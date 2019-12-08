@@ -1,0 +1,53 @@
+{
+  "name": "scouter",
+  "version": "0.0.1",
+  "description": "A scouting utility to for use in FRC regional events",
+  "author": "NicolasNewman <nnewman01@gmail.com> (https://github.com/NicolasNewman/)",
+  "contributors": [
+    "NicolasNewman <nnewman01@gmail.com> (https://github.com/NicolasNewman/)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NicolasNewman/scouter.git"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "nodejs",
+    "express",
+    "visual-studio-code",
+    "chrome-devtools",
+    "webpack",
+    "webpack-dev-server",
+    "typestyle",
+    "react-testing-library",
+    "supertest",
+    "jest",
+    "semantic-ui",
+    "boilerplate"
+  ],
+  "files": [
+    "./client/*",
+    "./server/*",
+    "./launcher/*"
+  ],
+  "scriptsComments": {
+    "note": "The 'scripts' section is limited. Please refer to ./README.md, ./client/package.json, ./server/package.json"
+  },
+  "scripts": {
+    "install": "cd client && yarn",
+    "postinstall": "cd server && yarn",
+    "test": "cd client && yarn test",
+    "posttest": "cd server && yarn copy && yarn test",
+    "compile": "cd client && yarn compile",
+    "postcompile": "cd server && yarn compile",
+    "build": "cd client && yarn build",
+    "postbuild": "cd server && yarn prestart",
+    "build:prod": "cd client && yarn build:prod",
+    "postbuild:prod": "cd server && yarn prestart",
+    "start:prod": "cd client && yarn build:prod",
+    "poststart:prod": "cd server && yarn start:prod",
+    "run:prod": "cd server && yarn run:prod"
+  }
+}
