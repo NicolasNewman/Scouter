@@ -10,11 +10,15 @@ class SetupForm extends Component<IProps & FormComponentProps> {
         super(props);
     }
 
-    handleSubmit = (e): void => {};
+    handleSubmit = (e: React.SyntheticEvent): void => {
+        e.preventDefault();
+        this.props.form.validateFields((err, vals) => {
+            console.log(vals);
+        });
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
 
         return (
             <Form className="form" onSubmit={this.handleSubmit}>
@@ -37,9 +41,9 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                         rules: [
                             {
                                 type: 'integer',
-                                message:
+                                message: (
                                     <p>The given port is not a valid number!</p>
-                            
+                                )
                             },
                             {
                                 required: true,
@@ -67,7 +71,9 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                         rules: [
                             {
                                 type: 'integer',
-                                message: <p>The given port is not a valid number!</p>
+                                message: (
+                                    <p>The given port is not a valid number!</p>
+                                )
                             },
                             {
                                 required: true,
