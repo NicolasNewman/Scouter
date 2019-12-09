@@ -13,26 +13,13 @@ export default class DataStore {
      */
     constructor() {
         this.schema = {
-            key: {
-                type: 'string',
-                description:
-                    'The API key used to authenticate with Google cloud'
+            serverPort: {
+                type: 'number',
+                description: 'The port used to connect to the web app'
             },
-            validKey: {
-                type: 'boolean',
-                description: 'Wheather or not the API key is valid',
-                default: false
-            },
-            mongoPort: {
-                type: 'string',
-                description: 'The port for the MongoDB server',
-                default: '2171'
-            },
-            uiTheme: {
-                type: 'string',
-                enum: ['light', 'dark'],
-                default: 'light',
-                description: 'The targeted theme for the UI'
+            dbPort: {
+                type: 'number',
+                description: 'The port used to connect to the database'
             }
         };
         this.store = new Store({ schema: this.schema });

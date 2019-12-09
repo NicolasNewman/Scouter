@@ -10,6 +10,9 @@ const { TabPane } = Tabs;
 
 interface IProps extends RouteComponentProps<any> {
     dataStore: DataStore;
+    serverPort: number;
+    dbPort: number;
+    updateFormState: (serverPort: number, dbPort: number) => void;
 }
 
 export default class Home extends Component<IProps> {
