@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { FormComponentProps } from 'antd/lib/form/Form';
-import { Form, Input, Checkbox, Button, Tooltip, Icon } from 'antd';
+import { Form, InputNumber, Checkbox, Button, Tooltip, Icon } from 'antd';
 
 interface IProps {}
 
@@ -15,25 +15,19 @@ class SetupForm extends Component<IProps & FormComponentProps> {
     render() {
         const { getFieldDecorator } = this.props.form;
 
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 }
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 }
-            }
-        };
 
         return (
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+            <Form className="form" onSubmit={this.handleSubmit}>
                 {/* Website port field */}
                 <Form.Item
+                    className="form__item"
                     label={
-                        <span>
+                        <span className="form__item--label">
                             Site Port
-                            <Tooltip title="The port used to connect to the webserver">
+                            <Tooltip
+                                className="form__item--tooltip"
+                                title="The port used to connect to the webserver"
+                            >
                                 <Icon type="question-circle" />
                             </Tooltip>
                         </span>
@@ -42,22 +36,28 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                     {getFieldDecorator('sitePort', {
                         rules: [
                             {
-                                type: 'number',
-                                message: 'The given port is not a valid number'
+                                type: 'integer',
+                                message:
+                                    <p>The given port is not a valid number!</p>
+                            
                             },
                             {
                                 required: true,
-                                message: 'The site port is required'
+                                message: <p>The site port is required!</p>
                             }
                         ]
-                    })(<Input />)}
+                    })(<InputNumber className="form__item--number-input" />)}
                 </Form.Item>
                 {/* Database port field */}
                 <Form.Item
+                    className="form__item"
                     label={
-                        <span>
+                        <span className="form__item--label">
                             DB Port
-                            <Tooltip title="The port used by the database">
+                            <Tooltip
+                                className="form__item--tooltip"
+                                title="The port used by the database"
+                            >
                                 <Icon type="question-circle" />
                             </Tooltip>
                         </span>
@@ -66,15 +66,15 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                     {getFieldDecorator('dbPort', {
                         rules: [
                             {
-                                type: 'number',
-                                message: 'The given port is not a valid number'
+                                type: 'integer',
+                                message: <p>The given port is not a valid number!</p>
                             },
                             {
                                 required: true,
-                                message: 'The database port is required'
+                                message: <p>The database port is required!</p>
                             }
                         ]
-                    })(<Input />)}
+                    })(<InputNumber className="form__item--number-input" />)}
                 </Form.Item>
                 {/* Save checkbox */}
                 <Form.Item>
