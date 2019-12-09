@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
-// import { Redirect } from 'react-router';
 import DataStore from 'app/classes/DataStore';
+
+import SetupForm from './SetupForm';
+
+import { Tabs } from 'antd';
+const { TabPane } = Tabs;
 
 interface IProps extends RouteComponentProps<any> {
     dataStore: DataStore;
@@ -10,19 +14,23 @@ interface IProps extends RouteComponentProps<any> {
 
 export default class Home extends Component<IProps> {
     props: IProps;
+    tabKeys = {
+        setup: 'SETUP',
+        log: 'LOG'
+    };
 
     constructor(props) {
         super(props);
     }
 
     render() {
-        // if (this.state.toHome) {
-        //     return <Redirect to="/home" />;
-        // }
         return (
-            <div>
-                <h2>Home</h2>
-            </div>
+            <Tabs defaultActiveKey={this.tabKeys.setup}>
+                <TabPane tab="Setup" key={this.tabKeys.setup}>
+                    <SetupForm />
+                </TabPane>
+                <TabPane tab="Log" key={this.tabKeys.log} disabled></TabPane>
+            </Tabs>
         );
     }
 }

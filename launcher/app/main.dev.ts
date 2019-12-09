@@ -71,8 +71,8 @@ app.on('ready', async () => {
         show: false,
         frame: false,
         width: 304,
-        height: 442,
-        resizable: false
+        height: 442
+        // resizable: false
     });
 
     mainWindow.loadURL(`file://${__dirname}/app.html`);
