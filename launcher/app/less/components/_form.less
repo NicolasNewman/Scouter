@@ -1,2 +1,30 @@
 .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__item {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        &--label {
+        }
+
+        &--tooltip {
+            margin-left: 0.5rem;
+        }
+
+        &--number-input {
+            width: 60vw;
+        }
+
+        & .ant-form-explain p {
+            margin: 0;
+        }
+    }
+
+    &__number-input {
+    }
 }

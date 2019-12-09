@@ -3,9 +3,28 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 @import '~@fortawesome/fontawesome-free/css/all.css';
-@import '~antd/dist/antd.less';
+// @import '~antd/dist/antd.less';
+@import '~antd/lib/button/style/index.less';
+@import '~antd/lib/checkbox/style/index.less';
+@import './less/override/form/style/index.less';
+@import '~antd/lib/grid/style/index.less';
+@import '~antd/lib/icon/style/index.less';
+@import '~antd/lib/input/style/index.less';
+@import '~antd/lib/input-number/style/index.less';
+@import '~antd/lib/style/index.less';
+@import '~antd/lib/tabs/style/index.less';
+@import '~antd/lib/tooltip/style/index.less';
+@import '~antd/lib/typography/style/index.less';
 
 @import './less/_dark.less';
 @import './less/_variables.less';
 @import './less/_helper.less';
 @import './less/components/_form.less';
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
