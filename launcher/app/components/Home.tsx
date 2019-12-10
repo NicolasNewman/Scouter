@@ -30,7 +30,11 @@ export default class Home extends Component<IProps> {
         return (
             <Tabs defaultActiveKey={this.tabKeys.setup}>
                 <TabPane tab="Setup" key={this.tabKeys.setup}>
-                    <SetupForm />
+                    <SetupForm
+                        serverPort={this.props.serverPort}
+                        dbPort={this.props.dbPort}
+                        dataStore={this.props.dataStore}
+                    />
                 </TabPane>
                 <TabPane tab="Log" key={this.tabKeys.log} disabled></TabPane>
             </Tabs>

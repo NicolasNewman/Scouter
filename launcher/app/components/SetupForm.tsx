@@ -2,18 +2,38 @@ import * as React from 'react';
 import { Component } from 'react';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import { Form, InputNumber, Checkbox, Button, Tooltip, Icon } from 'antd';
+import DataStore from 'app/classes/DataStore';
 
-interface IProps {}
+interface IProps {
+    dataStore: DataStore;
+    serverPort: number;
+    dbPort: number;
+}
 
+/**
+ * React component for the form the user enters the server's config fields into
+ */
 class SetupForm extends Component<IProps & FormComponentProps> {
     constructor(props: IProps & FormComponentProps) {
         super(props);
+    }
+
+    componentDidMount() {
+        this.props.form.setFieldsValue({
+            serverPort: this.props.serverPort,
+            dbPort: this.props.dbPort
+        });
     }
 
     handleSubmit = (e: React.SyntheticEvent): void => {
         e.preventDefault();
         this.props.form.validateFields((err, vals) => {
             console.log(vals);
+            console.log(err);
+            if (!err && vals.save) {
+                this.props.dataStore.set('serverPort', vals.serverPort);
+                this.props.dataStore.set('dbPort', vals.dbPort);
+            }
         });
     };
 
@@ -27,17 +47,17 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                     className="form__item"
                     label={
                         <span className="form__item--label">
-                            Site Port
+                            Server Port
                             <Tooltip
                                 className="form__item--tooltip"
-                                title="The port used to connect to the webserver"
+                                title="The port used to connect to the web app"
                             >
                                 <Icon type="question-circle" />
                             </Tooltip>
                         </span>
                     }
                 >
-                    {getFieldDecorator('sitePort', {
+                    {getFieldDecorator('serverPort', {
                         rules: [
                             {
                                 type: 'integer',
