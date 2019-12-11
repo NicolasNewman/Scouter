@@ -34,6 +34,7 @@ export default class Home extends Component<IProps> {
                         serverPort={this.props.serverPort}
                         dbPort={this.props.dbPort}
                         dataStore={this.props.dataStore}
+                        updateFormState={this.props.updateFormState}
                     />
                 </TabPane>
                 <TabPane tab="Log" key={this.tabKeys.log} disabled></TabPane>
