@@ -79,7 +79,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.8.1",
-        "antd": "^3.20.5",
+        "antd": "^3.26.2",
         "connected-react-router": "^6.3.2",
         "core-js": "2",
         "custom-electron-titlebar": "^3.1.0",
