@@ -9,6 +9,7 @@ interface IProps {
     serverPort: number;
     dbPort: number;
     updateFormState: (serverPort: number, dbPort: number) => void;
+    handleFormSubmit: () => void;
 }
 
 /**
@@ -34,7 +35,10 @@ class SetupForm extends Component<IProps & FormComponentProps> {
             if (!err && vals.save) {
                 this.props.dataStore.set('serverPort', vals.serverPort);
                 this.props.dataStore.set('dbPort', vals.dbPort);
+            }
+            if (!err) {
                 this.props.updateFormState(vals.serverPort, vals.dbPort);
+                this.props.handleFormSubmit();
             }
         });
     };
