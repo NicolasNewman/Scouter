@@ -177,14 +177,11 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                         </Upload.Dragger>
                     )}
                 </Form.Item>
-                {/* Save checkbox */}
+                {/* Save checkbox & submit button */}
                 <Form.Item>
                     {getFieldDecorator('save', {
                         valuePropName: 'checked'
                     })(<Checkbox>Save fields</Checkbox>)}
-                </Form.Item>
-                {/* Submit button */}
-                <Form.Item>
                     <Button type="primary" htmlType="submit">
                         Start
                     </Button>
