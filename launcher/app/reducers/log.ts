@@ -19,7 +19,7 @@ export default function form(
             };
         case LogTypeKeys.LOG:
             return {
-                text: state.text + '\n' + action.event;
+                text: state.text + '\n' + action.event
             };
         default:
             return state;
