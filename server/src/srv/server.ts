@@ -14,8 +14,8 @@ import { CustomError, handleErrors } from '../utils/error';
 import { logger } from '../utils/logger';
 import proxy = require('http-proxy-middleware');
 import * as SPAs from '../../config/spa.config';
-import * as dotenv from 'dotenv';
 import * as mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 
 export enum StaticAssetPath {
     // The path to static assets served by Express needs to be
@@ -30,6 +30,20 @@ export enum StaticAssetPath {
 
 class Server {
     constructor() {
+        console.log(dotenv.config());
+
+        const DB = `mongodb://${process.env.DB_HOSTNAME}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+        console.log(DB);
+        mongoose
+            .connect(DB, {})
+            .then(() => {
+                console.log('DB connection successful!');
+            })
+            .catch(_err => {
+                // TODO: handle
+                console.log('error');
+            });
+
         this.m_app = express();
         this.m_app.use(
             helmet({
