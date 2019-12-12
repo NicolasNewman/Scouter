@@ -32,25 +32,29 @@ export default class Log extends Component<IProps, IState> {
 
     render() {
         return (
-            <div>
+            <div className="log">
                 <TextArea
                     value={this.props.logText}
-                    autoSize={{ minRows: 14 }}
+                    autoSize={{ minRows: 18 }}
                 />
-                <Button
-                    disabled={this.state.startDisabled}
-                    onClick={this.startClicked}
-                    type="primary"
-                >
-                    Start
-                </Button>
-                <Button
-                    disabled={this.state.stopDisabled}
-                    onClick={this.stopClicked}
-                    type="danger"
-                >
-                    Stop
-                </Button>
+                <div className="log__button-row">
+                    <Button
+                        className="log__button"
+                        disabled={this.state.startDisabled}
+                        onClick={this.startClicked}
+                        type="primary"
+                    >
+                        Start
+                    </Button>
+                    <Button
+                        className="log__button"
+                        disabled={this.state.stopDisabled}
+                        onClick={this.stopClicked}
+                        type="danger"
+                    >
+                        Stop
+                    </Button>
+                </div>
             </div>
         );
     }
