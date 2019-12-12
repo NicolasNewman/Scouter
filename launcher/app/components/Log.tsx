@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 
 const { TextArea } = Input;
 interface IProps {
@@ -8,17 +8,50 @@ interface IProps {
     logEvent: (event: string) => void;
 }
 
-export default class Log extends Component<IProps> {
+interface IState {
+    startDisabled: boolean;
+    stopDisabled: boolean;
+}
+
+export default class Log extends Component<IProps, IState> {
     props: IProps;
+    state: IState;
 
     constructor(props) {
         super(props);
         this.props.logEvent('Ready');
+        this.state = {
+            startDisabled: false,
+            stopDisabled: true
+        };
     }
+
+    startClicked = (e): void => {};
+
+    stopClicked = (e): void => {};
 
     render() {
         return (
-            <TextArea value={this.props.logText} autoSize={{ minRows: 14 }} />
+            <div>
+                <TextArea
+                    value={this.props.logText}
+                    autoSize={{ minRows: 14 }}
+                />
+                <Button
+                    disabled={this.state.startDisabled}
+                    onClick={this.startClicked}
+                    type="primary"
+                >
+                    Start
+                </Button>
+                <Button
+                    disabled={this.state.stopDisabled}
+                    onClick={this.stopClicked}
+                    type="danger"
+                >
+                    Stop
+                </Button>
+            </div>
         );
     }
 }

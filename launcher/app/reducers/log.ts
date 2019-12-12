@@ -9,6 +9,7 @@ const initialState: ILogState = {
 };
 
 const date = new Date();
+
 export default function form(
     state: ILogState = initialState,
     action: LogTypes
@@ -22,6 +23,7 @@ export default function form(
             const formatedEvent = `> [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] ${
                 action.event
             }`;
+            // Handles first event not needing \n
             const appendedText =
                 state.text === ''
                     ? formatedEvent
