@@ -15,7 +15,10 @@ export type FormTypes = UpdateFormAction;
  * @param serverPort the port used to connect to the webapp
  * @param dbPort the port used to connect to the database
  */
-export function updateFormState(serverPort: number, dbPort: number) {
+export function updateFormState(
+    serverPort: number,
+    dbPort: number
+): UpdateFormAction {
     return {
         type: FormTypeKeys.UPDATE_FORM_STATE,
         serverPort,
