@@ -13,7 +13,9 @@ interface IProps extends RouteComponentProps<any> {
     dataStore: DataStore;
     serverPort: number;
     dbPort: number;
+    logText: string;
     updateFormState: (serverPort: number, dbPort: number) => void;
+    logEvent: (event: string) => void;
 }
 
 interface IState {
@@ -73,7 +75,10 @@ export default class Home extends Component<IProps, IState> {
                     key={this.tabKeys.log}
                     disabled={this.state.logTabDisabled}
                 >
-                    <Log />
+                    <Log
+                        logText={this.props.logText}
+                        logEvent={this.props.logEvent}
+                    />
                 </TabPane>
             </Tabs>
         );
