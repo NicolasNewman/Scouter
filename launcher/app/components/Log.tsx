@@ -19,16 +19,20 @@ export default class Log extends Component<IProps, IState> {
 
     constructor(props) {
         super(props);
-        this.props.logEvent('Ready');
+        this.props.logEvent('Click "Start" to compile the server');
         this.state = {
             startDisabled: false,
             stopDisabled: true
         };
     }
 
-    startClicked = (e): void => {};
+    startClicked = (e): void => {
+        this.props.logEvent('Starting the server...');
+    };
 
-    stopClicked = (e): void => {};
+    stopClicked = (e): void => {
+        this.props.logEvent('Stoping the server...');
+    };
 
     render() {
         return (
