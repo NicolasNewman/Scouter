@@ -1,7 +1,15 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { FormComponentProps } from 'antd/lib/form/Form';
-import { Form, InputNumber, Checkbox, Button, Tooltip, Icon } from 'antd';
+import {
+    Form,
+    InputNumber,
+    Checkbox,
+    Button,
+    Tooltip,
+    Icon,
+    Upload
+} from 'antd';
 import DataStore from 'app/classes/DataStore';
 
 interface IProps {
@@ -41,6 +49,39 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                 this.props.handleFormSubmit();
             }
         });
+    };
+
+    validateModules = async (rule, value, callback) => {
+        console.log(rule);
+        console.log(value);
+        let i = 0;
+        const requiredFiles = ['dbModel.ts', 'formModel.ts', 'graphModel.ts'];
+        const foundFiles = [];
+        value.fileList.forEach(file => {
+            i++;
+            foundFiles.push(file.name);
+            if (i > 3) {
+                callback('Exactly 3 files should be uploaded');
+            }
+        });
+        let isFileMissing = false;
+        let fileMissingCallbackMsg = 'The following files are missing:';
+        requiredFiles.forEach(file => {
+            if (!foundFiles.includes(file)) {
+                isFileMissing = true;
+                fileMissingCallbackMsg =
+                    fileMissingCallbackMsg + ' ' + file + ',';
+            }
+        });
+        if (isFileMissing) {
+            fileMissingCallbackMsg = fileMissingCallbackMsg.substring(
+                0,
+                fileMissingCallbackMsg.length - 1
+            );
+            callback(fileMissingCallbackMsg);
+        }
+
+        callback('Test');
     };
 
     render() {
@@ -107,6 +148,34 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             }
                         ]
                     })(<InputNumber className="form__item--number-input" />)}
+                </Form.Item>
+                {/* File uploader */}
+                <Form.Item>
+                    {getFieldDecorator('moduleDragger', {
+                        rules: [
+                            {
+                                required: true,
+                                message: 'Please upload the 3 files'
+                            },
+                            {
+                                validator: this.validateModules
+                            }
+                        ]
+                    })(
+                        <Upload.Dragger multiple={true} name="dbModel">
+                            <p className="ant-upload-drag-icon">
+                                <Icon type="inbox" />
+                            </p>
+                            <p className="ant-upload-text">
+                                Click or drag modules to this area to upload
+                            </p>
+                            <p className="ant-upload-hint">
+                                Must include:
+                                <br />
+                                dbModel.ts, formModel.ts, graphModel.ts
+                            </p>
+                        </Upload.Dragger>
+                    )}
                 </Form.Item>
                 {/* Save checkbox */}
                 <Form.Item>
