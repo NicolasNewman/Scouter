@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import Navigation from "../components/Navigation";
+import Header from "../components/Header";
 
 interface IProps {
   rightComponent: React.ReactType;
@@ -17,12 +18,15 @@ export default class BaseComponent extends Component<IProps> {
   render() {
     const RightComponent = this.props.rightComponent;
     return (
-      <div className="two-col-nav">
-        <div className="two-col-nav__left">
-          <Navigation />
-        </div>
-        <div className="two-col-nav__right">
-          <RightComponent />
+      <div>
+        <Header />
+        <div className="two-col-nav">
+          <div className="two-col-nav__left">
+            <Navigation />
+          </div>
+          <div className="two-col-nav__right">
+            <RightComponent />
+          </div>
         </div>
       </div>
     );
