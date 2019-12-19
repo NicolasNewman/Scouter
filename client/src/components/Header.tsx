@@ -13,7 +13,12 @@ export default class Navigation extends Component<IProps> {
   render() {
     return (
       <div className="header">
-        <p>Scouter</p>
+        <div className="header__title">
+          <h1>Scouter</h1>
+        </div>
+        <div className="header__info">
+          <p>Login</p>
+        </div>
       </div>
     );
   }

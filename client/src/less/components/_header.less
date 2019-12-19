@@ -1,7 +1,26 @@
 .header {
-  background-color: @first-blue;
-  color: #fff;
-  font-size: 1.25rem;
   padding: 0.75rem 2rem;
+  color: #fff;
   box-shadow: 0.5px 0.5px 0.2px rgba(0, 0, 0, 0.2);
+  background-color: @first-blue;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  &__title {
+    flex-basis: 10%;
+
+    & h1 {
+      color: #fff;
+      font-size: 1.25rem;
+    }
+  }
+
+  &__info {
+    flex-basis: 90%;
+    // background-color: @first-lighter-blue;
+    text-align: end;
+  }
 }
