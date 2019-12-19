@@ -4,11 +4,11 @@ const ObjectId = Schema.Types.ObjectId;
 interface ITeam extends Document {}
 
 const teamSchema: Schema = new Schema({
-    name: {
+    teamName: {
         type: String,
         required: [true, 'A team must have a name']
     },
-    number: {
+    teamNumber: {
         type: Number,
         min: [1, 'The team number must be greater then zero'],
         required: [true, 'A team must have a number'],
@@ -24,8 +24,8 @@ const teamSchema: Schema = new Schema({
 
 teamSchema.pre<ITeam>(/^find/, function(next) {
     this.populate({
-        path: 'matches'
-        // select: '-__v'
+        path: 'matches',
+        select: '-team'
     });
     next();
 });
