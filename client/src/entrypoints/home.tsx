@@ -10,20 +10,23 @@ import { ComponentA } from "../components/ComponentA";
 import { ComponentB } from "../components/ComponentB";
 import { Overview } from "../components/Overview";
 import * as SPAs from "../../config/spa.config";
+import "../app.global.less";
 
 ReactDOM.render(
   <Router>
     <div>
       <Helmet title={SPAs.appTitle} />
-        <div style={{ textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}>
-          <h2>Welcome to {SPAs.appTitle}</h2>
-        </div>
-        <Switch>
-          <Route exact path="/" component={Overview} />
-          <Route path="/a" component={ComponentA} />
-          <Route path="/b" component={ComponentB} />
-          <Route component={Overview} />
-        </Switch>
+      <div
+        style={{ textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}
+      >
+        <h2>Welcome to {SPAs.appTitle}</h2>
+      </div>
+      <Switch>
+        <Route exact path="/" component={Overview} />
+        <Route path="/a" component={ComponentA} />
+        <Route path="/b" component={ComponentB} />
+        <Route component={Overview} />
+      </Switch>
     </div>
   </Router>,
   document.getElementById("react-root")
