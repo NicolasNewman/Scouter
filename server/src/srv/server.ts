@@ -7,6 +7,7 @@
  */
 import * as path from 'path';
 import * as express from 'express';
+// import { Request, Response, NextFunction } from 'express';
 import nodeFetch from 'node-fetch';
 import * as helmet from 'helmet';
 import * as expressStaticGzip from 'express-static-gzip';
@@ -16,6 +17,14 @@ import proxy = require('http-proxy-middleware');
 import * as SPAs from '../../config/spa.config';
 import * as mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
+
+import * as http from 'http';
+import * as socketIO from 'socket.io';
+
+import teamRouter from '../routes/teamRoutes';
+import matchRouter from '../routes/matchRoutes';
+import gameRouter from '../routes/gameRoutes';
+import universalRouter from '../routes/universalRoutes';
 
 export enum StaticAssetPath {
     // The path to static assets served by Express needs to be
@@ -30,26 +39,37 @@ export enum StaticAssetPath {
 
 class Server {
     constructor() {
-        console.log(dotenv.config());
-
+        dotenv.config();
         const DB = `mongodb://${process.env.DB_HOSTNAME}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-        console.log(DB);
+        logger.log('info', `Connecting to ${DB}`);
         mongoose
             .connect(DB, {})
             .then(() => {
-                console.log('DB connection successful!');
+                logger.log('info', 'DB connection successful');
             })
-            .catch(_err => {
+            .catch(err => {
                 // TODO: handle
-                console.log('error');
+                logger.log('error', err);
             });
 
         this.m_app = express();
+
+        const httpServer = http.createServer(this.m_app);
+        this.io = socketIO(httpServer);
+        this.io.on('connection', function(_socket) {
+            console.log('A user connected!');
+        });
+        httpServer.listen(4000, function() {
+            console.log('test listen');
+        });
+
         this.m_app.use(
             helmet({
                 noCache: true
             })
         );
+        this.m_app.use(express.json());
+        this.addMiddleware();
         this.m_app.disable('etag');
         this.addRoutes();
         handleErrors(this.m_app);
@@ -66,6 +86,7 @@ class Server {
 
     /********************** private methods and data ************************/
 
+    private addMiddleware(): void {}
     private addRoutes(): void {
         // Redirect to the landing page of SPA that has 'redirect: true'
         this.m_app.get('/', (_req, res, next) => {
@@ -128,6 +149,11 @@ class Server {
                 })
             );
         }
+
+        this.m_app.use('/api/v1/teams', teamRouter);
+        this.m_app.use('/api/v1/matches', matchRouter);
+        this.m_app.use('/api/v1/games', gameRouter);
+        this.m_app.use('/api/v1/', universalRouter);
 
         // Default 404 handler
         this.m_app.use((req, _res, next) => {
@@ -229,6 +255,7 @@ class Server {
     }
 
     private readonly m_app: express.Application;
+    private readonly io: socketIO.Server;
     private m_assetPath: StaticAssetPath = StaticAssetPath.TRANSPILED;
     private m_expressStaticMiddleware:
         | ReturnType<typeof expressStaticGzip>
