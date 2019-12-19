@@ -13,7 +13,7 @@ export default class Home extends Component<IProps> {
   render() {
     return (
       <div>
-        <p>hi</p>
+        <p>Bonjour!</p>
       </div>
     );
   }

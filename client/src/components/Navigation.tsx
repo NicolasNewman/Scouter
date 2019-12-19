@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
 const { SubMenu } = Menu;
 
@@ -20,12 +21,14 @@ export default class Navigation extends Component<IProps> {
             <Icon type="home" />
             <span>Home</span>
           </span>
+          <Link to="/home" />
         </Menu.Item>
         <Menu.Item key="entry">
           <span>
             <Icon type="form" />
             <span>Entry</span>
           </span>
+          <Link to="/entry" />
         </Menu.Item>
       </Menu>
     );
