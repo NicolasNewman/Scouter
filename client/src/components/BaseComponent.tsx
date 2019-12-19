@@ -7,7 +7,9 @@
  * up one on top of the other.
  */
 import * as React from "react";
+const Component = React.Component;
 import { style, cssRaw } from "typestyle";
+import * as socketIOClient from "socket.io-client";
 
 // CSS used by the parent component
 cssRaw(`
@@ -33,26 +35,39 @@ const cssStyle: Record<string, string> = {
 
   right: style({
     flex: "auto"
-  }),
+  })
 };
 
-interface IBaseComponent {
+interface IProps {
   leftComponent: React.ReactType;
   rightComponent: React.ReactType;
 }
 
-export const BaseComponent: React.FC<IBaseComponent> = props => {
-  const LeftComponent = props.leftComponent;
-  const RightComponent = props.rightComponent;
+// export const BaseComponent: React.FC<IBaseComponent> = props => {
+export class BaseComponent extends Component<IProps> {
+  props: IProps;
+  LeftComponent: React.ReactType;
 
-  return (
-    <main className={cssStyle.container}>
-      <div className={cssStyle.left}>
-        <LeftComponent />
-      </div>
-      <div className={cssStyle.right}>
-        <RightComponent />
-      </div>
-    </main>
-  );
-};
+  constructor(props: IProps) {
+    super(props);
+  }
+
+  componentDidMount() {
+    const socket = socketIOClient("http://localhost:4000");
+  }
+
+  render() {
+    const LeftComponent = this.props.leftComponent;
+    const RightComponent = this.props.rightComponent;
+    return (
+      <main className={cssStyle.container}>
+        <div className={cssStyle.left}>
+          <LeftComponent />
+        </div>
+        <div className={cssStyle.right}>
+          <RightComponent />
+        </div>
+      </main>
+    );
+  }
+}

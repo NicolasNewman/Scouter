@@ -38,11 +38,13 @@
     "copy": "copyfiles -f dist/* ../server/build/client/"
   },
   "dependencies": {
+    "@types/socket.io-client": "^1.4.32",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-helmet": "5.2.1",
     "react-router-dom": "^5.1.2",
     "semantic-ui-react": "0.88.1",
+    "socket.io-client": "^2.3.0",
     "typestyle": "^2.0.4"
   },
   "devDependencies": {
