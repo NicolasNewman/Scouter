@@ -3,7 +3,7 @@ import { Component } from "react";
 
 interface IProps {}
 
-export default class Navigation extends Component<IProps> {
+export default class Home extends Component<IProps> {
   props: IProps;
 
   constructor(props: IProps) {

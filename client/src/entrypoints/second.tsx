@@ -5,7 +5,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Helmet } from "react-helmet";
-import { ComponentC } from "../components/ComponentC";
 import * as SPAs from "../../config/spa.config";
 import "../app.global.less";
 
@@ -17,7 +16,7 @@ ReactDOM.render(
     >
       <h2>Welcome to {SPAs.appTitle}</h2>
     </div>
-    <ComponentC />
+    {/* <ComponentC /> */}
   </>,
   document.getElementById("react-root")
 );
