@@ -5,11 +5,11 @@
 import * as React from "react";
 import { Component } from "react";
 import * as ReactDOM from "react-dom";
-import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import HomeContainer from "../containers/HomeContainer";
-import DataInputContainer from "../containers/DataInputContainer";
-import * as SPAs from "../../config/spa.config";
+import Home from "../components/Home";
+import DataInput from "../components/DataInput";
+// import * as SPAs from "../../config/spa.config";
+import NavContainer from "../containers/NavContainer";
 import * as socketIOClient from "socket.io-client";
 import "../app.global.less";
 
@@ -29,17 +29,20 @@ class Root extends Component<IProps> {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Switch>
-            <Route exact path="/" component={HomeContainer} />
-            <Route path="/entry" component={DataInputContainer} />
-            <Route component={HomeContainer} />
-          </Switch>
-        </div>
-      </Router>
+      <div>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/entry" component={DataInput} />
+          <Route component={Home} />
+        </Switch>
+      </div>
     );
   }
 }
 
-ReactDOM.render(<Root />, document.getElementById("react-root"));
+ReactDOM.render(
+  <Router>
+    <NavContainer rightComponent={Root} />
+  </Router>,
+  document.getElementById("react-root")
+);

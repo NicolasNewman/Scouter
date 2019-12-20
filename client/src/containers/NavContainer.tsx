@@ -15,6 +15,10 @@ export default class BaseComponent extends Component<IProps> {
     super(props);
   }
 
+  componentDidUpdate() {
+    console.log("updated");
+  }
+
   render() {
     const RightComponent = this.props.rightComponent;
     return (

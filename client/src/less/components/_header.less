@@ -1,8 +1,6 @@
 .header {
-  padding: 0.75rem 2rem;
   color: #fff;
   box-shadow: 0.5px 0.5px 0.2px rgba(0, 0, 0, 0.2);
-  background-color: @first-blue;
 
   display: flex;
   flex-direction: row;
@@ -11,6 +9,8 @@
 
   &__title {
     flex-basis: 10%;
+    padding: 0.75rem 2rem;
+    background-color: @first-blue;
 
     & h1 {
       color: #fff;
@@ -20,7 +20,9 @@
 
   &__info {
     flex-basis: 90%;
-    // background-color: @first-lighter-blue;
+    padding: 0.75rem 2rem;
+    height: 3.1rem;
+    background-color: @first-lighter-blue;
     text-align: end;
   }
 }
