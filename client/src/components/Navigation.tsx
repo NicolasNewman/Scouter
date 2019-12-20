@@ -30,6 +30,13 @@ export default class Navigation extends Component<IProps> {
           </span>
           <Link to="/entry" />
         </Menu.Item>
+        <Menu.Item key="visualize">
+          <span>
+            <Icon type="bar-chart" />
+            <span>Visualize</span>
+          </span>
+          <Link to="/visualize" />
+        </Menu.Item>
       </Menu>
     );
   }

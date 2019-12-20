@@ -8,6 +8,7 @@ import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "../components/Home";
 import DataInput from "../components/DataInput";
+import Visualize from "../components/Visualize";
 // import * as SPAs from "../../config/spa.config";
 import NavContainer from "../containers/NavContainer";
 import * as socketIOClient from "socket.io-client";
@@ -33,6 +34,7 @@ class Root extends Component<IProps> {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/entry" component={DataInput} />
+          <Route path="/visualize" component={Visualize} />
           <Route component={Home} />
         </Switch>
       </div>
