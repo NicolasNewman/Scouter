@@ -5,27 +5,39 @@
 import * as React from "react";
 import { Component } from "react";
 import * as ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "connected-react-router";
+import { Route, Switch } from "react-router-dom";
 import Home from "../components/Home";
 import DataInput from "../components/DataInput";
 import Visualize from "../components/Visualize";
 // import * as SPAs from "../../config/spa.config";
 import NavContainer from "../containers/NavContainer";
-import * as socketIOClient from "socket.io-client";
 import "../app.global.less";
+import { configureStore, history } from "../store/configureStore";
 
-interface IProps {}
+interface IProps {
+  inputText: string;
+}
 
-class Root extends Component<IProps> {
+interface IState {
+  modalVisible: boolean;
+  loggedIn: boolean;
+  isAdmin: boolean;
+  user: string | undefined;
+}
+
+class Root extends Component<IProps, IState> {
   props: IProps;
 
   constructor(props: IProps) {
     super(props);
-  }
-
-  componentDidMount() {
-    const socket = socketIOClient("http://localhost:4000");
-    console.log(socket);
+    this.state = {
+      modalVisible: true,
+      loggedIn: false,
+      isAdmin: false,
+      user: undefined
+    };
   }
 
   render() {
@@ -41,10 +53,13 @@ class Root extends Component<IProps> {
     );
   }
 }
+const store = configureStore();
 
 ReactDOM.render(
-  <Router>
-    <NavContainer rightComponent={Root} />
-  </Router>,
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <NavContainer rightComponent={Root} />
+    </ConnectedRouter>
+  </Provider>,
   document.getElementById("react-root")
 );

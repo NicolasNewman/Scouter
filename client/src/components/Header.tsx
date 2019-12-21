@@ -1,7 +1,12 @@
 import * as React from "react";
 import { Component } from "react";
 
-interface IProps {}
+import { Icon } from "antd";
+
+interface IProps {
+  username: string;
+  isAuthenticated: boolean;
+}
 
 export default class Navigation extends Component<IProps> {
   props: IProps;
@@ -11,13 +16,18 @@ export default class Navigation extends Component<IProps> {
   }
 
   render() {
+    console.log(this.props.username);
+    //TODO authenticate if signed out
     return (
       <div className="header">
         <div className="header__title">
           <h1>Scouter</h1>
         </div>
         <div className="header__info">
-          <p>Login</p>
+          {/* <a>Login</a> */}
+          <span>
+            <Icon type="user" /> {this.props.username}
+          </span>
         </div>
       </div>
     );
