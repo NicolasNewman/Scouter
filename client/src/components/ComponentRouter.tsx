@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "../components/Home";
-import DataInput from "../components/DataInput";
-import Visualize from "../components/Visualize";
-import Admin from "../components/Admin";
+import Home from "./RouterComponents/Home";
+import DataInput from "./RouterComponents/DataInput";
+import Visualize from "./RouterComponents/Visualize";
+import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 interface IProps {
