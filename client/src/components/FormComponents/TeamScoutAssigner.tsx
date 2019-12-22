@@ -17,20 +17,6 @@ interface IProps {
   ) => (node: React.ReactNode) => React.ReactNode;
 }
 
-// export default class Home extends Component<IProps> {
-//   props: IProps;
-
-//   constructor(props: IProps) {
-//     super(props);
-//   }
-
-//   render() {
-//     return (
-//       <Form.Item className="form__item" label=""></Form.Item>
-//     );
-//   }
-// }
-
 const TeamScoutAssigner: React.FC<IProps> = props => (
   <Form.Item
     className="admin__form--item"
