@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
 const { SubMenu } = Menu;
 
-interface IProps {}
+interface IProps {
+  isAdmin: boolean;
+}
 
 export default class Navigation extends Component<IProps> {
   props: IProps;
@@ -36,6 +38,13 @@ export default class Navigation extends Component<IProps> {
             <span>Visualize</span>
           </span>
           <Link to="/visualize" />
+        </Menu.Item>
+        <Menu.Item key="admin" hidden={!this.props.isAdmin}>
+          <span>
+            <Icon type="tool" />
+            <span>Admin</span>
+          </span>
+          <Link to="/admin" />
         </Menu.Item>
       </Menu>
     );

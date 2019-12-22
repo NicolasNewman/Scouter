@@ -18,13 +18,11 @@ import * as SPAs from '../../config/spa.config';
 import * as mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 
-import * as http from 'http';
-import * as socketIO from 'socket.io';
-
 import teamRouter from '../routes/teamRoutes';
 import matchRouter from '../routes/matchRoutes';
 import gameRouter from '../routes/gameRoutes';
 import universalRouter from '../routes/universalRoutes';
+import SocketController from '../socket/socketController';
 
 export enum StaticAssetPath {
     // The path to static assets served by Express needs to be
@@ -54,15 +52,6 @@ class Server {
 
         this.m_app = express();
 
-        const httpServer = http.createServer(this.m_app);
-        this.io = socketIO(httpServer);
-        this.io.on('connection', function(_socket) {
-            console.log('A user connected!');
-        });
-        httpServer.listen(4000, function() {
-            console.log('test listen');
-        });
-
         this.m_app.use(
             helmet({
                 noCache: true
@@ -73,6 +62,8 @@ class Server {
         this.m_app.disable('etag');
         this.addRoutes();
         handleErrors(this.m_app);
+
+        this.socketController = new SocketController(this.m_app);
     }
 
     public readonly getApp = (assetPath = StaticAssetPath.TRANSPILED) => {
@@ -82,6 +73,10 @@ class Server {
             Server.s_expressStaticConfig
         );
         return this.m_app;
+    };
+
+    public readonly getSocket = () => {
+        return this.socketController;
     };
 
     /********************** private methods and data ************************/
@@ -255,7 +250,8 @@ class Server {
     }
 
     private readonly m_app: express.Application;
-    private readonly io: socketIO.Server;
+    private readonly socketController: SocketController;
+
     private m_assetPath: StaticAssetPath = StaticAssetPath.TRANSPILED;
     private m_expressStaticMiddleware:
         | ReturnType<typeof expressStaticGzip>

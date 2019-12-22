@@ -9,7 +9,8 @@ import UserActions from "../actions/user";
 
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
-import * as socketIOClient from "socket.io-client";
+import { SocketController, socketEvents } from "../socket/socketController";
+import ComponentRouter from "../components/ComponentRouter";
 
 interface IProps {
   username: string;
@@ -17,7 +18,7 @@ interface IProps {
   isAuthenticated: boolean;
   setUsername: (username: string) => void;
   setAdminStatus: (isAdmin: boolean) => void;
-  rightComponent: React.ReactType;
+  socket: SocketController;
 }
 
 interface IState {
@@ -28,6 +29,7 @@ interface IState {
 // export const BaseComponent: React.FC<IBaseComponent> = props => {
 class NavContainer extends Component<IProps, IState> {
   props: IProps;
+  // socket: SocketIOClient.Socket;
 
   constructor(props: IProps) {
     super(props);
@@ -39,8 +41,14 @@ class NavContainer extends Component<IProps, IState> {
   }
 
   componentDidMount() {
-    // const socket = socketIOClient("http://localhost:4000");
-    // console.log(socket);
+    // this.socket = socketIOClient("http://localhost:4000");
+    // console.log(this.socket);
+    // this.socket.on("adminRes", (res: boolean) => {
+    //   console.log(`The admin res is ${res}`);
+    //   if (res) {
+    //     this.props.setAdminStatus(true);
+    //   }
+    // });
   }
 
   // componentDidUpdate() {
@@ -60,14 +68,13 @@ class NavContainer extends Component<IProps, IState> {
   handleModalSubmit = () => {
     // const isAdmin = this.props.inputText === "TODO";
     this.props.setUsername(this.state.inputText);
-    console.log(this.props);
+    this.props.socket.emit(socketEvents.adminAuthorize, this.state.inputText);
     this.setState({
       modalVisible: false
     });
   };
 
   render() {
-    const RightComponent = this.props.rightComponent;
     return (
       <div>
         <Header
@@ -76,10 +83,10 @@ class NavContainer extends Component<IProps, IState> {
         />
         <div className="two-col-nav">
           <div className="two-col-nav__left">
-            <Navigation />
+            <Navigation isAdmin={this.props.isAdmin} />
           </div>
           <div className="two-col-nav__right">
-            <RightComponent />
+            <ComponentRouter isAdmin={this.props.isAdmin} />
           </div>
         </div>
         <Modal
@@ -99,6 +106,7 @@ class NavContainer extends Component<IProps, IState> {
 }
 
 function mapStateToProps(state: any, ownProps: any) {
+  console.log(state);
   return {
     username: state.user.username,
     isAdmin: state.user.isAdmin,
