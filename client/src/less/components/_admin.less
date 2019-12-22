@@ -1,0 +1,29 @@
+.admin {
+  display: flex;
+  &__col {
+    width: 50%;
+  }
+  &__heading {
+    &--red {
+      color: @first-red;
+    }
+    &--blue {
+      color: @first-blue;
+    }
+  }
+
+  &__form {
+    &--row {
+      display: flex;
+    }
+    &--item {
+      display: flex;
+      flex-basis: 50%;
+      justify-content: center;
+
+      & > .ant-form-item-control-wrapper {
+        width: 50%;
+      }
+    }
+  }
+}
