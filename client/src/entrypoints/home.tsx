@@ -11,15 +11,17 @@ import { ConnectedRouter } from "connected-react-router";
 import NavContainer from "../containers/NavContainer";
 import "../app.global.less";
 import { configureStore, history } from "../store/configureStore";
-import { SocketController } from "../socket/socketController";
+import { SocketController } from "../classes/socketController";
+import RequestHandler from "../classes/RequestHandler";
 
 const store = configureStore();
 const socket = new SocketController("http://localhost:4000");
+const requestHandler = new RequestHandler("http://localhost:3000/data");
 
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <NavContainer socket={socket} />
+      <NavContainer socket={socket} requestHandler={requestHandler} />
     </ConnectedRouter>
   </Provider>,
   document.getElementById("react-root")

@@ -1,15 +1,39 @@
 import * as React from "react";
 import { Component } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
+import axios from "axios";
 
 import { Form, Select } from "antd";
 import TeamScoutAssigner from "../FormComponents/TeamScoutAssigner";
+import RequestHandler from "../../classes/RequestHandler";
 
-interface IProps {}
+interface IProps {
+  requestHandler: RequestHandler;
+}
 
-class Admin extends Component<IProps & FormComponentProps> {
+interface IState {
+  teams: Array<string>;
+}
+
+class Admin extends Component<IProps & FormComponentProps, IState> {
   constructor(props: IProps & FormComponentProps) {
     super(props);
+    this.state = {
+      teams: []
+    };
+  }
+
+  async componentDidMount() {
+    const data = await this.props.requestHandler.get("teams");
+
+    const teams = data.data.data.teams;
+    const teamNumbers: Array<string> = [];
+    teams.forEach((team: any) => {
+      teamNumbers.push(team.teamNumber);
+    });
+    this.setState({
+      teams: teamNumbers
+    });
   }
 
   render() {
@@ -21,7 +45,7 @@ class Admin extends Component<IProps & FormComponentProps> {
             <h1 className="admin__heading--red">Red Alliance</h1>
             <div className="admin__form--row">
               <TeamScoutAssigner
-                selectValues={["1", "2"]}
+                selectValues={this.state.teams}
                 getFieldDecorator={getFieldDecorator}
                 formLabel="S1 Team"
                 componentID="r-s1-team"

@@ -6,9 +6,11 @@ import DataInput from "./RouterComponents/DataInput";
 import Visualize from "./RouterComponents/Visualize";
 import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
+import RequestHandler from "../classes/RequestHandler";
 
 interface IProps {
   isAdmin: boolean;
+  requestHandler: RequestHandler;
 }
 
 export default class ComponentRouter extends Component<IProps> {
@@ -28,7 +30,9 @@ export default class ComponentRouter extends Component<IProps> {
           {/* <Route path="/admin" component={Admin} /> */}
           <ProtectedRoute
             isAuthenticated={this.props.isAdmin}
-            component={Admin}
+            component={() => (
+              <Admin requestHandler={this.props.requestHandler} />
+            )}
             path="/admin"
           />
           <Route component={Home} />

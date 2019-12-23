@@ -13,8 +13,9 @@ import {
   SocketController,
   socketEvents,
   emitableEvents
-} from "../socket/socketController";
+} from "../classes/socketController";
 import ComponentRouter from "../components/ComponentRouter";
+import RequestHandler from "../classes/RequestHandler";
 
 interface IProps {
   username: string;
@@ -23,6 +24,7 @@ interface IProps {
   setUsername: (username: string) => void;
   setAdminStatus: (isAdmin: boolean) => void;
   socket: SocketController;
+  requestHandler: RequestHandler;
 }
 
 interface IState {
@@ -80,7 +82,10 @@ class NavContainer extends Component<IProps, IState> {
             <Navigation isAdmin={this.props.isAdmin} />
           </div>
           <div className="two-col-nav__right">
-            <ComponentRouter isAdmin={this.props.isAdmin} />
+            <ComponentRouter
+              requestHandler={this.props.requestHandler}
+              isAdmin={this.props.isAdmin}
+            />
           </div>
         </div>
         <Modal
