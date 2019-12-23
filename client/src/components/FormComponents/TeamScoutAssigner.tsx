@@ -7,6 +7,7 @@ import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 
 interface IProps {
   formLabel: string;
+  labelClasses: string;
   componentID: string;
   selectValues: Array<string>;
   tooltip: boolean;
@@ -21,7 +22,7 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
   <Form.Item
     className="admin__form--item"
     label={
-      <span className="admin__form--label">
+      <span className={`admin__form--label ${props.labelClasses}`}>
         {props.formLabel}
         {props.tooltip && (
           <Tooltip className="form__item--tooltip" title={props.tooltipText}>

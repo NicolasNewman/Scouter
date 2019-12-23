@@ -6,20 +6,27 @@ import axios from "axios";
 import { Form, Select } from "antd";
 import TeamScoutAssigner from "../FormComponents/TeamScoutAssigner";
 import RequestHandler from "../../classes/RequestHandler";
+import {
+  SocketController,
+  emitableEvents
+} from "../../classes/socketController";
 
 interface IProps {
   requestHandler: RequestHandler;
+  socket: SocketController;
 }
 
 interface IState {
   teams: Array<string>;
+  users: Array<string>;
 }
 
 class Admin extends Component<IProps & FormComponentProps, IState> {
   constructor(props: IProps & FormComponentProps) {
     super(props);
     this.state = {
-      teams: []
+      teams: [],
+      users: []
     };
   }
 
@@ -31,6 +38,12 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
     teams.forEach((team: any) => {
       teamNumbers.push(team.teamNumber);
     });
+
+    this.props.socket.emit(emitableEvents.getUsers, undefined, users => {
+      //TODO refresh if another user connects while page is loaded
+      this.setState({ users });
+    });
+
     this.setState({
       teams: teamNumbers
     });
@@ -42,26 +55,118 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
       <Form className="admin__form">
         <div className="admin">
           <div className="admin__col">
-            <h1 className="admin__heading--red">Red Alliance</h1>
+            <h1 className="admin__heading red">Red Alliance</h1>
             <div className="admin__form--row">
               <TeamScoutAssigner
                 selectValues={this.state.teams}
                 getFieldDecorator={getFieldDecorator}
                 formLabel="S1 Team"
+                labelClasses="red"
                 componentID="r-s1-team"
                 tooltip={false}
               />
               <TeamScoutAssigner
-                selectValues={["1", "2"]}
+                selectValues={this.state.users}
                 getFieldDecorator={getFieldDecorator}
                 formLabel="S1 Scout"
+                labelClasses="red"
                 componentID="r-s1-scout"
+                tooltip={false}
+              />
+            </div>
+            <div className="admin__form--row">
+              <TeamScoutAssigner
+                selectValues={this.state.teams}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S2 Team"
+                labelClasses="red"
+                componentID="r-s2-team"
+                tooltip={false}
+              />
+              <TeamScoutAssigner
+                selectValues={this.state.users}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S2 Scout"
+                labelClasses="red"
+                componentID="r-s2-scout"
+                tooltip={false}
+              />
+            </div>
+            <div className="admin__form--row">
+              <TeamScoutAssigner
+                selectValues={this.state.teams}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S3 Team"
+                labelClasses="red"
+                componentID="r-s3-team"
+                tooltip={false}
+              />
+              <TeamScoutAssigner
+                selectValues={this.state.users}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S3 Scout"
+                labelClasses="red"
+                componentID="r-s3-scout"
                 tooltip={false}
               />
             </div>
           </div>
           <div className="admin__col">
-            <h1 className="admin__heading--blue">Blue Alliance</h1>
+            <h1 className="admin__heading blue">Blue Alliance</h1>
+            <div className="admin__form--row">
+              <TeamScoutAssigner
+                selectValues={this.state.teams}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S1 Team"
+                labelClasses="blue"
+                componentID="b-s1-team"
+                tooltip={false}
+              />
+              <TeamScoutAssigner
+                selectValues={this.state.users}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S1 Scout"
+                labelClasses="blue"
+                componentID="b-s1-scout"
+                tooltip={false}
+              />
+            </div>
+            <div className="admin__form--row">
+              <TeamScoutAssigner
+                selectValues={this.state.teams}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S2 Team"
+                labelClasses="blue"
+                componentID="b-s2-team"
+                tooltip={false}
+              />
+              <TeamScoutAssigner
+                selectValues={this.state.users}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S2 Scout"
+                labelClasses="blue"
+                componentID="b-s2-scout"
+                tooltip={false}
+              />
+            </div>
+            <div className="admin__form--row">
+              <TeamScoutAssigner
+                selectValues={this.state.teams}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S3 Team"
+                labelClasses="blue"
+                componentID="b-s3-team"
+                tooltip={false}
+              />
+              <TeamScoutAssigner
+                selectValues={this.state.users}
+                getFieldDecorator={getFieldDecorator}
+                formLabel="S3 Scout"
+                labelClasses="blue"
+                componentID="b-s3-scout"
+                tooltip={false}
+              />
+            </div>
           </div>
         </div>
       </Form>

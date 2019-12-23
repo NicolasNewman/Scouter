@@ -1,15 +1,19 @@
 .admin {
   display: flex;
+
+  & .red {
+    color: @first-red;
+  }
+  & .blue {
+    color: @first-blue;
+  }
+
   &__col {
     width: 50%;
   }
+
   &__heading {
-    &--red {
-      color: @first-red;
-    }
-    &--blue {
-      color: @first-blue;
-    }
+    text-align: center;
   }
 
   &__form {

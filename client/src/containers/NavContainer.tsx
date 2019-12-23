@@ -9,11 +9,7 @@ import UserActions from "../actions/user";
 
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
-import {
-  SocketController,
-  socketEvents,
-  emitableEvents
-} from "../classes/socketController";
+import { SocketController, emitableEvents } from "../classes/socketController";
 import ComponentRouter from "../components/ComponentRouter";
 import RequestHandler from "../classes/RequestHandler";
 
@@ -84,6 +80,7 @@ class NavContainer extends Component<IProps, IState> {
           <div className="two-col-nav__right">
             <ComponentRouter
               requestHandler={this.props.requestHandler}
+              socket={this.props.socket}
               isAdmin={this.props.isAdmin}
             />
           </div>
