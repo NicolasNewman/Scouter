@@ -1,9 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
-import axios from "axios";
 
-import { Form, Select } from "antd";
+import { Form, Button } from "antd";
 import TeamScoutAssigner from "../FormComponents/TeamScoutAssigner";
 import RequestHandler from "../../classes/RequestHandler";
 import {
@@ -49,10 +48,21 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
     });
   }
 
+  handleSubmit = (e: React.SyntheticEvent) => {
+    console.log(e);
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
+    this.props.form.validateFields;
     return (
-      <Form className="admin__form">
+      <Form className="admin__form" onSubmit={this.handleSubmit}>
         <div className="admin">
           <div className="admin__col">
             <h1 className="admin__heading red">Red Alliance</h1>
@@ -169,6 +179,15 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
             </div>
           </div>
         </div>
+        <Form.Item>
+          <Button
+            className="admin__form--submit"
+            type="primary"
+            htmlType="submit"
+          >
+            Assign
+          </Button>
+        </Form.Item>
       </Form>
     );
   }

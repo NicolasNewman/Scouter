@@ -32,15 +32,30 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
       </span>
     }
   >
-    {props.getFieldDecorator(props.componentID, {
-      rules: []
-    })(
-      <Select className="admin__form--select">
-        {props.selectValues.map(val => (
-          <Option key={val}>{val}</Option>
-        ))}
-      </Select>
-    )}
+    {props.componentID.includes("team")
+      ? props.getFieldDecorator(props.componentID, {
+          rules: [
+            {
+              required: true,
+              message: "The team number is required!"
+            }
+          ]
+        })(
+          <Select className="admin__form--select">
+            {props.selectValues.map(val => (
+              <Option key={val}>{val}</Option>
+            ))}
+          </Select>
+        )
+      : props.getFieldDecorator(props.componentID, {
+          rules: []
+        })(
+          <Select className="admin__form--select">
+            {props.selectValues.map(val => (
+              <Option key={val}>{val}</Option>
+            ))}
+          </Select>
+        )}
   </Form.Item>
 );
 
