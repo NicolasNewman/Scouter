@@ -145,10 +145,10 @@ class Server {
             );
         }
 
-        this.m_app.use('/api/v1/teams', teamRouter);
-        this.m_app.use('/api/v1/matches', matchRouter);
-        this.m_app.use('/api/v1/games', gameRouter);
-        this.m_app.use('/api/v1/', universalRouter);
+        this.m_app.use('/data/teams', teamRouter);
+        this.m_app.use('/data/matches', matchRouter);
+        this.m_app.use('/data/games', gameRouter);
+        this.m_app.use('/data/', universalRouter);
 
         // Default 404 handler
         this.m_app.use((req, _res, next) => {
