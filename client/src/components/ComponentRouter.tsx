@@ -7,10 +7,12 @@ import Visualize from "./RouterComponents/Visualize";
 import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
+import { SocketController } from "../classes/socketController";
 
 interface IProps {
   isAdmin: boolean;
   requestHandler: RequestHandler;
+  socket: SocketController;
 }
 
 export default class ComponentRouter extends Component<IProps> {
@@ -31,7 +33,10 @@ export default class ComponentRouter extends Component<IProps> {
           <ProtectedRoute
             isAuthenticated={this.props.isAdmin}
             component={() => (
-              <Admin requestHandler={this.props.requestHandler} />
+              <Admin
+                socket={this.props.socket}
+                requestHandler={this.props.requestHandler}
+              />
             )}
             path="/admin"
           />

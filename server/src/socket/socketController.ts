@@ -4,11 +4,13 @@ import * as socketIO from 'socket.io';
 import { logger } from '../utils/logger';
 
 export const socketEvents = {
-    registerUser: 'registerUser'
+    registerUser: 'registerUser',
+    getUsers: 'getUsers'
 };
 
 export const emitableEvents = {
-    isAdmin: 'isAdmin'
+    isAdmin: 'isAdmin',
+    sendUsers: 'sendUsers'
 };
 
 interface IIDtoUserMap {
@@ -64,6 +66,12 @@ export default class SocketController {
                             nameTakenCallback(false);
                         }
                     }
+                }
+            );
+            socket.on(
+                socketEvents.getUsers,
+                (_data: undefined, dataCallback) => {
+                    dataCallback(this.registeredUsers);
                 }
             );
         });

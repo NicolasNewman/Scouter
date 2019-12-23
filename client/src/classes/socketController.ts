@@ -4,11 +4,13 @@ import { Store } from "redux";
 import { setAdminStatus } from "../actions/user";
 
 export const socketEvents = {
-  isAdmin: "isAdmin"
+  isAdmin: "isAdmin",
+  sendUsers: "sendUsers"
 };
 
 export const emitableEvents = {
-  registerUser: "registerUser"
+  registerUser: "registerUser",
+  getUsers: "getUsers"
 };
 
 export class SocketController {
