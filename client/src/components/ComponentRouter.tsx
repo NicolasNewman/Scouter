@@ -8,11 +8,15 @@ import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
 import { SocketController } from "../classes/socketController";
+import { IAdminFormState } from "../reducers/admin";
 
 interface IProps {
   isAdmin: boolean;
   requestHandler: RequestHandler;
   socket: SocketController;
+  formState: IAdminFormState;
+  setFormState: (state: IAdminFormState) => void;
+  setFormField: (field: string, value: string) => void;
 }
 
 export default class ComponentRouter extends Component<IProps> {
@@ -36,6 +40,9 @@ export default class ComponentRouter extends Component<IProps> {
               <Admin
                 socket={this.props.socket}
                 requestHandler={this.props.requestHandler}
+                formState={this.props.formState}
+                setFormState={this.props.setFormState}
+                setFormField={this.props.setFormField}
               />
             )}
             path="/admin"

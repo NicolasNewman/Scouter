@@ -3,11 +3,13 @@ import { connectRouter, routerMiddleware } from "connected-react-router";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import user from "../reducers/user";
+import admin from "../reducers/admin";
 
 const history = createHashHistory();
 const rootReducer = combineReducers({
   router: connectRouter(history),
-  user
+  user,
+  admin
 });
 
 const configureStore = (initialState?: any) => {

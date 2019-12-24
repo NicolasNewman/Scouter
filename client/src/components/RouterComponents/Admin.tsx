@@ -2,17 +2,21 @@ import * as React from "react";
 import { Component } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 
-import { Form, Button } from "antd";
+import { Form, Button, message } from "antd";
 import TeamScoutAssigner from "../FormComponents/TeamScoutAssigner";
 import RequestHandler from "../../classes/RequestHandler";
 import {
   SocketController,
   emitableEvents
 } from "../../classes/socketController";
+import { IAdminFormState } from "../../reducers/admin";
 
 interface IProps {
   requestHandler: RequestHandler;
   socket: SocketController;
+  formState: IAdminFormState;
+  setFormState: (state: IAdminFormState) => void;
+  setFormField: (field: string, value: string) => void;
 }
 
 interface IState {
@@ -53,7 +57,19 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.props.setFormState(values);
         console.log("Received values of form: ", values);
+        const teams = [];
+        for (let key in values) {
+          if (key.includes("team")) {
+            teams.push(values[key]);
+          }
+        }
+        const unique = [...new Set(teams)];
+        if (unique.length !== teams.length) {
+          message.error("You have the same team selected multiple times!");
+        } else {
+        }
       }
     });
   };
@@ -74,6 +90,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="red"
                 componentID="r-s1-team"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
               <TeamScoutAssigner
                 selectValues={this.state.users}
@@ -82,6 +100,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="red"
                 componentID="r-s1-scout"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
             </div>
             <div className="admin__form--row">
@@ -92,6 +112,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="red"
                 componentID="r-s2-team"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
               <TeamScoutAssigner
                 selectValues={this.state.users}
@@ -100,6 +122,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="red"
                 componentID="r-s2-scout"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
             </div>
             <div className="admin__form--row">
@@ -110,6 +134,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="red"
                 componentID="r-s3-team"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
               <TeamScoutAssigner
                 selectValues={this.state.users}
@@ -118,6 +144,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="red"
                 componentID="r-s3-scout"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
             </div>
           </div>
@@ -131,6 +159,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="blue"
                 componentID="b-s1-team"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
               <TeamScoutAssigner
                 selectValues={this.state.users}
@@ -139,6 +169,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="blue"
                 componentID="b-s1-scout"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
             </div>
             <div className="admin__form--row">
@@ -149,6 +181,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="blue"
                 componentID="b-s2-team"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
               <TeamScoutAssigner
                 selectValues={this.state.users}
@@ -157,6 +191,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="blue"
                 componentID="b-s2-scout"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
             </div>
             <div className="admin__form--row">
@@ -167,6 +203,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="blue"
                 componentID="b-s3-team"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
               <TeamScoutAssigner
                 selectValues={this.state.users}
@@ -175,6 +213,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
                 labelClasses="blue"
                 componentID="b-s3-scout"
                 tooltip={false}
+                defaultFormValues={this.props.formState}
+                setFormField={this.props.setFormField}
               />
             </div>
           </div>

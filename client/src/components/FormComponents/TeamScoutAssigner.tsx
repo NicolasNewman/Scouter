@@ -4,6 +4,7 @@ import { Component } from "react";
 import { Form, Select, Tooltip, Icon } from "antd";
 const { Option } = Select;
 import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
+import { IAdminFormState } from "../../reducers/admin";
 
 interface IProps {
   formLabel: string;
@@ -11,6 +12,8 @@ interface IProps {
   componentID: string;
   selectValues: Array<string>;
   tooltip: boolean;
+  defaultFormValues: { [index: string]: any }; // TODO REDUX STORE
+  setFormField: (field: string, value: string) => void;
   tooltipText?: string;
   getFieldDecorator: <T extends Object = {}>(
     id: keyof T,
@@ -39,18 +42,32 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
               required: true,
               message: "The team number is required!"
             }
-          ]
+          ],
+          initialValue: props.defaultFormValues[props.componentID]
         })(
-          <Select className="admin__form--select">
+          <Select
+            onChange={(val: string) =>
+              props.setFormField(props.componentID, val)
+            }
+            // defaultValue={props.defaultFormValues[props.componentID]}
+            className="admin__form--select"
+          >
             {props.selectValues.map(val => (
               <Option key={val}>{val}</Option>
             ))}
           </Select>
         )
       : props.getFieldDecorator(props.componentID, {
-          rules: []
+          rules: [],
+          initialValue: props.defaultFormValues[props.componentID]
         })(
-          <Select className="admin__form--select">
+          <Select
+            onChange={(val: string) =>
+              props.setFormField(props.componentID, val)
+            }
+            // defaultValue={props.defaultFormValues[props.componentID]}
+            className="admin__form--select"
+          >
             {props.selectValues.map(val => (
               <Option key={val}>{val}</Option>
             ))}

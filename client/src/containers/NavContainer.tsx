@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 import { Modal, Button, Input, message } from "antd";
 
 import UserActions from "../actions/user";
+import AdminActions from "../actions/admin";
+
+import { IAdminFormState } from "../reducers/admin";
 
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
@@ -19,6 +22,9 @@ interface IProps {
   isAuthenticated: boolean;
   setUsername: (username: string) => void;
   setAdminStatus: (isAdmin: boolean) => void;
+  formState: IAdminFormState;
+  setFormState: (state: IAdminFormState) => void;
+  setFormField: (field: string, value: string) => void;
   socket: SocketController;
   requestHandler: RequestHandler;
 }
@@ -82,6 +88,9 @@ class NavContainer extends Component<IProps, IState> {
               requestHandler={this.props.requestHandler}
               socket={this.props.socket}
               isAdmin={this.props.isAdmin}
+              formState={this.props.formState}
+              setFormState={this.props.setFormState}
+              setFormField={this.props.setFormField}
             />
           </div>
         </div>
@@ -106,14 +115,16 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     username: state.user.username,
     isAdmin: state.user.isAdmin,
-    isAuthenticated: state.user.isAuthenticated
+    isAuthenticated: state.user.isAuthenticated,
+    formState: state.admin.formState
   };
 }
 
 function mapDispatchToDrops(dispatch: Dispatch) {
   return bindActionCreators(
     {
-      ...UserActions
+      ...UserActions,
+      ...AdminActions
     },
     dispatch
   );
