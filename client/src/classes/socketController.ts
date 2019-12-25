@@ -2,6 +2,7 @@ import * as socketIOClient from "socket.io-client";
 import store from "../entrypoints/home";
 // import { Store } from "redux";
 import { setAdminStatus } from "../actions/user";
+import { setScoutingTargets } from "../actions/scouting";
 
 export const socketEvents = {
   isAdmin: "isAdmin",
@@ -14,14 +15,6 @@ export const emitableEvents = {
   adminFormSubmited: "adminFormSubmited"
 };
 
-interface IScoutingTarget {
-  user: string;
-  team: string;
-}
-interface IScoutingTargets {
-  [target: string]: Array<IScoutingTarget>;
-}
-
 export class SocketController {
   socket: SocketIOClient.Socket;
   constructor(address: string) {
@@ -32,8 +25,9 @@ export class SocketController {
         store.dispatch(setAdminStatus(true));
       }
     });
-    this.socket.on(socketEvents.assignScout, (target: IScoutingTargets) => {
+    this.socket.on(socketEvents.assignScout, (target: Array<string>) => {
       console.log(`You are scouting ${target}`);
+      store.dispatch(setScoutingTargets(target));
     });
   }
 

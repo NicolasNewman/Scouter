@@ -35,12 +35,8 @@ export interface IAdminFormState {
     [key: string]: string;
 }
 
-interface IScoutingTarget {
-    user: string;
-    team: string;
-}
 interface IScoutingTargets {
-    [target: string]: Array<IScoutingTarget>;
+    [target: string]: Array<string>;
 }
 
 export default class SocketController {
@@ -125,9 +121,9 @@ export default class SocketController {
                             logger.info(`${scout} is scouting ${team}`);
 
                             if (teamsForUser[scout]) {
-                                teamsForUser[scout].push({ user: scout, team });
+                                teamsForUser[scout].push(team);
                             } else {
-                                teamsForUser[scout] = [{ user: scout, team }];
+                                teamsForUser[scout] = [team];
                             }
                         }
                     }

@@ -4,12 +4,14 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import user from "../reducers/user";
 import admin from "../reducers/admin";
+import scouting from "../reducers/scouting";
 
 const history = createHashHistory();
 const rootReducer = combineReducers({
   router: connectRouter(history),
   user,
-  admin
+  admin,
+  scouting
 });
 
 const configureStore = (initialState?: any) => {
