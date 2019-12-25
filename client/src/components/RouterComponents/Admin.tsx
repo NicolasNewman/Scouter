@@ -16,7 +16,7 @@ interface IProps {
   socket: SocketController;
   formState: IAdminFormState;
   setFormState: (state: IAdminFormState) => void;
-  setFormField: (field: string, value: string) => void;
+  setFormField: (field: keyof IAdminFormState, value: string) => void;
 }
 
 interface IState {
@@ -69,6 +69,7 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
         if (unique.length !== teams.length) {
           message.error("You have the same team selected multiple times!");
         } else {
+          this.props.socket.emit(emitableEvents.adminFormSubmited, values);
         }
       }
     });

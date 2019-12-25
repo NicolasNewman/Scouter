@@ -12,7 +12,7 @@ interface SetFormStateAction {
 
 interface SetFormFieldAction {
   type: AdminTypeKeys.SET_FORM_FIELD;
-  field: string;
+  field: keyof IAdminFormState;
   value: string;
 }
 
@@ -25,7 +25,7 @@ export function setFormState(state: IAdminFormState) {
   };
 }
 
-export function setFormField(field: string, value: string) {
+export function setFormField(field: keyof IAdminFormState, value: string) {
   return {
     type: AdminTypeKeys.SET_FORM_FIELD,
     field,

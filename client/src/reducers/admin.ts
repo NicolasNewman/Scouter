@@ -46,8 +46,9 @@ export default function user(
         formState: action.state
       };
     case AdminTypeKeys.SET_FORM_FIELD:
-      const newState: { [index: string]: any } = state.formState;
+      const newState: IAdminFormState = state.formState;
       newState[action.field] = action.value;
+      // newState[action.field] = action.value;
       return {
         formState: newState
       };

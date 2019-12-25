@@ -9,11 +9,11 @@ import { IAdminFormState } from "../../reducers/admin";
 interface IProps {
   formLabel: string;
   labelClasses: string;
-  componentID: string;
+  componentID: keyof IAdminFormState;
   selectValues: Array<string>;
   tooltip: boolean;
   defaultFormValues: { [index: string]: any }; // TODO REDUX STORE
-  setFormField: (field: string, value: string) => void;
+  setFormField: (field: keyof IAdminFormState, value: string) => void;
   tooltipText?: string;
   getFieldDecorator: <T extends Object = {}>(
     id: keyof T,

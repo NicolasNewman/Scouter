@@ -5,16 +5,42 @@ import { logger } from '../utils/logger';
 
 export const socketEvents = {
     registerUser: 'registerUser',
-    getUsers: 'getUsers'
+    getUsers: 'getUsers',
+    adminFormSubmited: 'adminFormSubmited'
 };
 
 export const emitableEvents = {
     isAdmin: 'isAdmin',
-    sendUsers: 'sendUsers'
+    sendUsers: 'sendUsers',
+    assignScout: 'assignScout'
 };
 
 interface IIDtoUserMap {
     [key: string]: string;
+}
+
+export interface IAdminFormState {
+    'r-s1-team': string;
+    'r-s1-scout': string;
+    'r-s2-team': string;
+    'r-s2-scout': string;
+    'r-s3-team': string;
+    'r-s3-scout': string;
+    'b-s1-team': string;
+    'b-s1-scout': string;
+    'b-s2-team': string;
+    'b-s2-scout': string;
+    'b-s3-team': string;
+    'b-s3-scout': string;
+    [key: string]: string;
+}
+
+interface IScoutingTarget {
+    user: string;
+    team: string;
+}
+interface IScoutingTargets {
+    [target: string]: Array<IScoutingTarget>;
 }
 
 export default class SocketController {
@@ -23,11 +49,13 @@ export default class SocketController {
     httpServer: http.Server;
     registeredUsers: Array<string>;
     idToUserMap: IIDtoUserMap;
+    userToIdMap: IIDtoUserMap;
 
     constructor(app: Application) {
         this.app = app;
         this.registeredUsers = [];
         this.idToUserMap = {};
+        this.userToIdMap = {};
 
         this.httpServer = http.createServer(this.app);
         this.io = socketIO(this.httpServer);
@@ -38,6 +66,8 @@ export default class SocketController {
                 this.registeredUsers = this.registeredUsers.filter(
                     e => e !== name
                 );
+                delete this.idToUserMap[socket.id];
+                delete this.userToIdMap[name];
                 logger.log(
                     'info',
                     `User ${socket.id} disconnected. Removing ${name} form the user list`
@@ -54,6 +84,7 @@ export default class SocketController {
                     } else {
                         this.registeredUsers.push(name);
                         this.idToUserMap[socket.id] = name;
+                        this.userToIdMap[name] = socket.id;
                         logger.log(
                             'info',
                             `User ${socket.id} registered as ${name}`
@@ -68,10 +99,48 @@ export default class SocketController {
                     }
                 }
             );
+            // Sends the client a list of connected users as a callback
             socket.on(
                 socketEvents.getUsers,
                 (_data: undefined, dataCallback) => {
                     dataCallback(this.registeredUsers);
+                }
+            );
+            socket.on(
+                socketEvents.adminFormSubmited,
+                (formValues: IAdminFormState) => {
+                    // 1) Split as {scout: teamNumber}
+                    // 2) io.to(userToId(scout))
+                    // const scoutToTeam = {};
+                    let key: keyof IAdminFormState;
+                    const teamsForUser: IScoutingTargets = {};
+                    for (key in formValues) {
+                        if (key.includes('scout')) {
+                            const scout = formValues[key];
+                            const teamKey: keyof IAdminFormState = key.replace(
+                                'scout',
+                                'team'
+                            );
+                            const team = formValues[teamKey];
+                            logger.info(`${scout} is scouting ${team}`);
+
+                            if (teamsForUser[scout]) {
+                                teamsForUser[scout].push({ user: scout, team });
+                            } else {
+                                teamsForUser[scout] = [{ user: scout, team }];
+                            }
+                        }
+                    }
+                    for (key in teamsForUser) {
+                        this.io
+                            .to(this.userToIdMap[key])
+                            .emit(
+                                emitableEvents.assignScout,
+                                teamsForUser[key]
+                            );
+                    }
+                    // const s1Scout = formValues['r-s1-scout'];
+                    // scoutToTeam[s1Scout] = formValues['r-s1-team'];
                 }
             );
         });
