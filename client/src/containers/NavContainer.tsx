@@ -29,6 +29,7 @@ interface IProps {
   socket: SocketController;
   requestHandler: RequestHandler;
   scoutingTargets: Array<string>;
+  matchNumber: number;
   isActive: boolean;
 }
 
@@ -79,6 +80,9 @@ class NavContainer extends Component<IProps, IState> {
     if (this.props.isActive) {
       message.info("The scouting form is now active!");
     }
+    console.log(this.props.scoutingTargets);
+    console.log(this.props.matchNumber);
+
     return (
       <div>
         <Header
@@ -101,6 +105,7 @@ class NavContainer extends Component<IProps, IState> {
               setFormState={this.props.setFormState}
               setFormField={this.props.setFormField}
               scoutingTargets={this.props.scoutingTargets}
+              matchNumber={this.props.matchNumber}
             />
           </div>
         </div>
@@ -127,7 +132,8 @@ function mapStateToProps(state: any, ownProps: any) {
     isAdmin: state.user.isAdmin,
     isAuthenticated: state.user.isAuthenticated,
     formState: state.admin.formState,
-    scoutingTargets: state.scouting.scoutingTargets,
+    scoutingTargets: state.scouting.targets,
+    matchNumber: state.scouting.matchNumber,
     isActive: state.scouting.isActive
   };
 }

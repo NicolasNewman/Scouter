@@ -15,6 +15,11 @@ export const emitableEvents = {
   adminFormSubmited: "adminFormSubmited"
 };
 
+interface IAssignScoutPacket {
+  teams: Array<string>;
+  matchNumber: number;
+}
+
 export class SocketController {
   socket: SocketIOClient.Socket;
   constructor(address: string) {
@@ -25,9 +30,11 @@ export class SocketController {
         store.dispatch(setAdminStatus(true));
       }
     });
-    this.socket.on(socketEvents.assignScout, (target: Array<string>) => {
-      console.log(`You are scouting ${target}`);
-      store.dispatch(setScoutingTargets(target));
+    this.socket.on(socketEvents.assignScout, (data: IAssignScoutPacket) => {
+      console.log(`You are scouting ${data.teams}`);
+      console.log(`With match number ${data.matchNumber}`);
+
+      store.dispatch(setScoutingTargets(data.teams, data.matchNumber));
     });
   }
 

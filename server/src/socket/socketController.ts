@@ -32,6 +32,7 @@ export interface IAdminFormState {
     'b-s2-scout': string;
     'b-s3-team': string;
     'b-s3-scout': string;
+    matchNumber: string;
     [key: string]: string;
 }
 
@@ -105,9 +106,6 @@ export default class SocketController {
             socket.on(
                 socketEvents.adminFormSubmited,
                 (formValues: IAdminFormState) => {
-                    // 1) Split as {scout: teamNumber}
-                    // 2) io.to(userToId(scout))
-                    // const scoutToTeam = {};
                     let key: keyof IAdminFormState;
                     const teamsForUser: IScoutingTargets = {};
                     for (key in formValues) {
@@ -127,13 +125,15 @@ export default class SocketController {
                             }
                         }
                     }
+                    console.log(teamsForUser);
+
                     for (key in teamsForUser) {
                         this.io
                             .to(this.userToIdMap[key])
-                            .emit(
-                                emitableEvents.assignScout,
-                                teamsForUser[key]
-                            );
+                            .emit(emitableEvents.assignScout, {
+                                teams: teamsForUser[key],
+                                matchNumber: formValues.matchNumber
+                            });
                     }
                     // const s1Scout = formValues['r-s1-scout'];
                     // scoutToTeam[s1Scout] = formValues['r-s1-team'];

@@ -18,6 +18,7 @@ interface IProps {
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
   scoutingTargets: Array<string>;
+  matchNumber: number;
 }
 
 export default class ComponentRouter extends Component<IProps> {
@@ -35,7 +36,10 @@ export default class ComponentRouter extends Component<IProps> {
           <Route
             path="/entry"
             component={() => (
-              <DataInput scoutingTargets={this.props.scoutingTargets} />
+              <DataInput
+                scoutingTargets={this.props.scoutingTargets}
+                matchNumber={this.props.matchNumber}
+              />
             )}
           />
           <Route path="/visualize" component={Visualize} />

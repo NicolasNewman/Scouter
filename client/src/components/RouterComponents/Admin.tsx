@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 
-import { Form, Button, message } from "antd";
+import { Form, Button, Input, message } from "antd";
 import TeamScoutAssigner from "../AdminFormComponents/TeamScoutAssigner";
 import RequestHandler from "../../classes/RequestHandler";
 import {
@@ -220,6 +220,16 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
             </div>
           </div>
         </div>
+        <Form.Item className="admin__form--item-global" label="Match number:">
+          {getFieldDecorator("matchNumber", {
+            rules: [
+              {
+                required: true,
+                message: "The match number is required!"
+              }
+            ]
+          })(<Input />)}
+        </Form.Item>
         <Form.Item>
           <Button
             className="admin__form--submit"
