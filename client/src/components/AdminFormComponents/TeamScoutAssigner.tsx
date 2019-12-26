@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Component } from "react";
 
 import { Form, Select, Tooltip, Icon } from "antd";
 const { Option } = Select;

@@ -3,7 +3,7 @@ import { Component } from "react";
 import { FormComponentProps } from "antd/lib/form/Form";
 
 import { Form, Button, message } from "antd";
-import TeamScoutAssigner from "../FormComponents/TeamScoutAssigner";
+import TeamScoutAssigner from "../AdminFormComponents/TeamScoutAssigner";
 import RequestHandler from "../../classes/RequestHandler";
 import {
   SocketController,
@@ -53,8 +53,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
   }
 
   handleSubmit = (e: React.SyntheticEvent) => {
-    console.log(e);
     e.preventDefault();
+    console.log(e);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.setFormState(values);
