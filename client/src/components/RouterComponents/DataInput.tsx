@@ -1,7 +1,12 @@
 import * as React from "react";
 import { Component } from "react";
 
-interface IProps {}
+import { Tabs } from "antd";
+const { TabPane } = Tabs;
+
+interface IProps {
+  scoutingTargets: Array<string>;
+}
 
 export default class Home extends Component<IProps> {
   props: IProps;
@@ -13,7 +18,14 @@ export default class Home extends Component<IProps> {
   render() {
     return (
       <div>
-        <p>Bonjour!</p>
+        <h1>You are scouting: {this.props.scoutingTargets}</h1>
+        <Tabs>
+          {this.props.scoutingTargets.map(team => (
+            <TabPane tab={team} key={team}>
+              <h1>Insert form here</h1>
+            </TabPane>
+          ))}
+        </Tabs>
       </div>
     );
   }

@@ -100,6 +100,7 @@ class NavContainer extends Component<IProps, IState> {
               formState={this.props.formState}
               setFormState={this.props.setFormState}
               setFormField={this.props.setFormField}
+              scoutingTargets={this.props.scoutingTargets}
             />
           </div>
         </div>
