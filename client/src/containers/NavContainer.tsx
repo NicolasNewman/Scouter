@@ -7,6 +7,7 @@ import { Modal, Button, Input, message } from "antd";
 
 import UserActions from "../actions/user";
 import AdminActions from "../actions/admin";
+import ScoutingActions from "../actions/scouting";
 
 import { IAdminFormState } from "../reducers/admin";
 
@@ -27,6 +28,8 @@ interface IProps {
   setFormField: (field: string, value: string) => void;
   socket: SocketController;
   requestHandler: RequestHandler;
+  scoutingTargets: Array<string>;
+  isActive: boolean;
 }
 
 interface IState {
@@ -73,6 +76,9 @@ class NavContainer extends Component<IProps, IState> {
   };
 
   render() {
+    if (this.props.isActive) {
+      message.info("The scouting form is now active!");
+    }
     return (
       <div>
         <Header
@@ -81,7 +87,10 @@ class NavContainer extends Component<IProps, IState> {
         />
         <div className="two-col-nav">
           <div className="two-col-nav__left">
-            <Navigation isAdmin={this.props.isAdmin} />
+            <Navigation
+              isActive={this.props.isActive}
+              isAdmin={this.props.isAdmin}
+            />
           </div>
           <div className="two-col-nav__right">
             <ComponentRouter
@@ -116,7 +125,9 @@ function mapStateToProps(state: any, ownProps: any) {
     username: state.user.username,
     isAdmin: state.user.isAdmin,
     isAuthenticated: state.user.isAuthenticated,
-    formState: state.admin.formState
+    formState: state.admin.formState,
+    scoutingTargets: state.scouting.scoutingTargets,
+    isActive: state.scouting.isActive
   };
 }
 
@@ -124,7 +135,8 @@ function mapDispatchToDrops(dispatch: Dispatch) {
   return bindActionCreators(
     {
       ...UserActions,
-      ...AdminActions
+      ...AdminActions,
+      ...ScoutingActions
     },
     dispatch
   );

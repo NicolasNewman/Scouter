@@ -1,17 +1,17 @@
 import { ScoutingTypeKeys, ScoutingTypes } from "../actions/scouting";
 
 export type ScoutingTargetState = {
-  targets: Array<string>;
+  scoutingTargets: Array<string>;
   isActive: boolean;
 };
 
 const initialState: ScoutingTargetState = {
-  targets: [],
+  scoutingTargets: [],
   isActive: false
 };
 
 export default function scouting(
-  state: ScoutingTargetState,
+  state: ScoutingTargetState = initialState,
   action: ScoutingTypes
 ) {
   switch (action.type) {
@@ -22,7 +22,7 @@ export default function scouting(
       };
     case ScoutingTypeKeys.UPDATE_SCOUTING_STATUS:
       return {
-        targets: state.targets,
+        targets: state.scoutingTargets,
         isActive: action.isActive
       };
     default:
