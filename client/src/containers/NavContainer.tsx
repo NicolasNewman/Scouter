@@ -9,17 +9,18 @@ import UserActions from "../actions/user";
 import AdminActions from "../actions/admin";
 import ScoutingActions from "../actions/scouting";
 
-import { IAdminFormState } from "../reducers/admin";
-
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
+import ComponentRouter from "../components/ComponentRouter";
+
 import {
   SocketController,
   emitableEvents,
   ScoutingTargets
 } from "../classes/socketController";
-import ComponentRouter from "../components/ComponentRouter";
 import RequestHandler from "../classes/RequestHandler";
+
+import { IAdminFormState, IAdminScoutStatus } from "../reducers/admin";
 
 interface IProps {
   username: string;
@@ -28,6 +29,8 @@ interface IProps {
   setUsername: (username: string) => void;
   setAdminStatus: (isAdmin: boolean) => void;
   formState: IAdminFormState;
+  scoutStatus: IAdminScoutStatus;
+  inProgress: boolean;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
   socket: SocketController;
@@ -106,6 +109,8 @@ class NavContainer extends Component<IProps, IState> {
               socket={this.props.socket}
               isAdmin={this.props.isAdmin}
               formState={this.props.formState}
+              scoutStatus={this.props.scoutStatus}
+              inProgress={this.props.inProgress}
               setFormState={this.props.setFormState}
               setFormField={this.props.setFormField}
               scoutingTargets={this.props.scoutingTargets}
@@ -136,6 +141,8 @@ function mapStateToProps(state: any, ownProps: any) {
     isAdmin: state.user.isAdmin,
     isAuthenticated: state.user.isAuthenticated,
     formState: state.admin.formState,
+    scoutStatus: state.admin.scoutStatus,
+    inProgress: state.admin.inProgress,
     scoutingTargets: state.scouting.targets,
     matchNumber: state.scouting.matchNumber,
     isActive: state.scouting.isActive

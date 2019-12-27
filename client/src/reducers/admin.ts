@@ -15,8 +15,28 @@ export interface IAdminFormState {
   "b-s3-scout": string;
 }
 
+export interface IAdminScoutStatus {
+  "r-s1-scout": boolean;
+  "r-s2-scout": boolean;
+  "r-s3-scout": boolean;
+  "b-s1-scout": boolean;
+  "b-s2-scout": boolean;
+  "b-s3-scout": boolean;
+}
+
+const falseScoutStatus: IAdminScoutStatus = {
+  "r-s1-scout": false,
+  "r-s2-scout": false,
+  "r-s3-scout": false,
+  "b-s1-scout": false,
+  "b-s2-scout": false,
+  "b-s3-scout": false
+};
+
 export type AdminState = {
   formState: IAdminFormState;
+  scoutStatus: IAdminScoutStatus;
+  inProgress: boolean;
 };
 
 const initialState: AdminState = {
@@ -33,7 +53,9 @@ const initialState: AdminState = {
     "b-s2-scout": "",
     "b-s3-team": "",
     "b-s3-scout": ""
-  }
+  },
+  scoutStatus: falseScoutStatus,
+  inProgress: false
 };
 
 export default function user(
@@ -43,15 +65,42 @@ export default function user(
   switch (action.type) {
     case AdminTypeKeys.SET_FORM_STATE:
       return {
-        formState: action.state
+        formState: action.state,
+        scoutStatus: state.scoutStatus,
+        inProgress: state.inProgress
       };
     case AdminTypeKeys.SET_FORM_FIELD:
       const newState: IAdminFormState = state.formState;
       newState[action.field] = action.value;
-      // newState[action.field] = action.value;
       return {
-        formState: newState
+        formState: newState,
+        scoutStatus: state.scoutStatus,
+        inProgress: state.inProgress
       };
+    case AdminTypeKeys.START_SESSION:
+      return {
+        formState: state.formState,
+        scoutStatus: falseScoutStatus,
+        inProgress: true
+      };
+    case AdminTypeKeys.END_SESSION:
+      return {
+        formState: state.formState,
+        scoutStatus: state.scoutStatus,
+        inProgress: false
+      };
+    case AdminTypeKeys.SET_SCOUT_STATUS:
+      if (state.inProgress) {
+        const newStatus: IAdminScoutStatus = state.scoutStatus;
+        newStatus[action.scout] = action.status;
+        return {
+          formState: state.formState,
+          scoutStatus: newStatus,
+          inProgress: state.inProgress
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

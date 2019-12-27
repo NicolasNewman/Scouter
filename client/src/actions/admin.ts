@@ -1,8 +1,11 @@
-import { IAdminFormState } from "../reducers/admin";
+import { IAdminFormState, IAdminScoutStatus } from "../reducers/admin";
 
 export enum AdminTypeKeys {
   SET_FORM_STATE = "SET_FORM_STATE",
-  SET_FORM_FIELD = "SET_FORM_FIELD"
+  SET_FORM_FIELD = "SET_FORM_FIELD",
+  START_SESSION = "START_SESSION",
+  END_SESSION = "END_SESSION",
+  SET_SCOUT_STATUS = "SET_SCOUT_STATUS"
 }
 
 interface SetFormStateAction {
@@ -16,7 +19,26 @@ interface SetFormFieldAction {
   value: string;
 }
 
-export type AdminTypes = SetFormStateAction | SetFormFieldAction;
+interface StartSessionAction {
+  type: AdminTypeKeys.START_SESSION;
+}
+
+interface EndSessionAction {
+  type: AdminTypeKeys.END_SESSION;
+}
+
+interface SetScoutStatus {
+  type: AdminTypeKeys.SET_SCOUT_STATUS;
+  scout: keyof IAdminScoutStatus;
+  status: boolean;
+}
+
+export type AdminTypes =
+  | SetFormStateAction
+  | SetFormFieldAction
+  | StartSessionAction
+  | EndSessionAction
+  | SetScoutStatus;
 
 export function setFormState(state: IAdminFormState) {
   return {
@@ -33,4 +55,33 @@ export function setFormField(field: keyof IAdminFormState, value: string) {
   };
 }
 
-export default { setFormState, setFormField };
+export function startSession() {
+  return {
+    type: AdminTypeKeys.START_SESSION
+  };
+}
+
+export function endSession() {
+  return {
+    type: AdminTypeKeys.END_SESSION
+  };
+}
+
+export function setScoutStatus(
+  scout: keyof IAdminScoutStatus,
+  status: boolean
+) {
+  return {
+    type: AdminTypeKeys.SET_SCOUT_STATUS,
+    scout,
+    status
+  };
+}
+
+export default {
+  setFormState,
+  setFormField,
+  startSession,
+  endSession,
+  setScoutStatus
+};

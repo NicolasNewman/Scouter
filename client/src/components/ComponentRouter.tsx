@@ -8,13 +8,15 @@ import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
 import { SocketController, ScoutingTargets } from "../classes/socketController";
-import { IAdminFormState } from "../reducers/admin";
+import { IAdminFormState, IAdminScoutStatus } from "../reducers/admin";
 
 interface IProps {
   isAdmin: boolean;
   requestHandler: RequestHandler;
   socket: SocketController;
   formState: IAdminFormState;
+  scoutStatus: IAdminScoutStatus;
+  inProgress: boolean;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
   scoutingTargets: ScoutingTargets;
@@ -51,6 +53,8 @@ export default class ComponentRouter extends Component<IProps> {
                 socket={this.props.socket}
                 requestHandler={this.props.requestHandler}
                 formState={this.props.formState}
+                scoutStatus={this.props.scoutStatus}
+                inProgress={this.props.inProgress}
                 setFormState={this.props.setFormState}
                 setFormField={this.props.setFormField}
               />
