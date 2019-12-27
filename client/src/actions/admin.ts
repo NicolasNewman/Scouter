@@ -1,11 +1,16 @@
-import { IAdminFormState, IAdminScoutStatus } from "../reducers/admin";
+import {
+  IAdminFormState,
+  IAdminScoutStatus,
+  MainTabKeys
+} from "../reducers/admin";
 
 export enum AdminTypeKeys {
   SET_FORM_STATE = "SET_FORM_STATE",
   SET_FORM_FIELD = "SET_FORM_FIELD",
   START_SESSION = "START_SESSION",
   END_SESSION = "END_SESSION",
-  SET_SCOUT_STATUS = "SET_SCOUT_STATUS"
+  SET_SCOUT_STATUS = "SET_SCOUT_STATUS",
+  SET_SELECTED_MAIN_TAB = "SET_SELECTED_MAIN_TAB"
 }
 
 interface SetFormStateAction {
@@ -27,10 +32,15 @@ interface EndSessionAction {
   type: AdminTypeKeys.END_SESSION;
 }
 
-interface SetScoutStatus {
+interface SetScoutStatusAction {
   type: AdminTypeKeys.SET_SCOUT_STATUS;
   scout: keyof IAdminScoutStatus;
   status: boolean;
+}
+
+interface SetSelectedMainTabAction {
+  type: AdminTypeKeys.SET_SELECTED_MAIN_TAB;
+  key: MainTabKeys;
 }
 
 export type AdminTypes =
@@ -38,7 +48,8 @@ export type AdminTypes =
   | SetFormFieldAction
   | StartSessionAction
   | EndSessionAction
-  | SetScoutStatus;
+  | SetScoutStatusAction
+  | SetSelectedMainTabAction;
 
 export function setFormState(state: IAdminFormState) {
   return {
@@ -78,10 +89,18 @@ export function setScoutStatus(
   };
 }
 
+export function setSelectedMainTab(key: MainTabKeys) {
+  return {
+    type: AdminTypeKeys.SET_SELECTED_MAIN_TAB,
+    key
+  };
+}
+
 export default {
   setFormState,
   setFormField,
   startSession,
   endSession,
-  setScoutStatus
+  setScoutStatus,
+  setSelectedMainTab
 };

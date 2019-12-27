@@ -17,6 +17,7 @@ interface IProps {
   formState: IAdminFormState;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: keyof IAdminFormState, value: string) => void;
+  startSession: () => void;
 }
 
 interface IState {
@@ -77,6 +78,8 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
             (error: boolean, errorMsg?: string) => {
               if (error) {
                 message.error(errorMsg);
+              } else {
+                this.props.startSession();
               }
             }
           );

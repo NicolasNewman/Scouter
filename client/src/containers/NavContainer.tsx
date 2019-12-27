@@ -20,7 +20,11 @@ import {
 } from "../classes/socketController";
 import RequestHandler from "../classes/RequestHandler";
 
-import { IAdminFormState, IAdminScoutStatus } from "../reducers/admin";
+import {
+  IAdminFormState,
+  IAdminScoutStatus,
+  MainTabKeys
+} from "../reducers/admin";
 
 interface IProps {
   username: string;
@@ -31,8 +35,12 @@ interface IProps {
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
+  keyOfSelectedMainTab: MainTabKeys;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
+  startSession: () => void;
+  endSession: () => void;
+  setSelectedMainTab: (key: MainTabKeys) => void;
   socket: SocketController;
   requestHandler: RequestHandler;
   scoutingTargets: ScoutingTargets;
@@ -84,11 +92,7 @@ class NavContainer extends Component<IProps, IState> {
   };
 
   render() {
-    if (this.props.isActive) {
-      message.info("The scouting form is now active!");
-    }
-    console.log(this.props.scoutingTargets);
-    console.log(this.props.matchNumber);
+    console.log(`IN NAV ${this.props.keyOfSelectedMainTab}`);
 
     return (
       <div>
@@ -111,9 +115,13 @@ class NavContainer extends Component<IProps, IState> {
               formState={this.props.formState}
               scoutStatus={this.props.scoutStatus}
               inProgress={this.props.inProgress}
+              keyOfSelectedMainTab={this.props.keyOfSelectedMainTab}
               setFormState={this.props.setFormState}
               setFormField={this.props.setFormField}
               scoutingTargets={this.props.scoutingTargets}
+              startSession={this.props.startSession}
+              endSession={this.props.endSession}
+              setSelectedMainTab={this.props.setSelectedMainTab}
               matchNumber={this.props.matchNumber}
             />
           </div>
@@ -135,7 +143,6 @@ class NavContainer extends Component<IProps, IState> {
 }
 
 function mapStateToProps(state: any, ownProps: any) {
-  console.log(state);
   return {
     username: state.user.username,
     isAdmin: state.user.isAdmin,
@@ -143,6 +150,7 @@ function mapStateToProps(state: any, ownProps: any) {
     formState: state.admin.formState,
     scoutStatus: state.admin.scoutStatus,
     inProgress: state.admin.inProgress,
+    keyOfSelectedMainTab: state.admin.keyOfSelectedMainTab,
     scoutingTargets: state.scouting.targets,
     matchNumber: state.scouting.matchNumber,
     isActive: state.scouting.isActive

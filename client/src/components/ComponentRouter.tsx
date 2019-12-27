@@ -8,7 +8,11 @@ import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
 import { SocketController, ScoutingTargets } from "../classes/socketController";
-import { IAdminFormState, IAdminScoutStatus } from "../reducers/admin";
+import {
+  IAdminFormState,
+  IAdminScoutStatus,
+  MainTabKeys
+} from "../reducers/admin";
 
 interface IProps {
   isAdmin: boolean;
@@ -17,8 +21,13 @@ interface IProps {
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
+  keyOfSelectedMainTab: MainTabKeys;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
+  startSession: () => void;
+  endSession: () => void;
+  setSelectedMainTab: (key: MainTabKeys) => void;
+
   scoutingTargets: ScoutingTargets;
   matchNumber: number;
 }
@@ -55,8 +64,12 @@ export default class ComponentRouter extends Component<IProps> {
                 formState={this.props.formState}
                 scoutStatus={this.props.scoutStatus}
                 inProgress={this.props.inProgress}
+                keyOfSelectedMainTab={this.props.keyOfSelectedMainTab}
                 setFormState={this.props.setFormState}
                 setFormField={this.props.setFormField}
+                startSession={this.props.startSession}
+                endSession={this.props.endSession}
+                setSelectedMainTab={this.props.setSelectedMainTab}
               />
             )}
             path="/admin"

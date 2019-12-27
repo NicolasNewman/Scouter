@@ -4,6 +4,8 @@ import store from "../entrypoints/home";
 import { setAdminStatus } from "../actions/user";
 import { setScoutingTargets } from "../actions/scouting";
 
+import { message } from "antd";
+
 export const socketEvents = {
   isAdmin: "isAdmin",
   assignScout: "assignScout"
@@ -44,6 +46,7 @@ export class SocketController {
       console.log(data.teams);
 
       store.dispatch(setScoutingTargets(data.teams, data.matchNumber));
+      message.info("The scouting form is now active!");
     });
   }
 

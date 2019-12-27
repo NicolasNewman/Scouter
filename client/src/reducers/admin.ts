@@ -33,10 +33,16 @@ const falseScoutStatus: IAdminScoutStatus = {
   "b-s3-scout": false
 };
 
+export enum MainTabKeys {
+  DB_ENTRY = "DB_ENTRY",
+  ASSIGNMENT_FORM = "ASSIGNMENT_FORM"
+}
+
 export type AdminState = {
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
+  keyOfSelectedMainTab: MainTabKeys;
 };
 
 const initialState: AdminState = {
@@ -55,7 +61,8 @@ const initialState: AdminState = {
     "b-s3-scout": ""
   },
   scoutStatus: falseScoutStatus,
-  inProgress: false
+  inProgress: false,
+  keyOfSelectedMainTab: MainTabKeys.DB_ENTRY
 };
 
 export default function user(
@@ -67,7 +74,8 @@ export default function user(
       return {
         formState: action.state,
         scoutStatus: state.scoutStatus,
-        inProgress: state.inProgress
+        inProgress: state.inProgress,
+        keyOfSelectedMainTab: state.keyOfSelectedMainTab
       };
     case AdminTypeKeys.SET_FORM_FIELD:
       const newState: IAdminFormState = state.formState;
@@ -75,19 +83,22 @@ export default function user(
       return {
         formState: newState,
         scoutStatus: state.scoutStatus,
-        inProgress: state.inProgress
+        inProgress: state.inProgress,
+        keyOfSelectedMainTab: state.keyOfSelectedMainTab
       };
     case AdminTypeKeys.START_SESSION:
       return {
         formState: state.formState,
         scoutStatus: falseScoutStatus,
-        inProgress: true
+        inProgress: true,
+        keyOfSelectedMainTab: state.keyOfSelectedMainTab
       };
     case AdminTypeKeys.END_SESSION:
       return {
         formState: state.formState,
         scoutStatus: state.scoutStatus,
-        inProgress: false
+        inProgress: false,
+        keyOfSelectedMainTab: state.keyOfSelectedMainTab
       };
     case AdminTypeKeys.SET_SCOUT_STATUS:
       if (state.inProgress) {
@@ -96,11 +107,21 @@ export default function user(
         return {
           formState: state.formState,
           scoutStatus: newStatus,
-          inProgress: state.inProgress
+          inProgress: state.inProgress,
+          keyOfSelectedMainTab: state.keyOfSelectedMainTab
         };
       } else {
         return state;
       }
+    case AdminTypeKeys.SET_SELECTED_MAIN_TAB:
+      console.log(`HERE! KEY IS ${action.key}`);
+
+      return {
+        formState: state.formState,
+        scoutStatus: state.scoutStatus,
+        inProgress: state.inProgress,
+        keyOfSelectedMainTab: action.key
+      };
     default:
       return state;
   }
