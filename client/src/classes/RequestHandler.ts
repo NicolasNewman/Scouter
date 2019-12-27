@@ -13,6 +13,6 @@ export default class RequestHandler {
   };
 
   post = async (url: string, data: any) => {
-    return await axios.post(url, data);
+    return await this.instance.post(url, data);
   };
 }
