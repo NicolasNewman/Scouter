@@ -71,7 +71,13 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
         if (unique.length !== teams.length) {
           message.error("You have the same team selected multiple times!");
         } else {
-          this.props.socket.emit(emitableEvents.adminFormSubmited, values);
+          this.props.socket.emit(
+            emitableEvents.adminFormSubmited,
+            values,
+            (error: boolean, errorMsg?: string) => {
+              console.log(error);
+            }
+          );
         }
       }
     });

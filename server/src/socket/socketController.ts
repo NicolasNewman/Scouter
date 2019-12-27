@@ -2,6 +2,7 @@ import { Application } from 'express';
 import * as http from 'http';
 import * as socketIO from 'socket.io';
 import { logger } from '../utils/logger';
+import Game from '../models/gameModel';
 
 export const socketEvents = {
     registerUser: 'registerUser',
@@ -35,10 +36,6 @@ export interface IAdminFormState {
     matchNumber: string;
     [key: string]: string;
 }
-
-// interface IScoutingTargets {
-//     [target: string]: Array<string>;
-// }
 
 interface IScoutingTargets {
     [target: string]: [
@@ -115,57 +112,78 @@ export default class SocketController {
             );
             socket.on(
                 socketEvents.adminFormSubmited,
-                (formValues: IAdminFormState) => {
-                    let key: keyof IAdminFormState;
-                    // Will hold a map of usernames to the teams they are scouting
-                    const teamsForUser: IScoutingTargets = {};
-                    for (key in formValues) {
-                        if (key.includes('scout')) {
-                            const scout = formValues[key];
-                            const teamKey: keyof IAdminFormState = key.replace(
-                                'scout',
-                                'team'
-                            );
-                            const team = formValues[teamKey];
-                            const splitFields = key.split('-', 3);
-                            const alliance =
-                                splitFields[0] === 'r' ? 'red' : 'blue';
-                            const seed =
-                                splitFields[1] !== 's1' &&
-                                splitFields[1] !== 's2' &&
-                                splitFields[1] !== 's3'
-                                    ? 's1'
-                                    : splitFields[1];
-
-                            logger.info(
-                                `${scout} is scouting the team ${team} which is seed ${seed} on the ${alliance} alliance`
-                            );
-
-                            if (teamsForUser[scout]) {
-                                teamsForUser[scout].push({
-                                    team,
-                                    alliance,
-                                    seed
-                                });
+                (formValues: IAdminFormState, callback) => {
+                    // Make sure the match doesn't already exist
+                    Game.findOne({
+                        matchNumber: formValues.matchNumber
+                    })
+                        .then(game => {
+                            if (game) {
+                                callback(
+                                    true,
+                                    `A game with match number ${formValues.matchNumber} already exists. If overwriting, please remove the old one`
+                                );
                             } else {
-                                teamsForUser[scout] = [
-                                    { team, alliance, seed }
-                                ];
-                            }
-                        }
-                    }
-                    console.log(teamsForUser);
+                                let key: keyof IAdminFormState;
+                                // Will hold a map of usernames to the teams they are scouting
+                                const teamsForUser: IScoutingTargets = {};
+                                for (key in formValues) {
+                                    if (key.includes('scout')) {
+                                        const scout = formValues[key];
+                                        const teamKey: keyof IAdminFormState = key.replace(
+                                            'scout',
+                                            'team'
+                                        );
+                                        const team = formValues[teamKey];
+                                        const splitFields = key.split('-', 3);
+                                        const alliance =
+                                            splitFields[0] === 'r'
+                                                ? 'red'
+                                                : 'blue';
+                                        const seed =
+                                            splitFields[1] !== 's1' &&
+                                            splitFields[1] !== 's2' &&
+                                            splitFields[1] !== 's3'
+                                                ? 's1'
+                                                : splitFields[1];
 
-                    for (key in teamsForUser) {
-                        this.io
-                            .to(this.userToIdMap[key])
-                            .emit(emitableEvents.assignScout, {
-                                teams: teamsForUser[key],
-                                matchNumber: formValues.matchNumber
-                            });
-                    }
-                    // const s1Scout = formValues['r-s1-scout'];
-                    // scoutToTeam[s1Scout] = formValues['r-s1-team'];
+                                        logger.info(
+                                            `${scout} is scouting the team ${team} which is seed ${seed} on the ${alliance} alliance`
+                                        );
+
+                                        if (teamsForUser[scout]) {
+                                            teamsForUser[scout].push({
+                                                team,
+                                                alliance,
+                                                seed
+                                            });
+                                        } else {
+                                            teamsForUser[scout] = [
+                                                { team, alliance, seed }
+                                            ];
+                                        }
+                                    }
+                                }
+                                console.log(teamsForUser);
+
+                                for (key in teamsForUser) {
+                                    this.io
+                                        .to(this.userToIdMap[key])
+                                        .emit(emitableEvents.assignScout, {
+                                            teams: teamsForUser[key],
+                                            matchNumber: formValues.matchNumber
+                                        });
+                                }
+                                Game.create({
+                                    matchNumber: formValues.matchNumber
+                                }).then(_game => {
+                                    callback(false);
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            logger.error(err);
+                        });
                 }
             );
         });

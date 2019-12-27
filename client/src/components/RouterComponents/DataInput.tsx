@@ -27,7 +27,7 @@ export default class Home extends Component<IProps> {
       .join(", ");
     if (this.props.scoutingTargets && this.props.matchNumber) {
       return (
-        <div>
+        <div className="scouting">
           <h1>Match: {this.props.matchNumber}</h1>
           <h1>Scouting: {scoutingTargets}</h1>
           <Tabs>

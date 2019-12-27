@@ -41,6 +41,7 @@ export class SocketController {
     this.socket.on(socketEvents.assignScout, (data: IAssignScoutPacket) => {
       console.log(`You are scouting ${data.teams}`);
       console.log(`With match number ${data.matchNumber}`);
+      console.log(data.teams);
 
       store.dispatch(setScoutingTargets(data.teams, data.matchNumber));
     });
