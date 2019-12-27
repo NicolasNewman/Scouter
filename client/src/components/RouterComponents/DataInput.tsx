@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
 
+import DataForm from "../DataForm";
+
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 
@@ -25,7 +27,7 @@ export default class Home extends Component<IProps> {
           <Tabs>
             {this.props.scoutingTargets.map(team => (
               <TabPane tab={team} key={team}>
-                <h1>Insert form here</h1>
+                <DataForm team={team} />
               </TabPane>
             ))}
           </Tabs>
@@ -38,7 +40,7 @@ export default class Home extends Component<IProps> {
       //   </div>
       // );
       const matchNumber = 1;
-      const scoutingTargets = [100, 200, 300];
+      const scoutingTargets = ["100", "200", "300"];
       return (
         <div className="scouting">
           <h1>Match: {matchNumber}</h1>
@@ -46,7 +48,7 @@ export default class Home extends Component<IProps> {
           <Tabs>
             {scoutingTargets.map(team => (
               <TabPane tab={team} key={team + ""}>
-                <h1>Insert form here</h1>
+                <DataForm team={team} />
               </TabPane>
             ))}
           </Tabs>
