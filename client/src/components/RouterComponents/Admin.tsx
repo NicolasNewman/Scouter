@@ -60,12 +60,14 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
         this.props.setFormState(values);
         console.log("Received values of form: ", values);
         const teams = [];
+        // Verify each team is unique
         for (let key in values) {
           if (key.includes("team")) {
             teams.push(values[key]);
           }
         }
         const unique = [...new Set(teams)];
+        // If not unique
         if (unique.length !== teams.length) {
           message.error("You have the same team selected multiple times!");
         } else {

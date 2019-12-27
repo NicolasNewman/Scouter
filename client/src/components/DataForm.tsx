@@ -6,6 +6,8 @@ import { FormComponentProps } from "antd/lib/form";
 
 interface IProps {
   team: string;
+  alliance: "red" | "blue";
+  seed: "s1" | "s2" | "s3";
 }
 
 class DataForm extends Component<IProps & FormComponentProps> {

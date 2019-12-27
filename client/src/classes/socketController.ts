@@ -15,8 +15,16 @@ export const emitableEvents = {
   adminFormSubmited: "adminFormSubmited"
 };
 
+export interface IScoutingTarget {
+  team: string;
+  alliance: "red" | "blue";
+  seed: "s1" | "s2" | "s3";
+}
+
+export type ScoutingTargets = Array<IScoutingTarget>;
+
 interface IAssignScoutPacket {
-  teams: Array<string>;
+  teams: ScoutingTargets;
   matchNumber: number;
 }
 

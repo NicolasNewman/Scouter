@@ -1,8 +1,9 @@
 import { ScoutingTypeKeys, ScoutingTypes } from "../actions/scouting";
+import { ScoutingTargets } from "../classes/socketController";
 
 export type ScoutingTargetState = {
-  scoutingTargets: Array<string>;
-  matchNumber: string;
+  scoutingTargets: ScoutingTargets;
+  matchNumber: number;
   isActive: boolean;
 };
 

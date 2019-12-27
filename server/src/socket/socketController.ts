@@ -36,8 +36,18 @@ export interface IAdminFormState {
     [key: string]: string;
 }
 
+// interface IScoutingTargets {
+//     [target: string]: Array<string>;
+// }
+
 interface IScoutingTargets {
-    [target: string]: Array<string>;
+    [target: string]: [
+        {
+            team: string;
+            alliance: 'red' | 'blue';
+            seed: 's1' | 's2' | 's3';
+        }
+    ];
 }
 
 export default class SocketController {
@@ -107,6 +117,7 @@ export default class SocketController {
                 socketEvents.adminFormSubmited,
                 (formValues: IAdminFormState) => {
                     let key: keyof IAdminFormState;
+                    // Will hold a map of usernames to the teams they are scouting
                     const teamsForUser: IScoutingTargets = {};
                     for (key in formValues) {
                         if (key.includes('scout')) {
@@ -116,12 +127,30 @@ export default class SocketController {
                                 'team'
                             );
                             const team = formValues[teamKey];
-                            logger.info(`${scout} is scouting ${team}`);
+                            const splitFields = key.split('-', 3);
+                            const alliance =
+                                splitFields[0] === 'r' ? 'red' : 'blue';
+                            const seed =
+                                splitFields[1] !== 's1' &&
+                                splitFields[1] !== 's2' &&
+                                splitFields[1] !== 's3'
+                                    ? 's1'
+                                    : splitFields[1];
+
+                            logger.info(
+                                `${scout} is scouting the team ${team} which is seed ${seed} on the ${alliance} alliance`
+                            );
 
                             if (teamsForUser[scout]) {
-                                teamsForUser[scout].push(team);
+                                teamsForUser[scout].push({
+                                    team,
+                                    alliance,
+                                    seed
+                                });
                             } else {
-                                teamsForUser[scout] = [team];
+                                teamsForUser[scout] = [
+                                    { team, alliance, seed }
+                                ];
                             }
                         }
                     }

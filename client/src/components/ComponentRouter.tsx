@@ -7,7 +7,7 @@ import Visualize from "./RouterComponents/Visualize";
 import Admin from "./RouterComponents/Admin";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
-import { SocketController } from "../classes/socketController";
+import { SocketController, ScoutingTargets } from "../classes/socketController";
 import { IAdminFormState } from "../reducers/admin";
 
 interface IProps {
@@ -17,7 +17,7 @@ interface IProps {
   formState: IAdminFormState;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
-  scoutingTargets: Array<string>;
+  scoutingTargets: ScoutingTargets;
   matchNumber: number;
 }
 

@@ -1,3 +1,5 @@
+import { ScoutingTargets } from "../classes/socketController";
+
 export enum ScoutingTypeKeys {
   SET_SCOUTING_TARGETS = "SET_SCOUTING_TARGETS",
   UPDATE_SCOUTING_STATUS = "UPDATE_SCOUTING_STATUS"
@@ -5,7 +7,7 @@ export enum ScoutingTypeKeys {
 
 interface SetScoutingTargetsAction {
   type: ScoutingTypeKeys.SET_SCOUTING_TARGETS;
-  targets: Array<string>;
+  targets: ScoutingTargets;
   matchNumber: number;
 }
 
@@ -17,7 +19,7 @@ interface UpdateScoutingStatus {
 export type ScoutingTypes = SetScoutingTargetsAction | UpdateScoutingStatus;
 
 export function setScoutingTargets(
-  targets: Array<string>,
+  targets: ScoutingTargets,
   matchNumber: number
 ) {
   return {

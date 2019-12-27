@@ -13,7 +13,11 @@ import { IAdminFormState } from "../reducers/admin";
 
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
-import { SocketController, emitableEvents } from "../classes/socketController";
+import {
+  SocketController,
+  emitableEvents,
+  ScoutingTargets
+} from "../classes/socketController";
 import ComponentRouter from "../components/ComponentRouter";
 import RequestHandler from "../classes/RequestHandler";
 
@@ -28,7 +32,7 @@ interface IProps {
   setFormField: (field: string, value: string) => void;
   socket: SocketController;
   requestHandler: RequestHandler;
-  scoutingTargets: Array<string>;
+  scoutingTargets: ScoutingTargets;
   matchNumber: number;
   isActive: boolean;
 }

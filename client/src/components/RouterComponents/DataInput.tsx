@@ -2,12 +2,13 @@ import * as React from "react";
 import { Component } from "react";
 
 import DataForm from "../DataForm";
+import { ScoutingTargets } from "../../classes/socketController";
 
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 
 interface IProps {
-  scoutingTargets: Array<string>;
+  scoutingTargets: ScoutingTargets;
   matchNumber: number;
 }
 
@@ -19,15 +20,24 @@ export default class Home extends Component<IProps> {
   }
 
   render() {
+    const scoutingTargets = this.props.scoutingTargets
+      .map(obj => {
+        return obj.team;
+      })
+      .join(", ");
     if (this.props.scoutingTargets && this.props.matchNumber) {
       return (
         <div>
           <h1>Match: {this.props.matchNumber}</h1>
-          <h1>Scouting: {this.props.scoutingTargets.join(", ")}</h1>
+          <h1>Scouting: {scoutingTargets}</h1>
           <Tabs>
-            {this.props.scoutingTargets.map(team => (
-              <TabPane tab={team} key={team}>
-                <DataForm team={team} />
+            {this.props.scoutingTargets.map(target => (
+              <TabPane tab={target.team} key={target.team}>
+                <DataForm
+                  team={target.team}
+                  alliance={target.alliance}
+                  seed={target.seed}
+                />
               </TabPane>
             ))}
           </Tabs>
@@ -48,7 +58,7 @@ export default class Home extends Component<IProps> {
           <Tabs>
             {scoutingTargets.map(team => (
               <TabPane tab={team} key={team + ""}>
-                <DataForm team={team} />
+                <DataForm alliance="red" seed="s1" team={team} />
               </TabPane>
             ))}
           </Tabs>
