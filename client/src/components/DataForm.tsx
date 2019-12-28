@@ -1,13 +1,15 @@
 import * as React from "react";
 import { Component } from "react";
 
-import { Form, Select, Input, Button } from "antd";
+import { Form, Input, Button } from "antd";
 import { FormComponentProps } from "antd/lib/form";
+import { SocketController, emitableEvents } from "../classes/socketController";
 
 interface IProps {
   team: string;
   alliance: "red" | "blue";
   seed: "s1" | "s2" | "s3";
+  socket: SocketController;
 }
 
 class DataForm extends Component<IProps & FormComponentProps> {
@@ -21,6 +23,10 @@ class DataForm extends Component<IProps & FormComponentProps> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log(values);
+        const identifier = `${this.props.alliance === "red" ? "r" : "b"}-${
+          this.props.seed
+        }-scout`;
+        this.props.socket.emit(emitableEvents.scoutingFormSubmited, identifier);
       }
     });
   };
@@ -33,25 +39,25 @@ class DataForm extends Component<IProps & FormComponentProps> {
           {getFieldDecorator("csHatch", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Cargo Ship Cargo:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("csCargo", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Rocket L1 Hatches:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("r1Hatch", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Rocket L2 Hatches:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("r2Hatch", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Rocket L3 Hatches:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("r3Hatch", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Rocket L1 Cargo:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("r1Cargo", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Rocket L2 Cargo:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("r2Cargo", {})(<Input />)}
         </Form.Item>
         <Form.Item label="Rocket L3 Cargo:">
-          {getFieldDecorator("csHatch", {})(<Input />)}
+          {getFieldDecorator("r3Cargo", {})(<Input />)}
         </Form.Item>
         <Form.Item>
           <Button className="" type="primary" htmlType="submit">

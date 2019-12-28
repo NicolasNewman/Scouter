@@ -2,7 +2,10 @@ import * as React from "react";
 import { Component } from "react";
 
 import DataForm from "../DataForm";
-import { ScoutingTargets } from "../../classes/socketController";
+import {
+  ScoutingTargets,
+  SocketController
+} from "../../classes/socketController";
 
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
@@ -10,6 +13,7 @@ const { TabPane } = Tabs;
 interface IProps {
   scoutingTargets: ScoutingTargets;
   matchNumber: number;
+  socket: SocketController;
 }
 
 export default class Home extends Component<IProps> {
@@ -37,6 +41,7 @@ export default class Home extends Component<IProps> {
                   team={target.team}
                   alliance={target.alliance}
                   seed={target.seed}
+                  socket={this.props.socket}
                 />
               </TabPane>
             ))}

@@ -7,13 +7,15 @@ import Game from '../models/gameModel';
 export const socketEvents = {
     registerUser: 'registerUser',
     getUsers: 'getUsers',
-    adminFormSubmited: 'adminFormSubmited'
+    adminFormSubmited: 'adminFormSubmited',
+    scoutingFormSubmited: 'scoutingFormSubmited'
 };
 
 export const emitableEvents = {
     isAdmin: 'isAdmin',
     sendUsers: 'sendUsers',
-    assignScout: 'assignScout'
+    assignScout: 'assignScout',
+    scoutFinished: 'scoutFinished'
 };
 
 interface IIDtoUserMap {
@@ -54,12 +56,14 @@ export default class SocketController {
     registeredUsers: Array<string>;
     idToUserMap: IIDtoUserMap;
     userToIdMap: IIDtoUserMap;
+    adminPassword: string;
 
     constructor(app: Application) {
         this.app = app;
         this.registeredUsers = [];
         this.idToUserMap = {};
         this.userToIdMap = {};
+        this.adminPassword = '';
 
         this.httpServer = http.createServer(this.app);
         this.io = socketIO(this.httpServer);
@@ -95,6 +99,7 @@ export default class SocketController {
                         );
                         if (name === process.env.PASSWORD) {
                             socket.emit(emitableEvents.isAdmin, true);
+                            this.adminPassword = process.env.PASSWORD;
                             nameTakenCallback(false);
                         } else {
                             socket.emit(emitableEvents.isAdmin, false);
@@ -110,6 +115,17 @@ export default class SocketController {
                     dataCallback(this.registeredUsers);
                 }
             );
+            socket.on(socketEvents.scoutingFormSubmited, identifier => {
+                console.log(`Identifier is: ${identifier}`);
+                console.log(
+                    `sending to ${this.adminPassword} with id ${
+                        this.userToIdMap[this.adminPassword]
+                    }`
+                );
+
+                const id = this.userToIdMap[this.adminPassword];
+                this.io.to(id).emit(emitableEvents.scoutFinished, identifier);
+            });
             socket.on(
                 socketEvents.adminFormSubmited,
                 (formValues: IAdminFormState, callback) => {

@@ -31,23 +31,27 @@ export default class Home extends Component<IProps> {
     {
       title: "Status",
       dataIndex: "status",
-      key: "status",
-      render: (text: string) =>
-        text === "true" ? (
-          <span style={{ color: "#52c41a" }}>
-            <Icon type="check" />
-          </span>
-        ) : (
-          <span style={{ color: "#f5222d" }}>
-            <Icon type="close" />
-          </span>
-        )
+      key: "status"
     }
   ];
 
   constructor(props: IProps) {
     super(props);
   }
+
+  getStatusIcon = (status: boolean) => {
+    console.log(`STATUS IS ${status}`);
+
+    return status === true ? (
+      <span style={{ color: "#52c41a" }}>
+        <Icon type="check" />
+      </span>
+    ) : (
+      <span style={{ color: "#f5222d" }}>
+        <Icon type="close" />
+      </span>
+    );
+  };
 
   render() {
     const redData = [
@@ -56,21 +60,21 @@ export default class Home extends Component<IProps> {
         seed: "1st Seed",
         team: this.props.formState["r-s1-team"],
         scout: this.props.formState["r-s1-scout"],
-        status: this.props.scoutStatus["r-s1-scout"]
+        status: this.getStatusIcon(this.props.scoutStatus["r-s1-scout"])
       },
       {
         key: "s2",
         seed: "2nd Seed",
         team: this.props.formState["r-s2-team"],
         scout: this.props.formState["r-s2-scout"],
-        status: this.props.scoutStatus["r-s2-scout"]
+        status: this.getStatusIcon(this.props.scoutStatus["r-s2-scout"])
       },
       {
         key: "s3",
         seed: "3rd Seed",
         team: this.props.formState["r-s3-team"],
         scout: this.props.formState["r-s3-scout"],
-        status: this.props.scoutStatus["r-s3-scout"]
+        status: this.getStatusIcon(this.props.scoutStatus["r-s3-scout"])
       }
     ];
     const blueData = [
@@ -79,21 +83,21 @@ export default class Home extends Component<IProps> {
         seed: "1st Seed",
         team: this.props.formState["b-s1-team"],
         scout: this.props.formState["b-s1-scout"],
-        status: this.props.scoutStatus["b-s1-scout"]
+        status: this.getStatusIcon(this.props.scoutStatus["b-s1-scout"])
       },
       {
         key: "s2",
         seed: "2nd Seed",
         team: this.props.formState["b-s2-team"],
         scout: this.props.formState["b-s2-scout"],
-        status: this.props.scoutStatus["b-s2-scout"]
+        status: this.getStatusIcon(this.props.scoutStatus["b-s2-scout"])
       },
       {
         key: "s3",
         seed: "3rd Seed",
         team: this.props.formState["b-s3-team"],
         scout: this.props.formState["b-s3-scout"],
-        status: this.props.scoutStatus["b-s3-scout"]
+        status: this.getStatusIcon(this.props.scoutStatus["b-s3-scout"])
       }
     ];
     return (

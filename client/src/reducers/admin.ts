@@ -101,9 +101,17 @@ export default function user(
         keyOfSelectedMainTab: state.keyOfSelectedMainTab
       };
     case AdminTypeKeys.SET_SCOUT_STATUS:
+      console.log(state.inProgress);
+
       if (state.inProgress) {
-        const newStatus: IAdminScoutStatus = state.scoutStatus;
+        const newStatus: IAdminScoutStatus = Object.assign(
+          {},
+          state.scoutStatus
+        );
         newStatus[action.scout] = action.status;
+        console.log(newStatus);
+        console.log(state.scoutStatus);
+
         return {
           formState: state.formState,
           scoutStatus: newStatus,

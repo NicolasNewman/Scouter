@@ -3,18 +3,21 @@ import store from "../entrypoints/home";
 // import { Store } from "redux";
 import { setAdminStatus } from "../actions/user";
 import { setScoutingTargets } from "../actions/scouting";
+import { setScoutStatus } from "../actions/admin";
 
 import { message } from "antd";
 
 export const socketEvents = {
   isAdmin: "isAdmin",
-  assignScout: "assignScout"
+  assignScout: "assignScout",
+  scoutFinished: "scoutFinished"
 };
 
 export const emitableEvents = {
   registerUser: "registerUser",
   getUsers: "getUsers",
-  adminFormSubmited: "adminFormSubmited"
+  adminFormSubmited: "adminFormSubmited",
+  scoutingFormSubmited: "scoutingFormSubmited"
 };
 
 export interface IScoutingTarget {
@@ -24,6 +27,14 @@ export interface IScoutingTarget {
 }
 
 export type ScoutingTargets = Array<IScoutingTarget>;
+
+export type ScoutIdentifier =
+  | "r-s1-scout"
+  | "r-s2-scout"
+  | "r-s3-scout"
+  | "b-s1-scout"
+  | "b-s2-scout"
+  | "b-s3-scout";
 
 interface IAssignScoutPacket {
   teams: ScoutingTargets;
@@ -48,6 +59,17 @@ export class SocketController {
       store.dispatch(setScoutingTargets(data.teams, data.matchNumber));
       message.info("The scouting form is now active!");
     });
+
+    this.socket.on(
+      socketEvents.scoutFinished,
+      (identifier: ScoutIdentifier) => {
+        console.log(
+          `Received socket event scoutFinished with data: ${identifier}`
+        );
+
+        store.dispatch(setScoutStatus(identifier, true));
+      }
+    );
   }
 
   emit = (event: string, data: any, func?: (...args: any[]) => void): void => {

@@ -50,6 +50,7 @@ export default class ComponentRouter extends Component<IProps> {
               <DataInput
                 scoutingTargets={this.props.scoutingTargets}
                 matchNumber={this.props.matchNumber}
+                socket={this.props.socket}
               />
             )}
           />

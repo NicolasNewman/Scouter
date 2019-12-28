@@ -143,6 +143,8 @@ class NavContainer extends Component<IProps, IState> {
 }
 
 function mapStateToProps(state: any, ownProps: any) {
+  console.log(state);
+
   return {
     username: state.user.username,
     isAdmin: state.user.isAdmin,
