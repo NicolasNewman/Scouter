@@ -32,7 +32,9 @@ export const postMatch = catchAsync(
             match = await Match.create(match);
 
             // Add the match to the team
-            await Team.update(team, { $push: { matches: match._id } });
+            team.matches.push(match._id);
+            await team.save();
+            // await Team.update(team, { $push: { matches: match._id } });
 
             // Add the match to the game
             console.log(seed);
