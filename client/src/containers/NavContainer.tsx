@@ -35,6 +35,7 @@ interface IProps {
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
+  removeScoutingTarget: (target: string) => void;
   keyOfSelectedMainTab: MainTabKeys;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
@@ -115,6 +116,7 @@ class NavContainer extends Component<IProps, IState> {
               formState={this.props.formState}
               scoutStatus={this.props.scoutStatus}
               inProgress={this.props.inProgress}
+              removeScoutingTarget={this.props.removeScoutingTarget}
               keyOfSelectedMainTab={this.props.keyOfSelectedMainTab}
               setFormState={this.props.setFormState}
               setFormField={this.props.setFormField}

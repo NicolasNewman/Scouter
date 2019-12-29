@@ -2,6 +2,7 @@ import { ScoutingTargets } from "../classes/socketController";
 
 export enum ScoutingTypeKeys {
   SET_SCOUTING_TARGETS = "SET_SCOUTING_TARGETS",
+  REOMVE_SCOUTING_TARGET = "REMOVE_SCOUTING_TARGET",
   UPDATE_SCOUTING_STATUS = "UPDATE_SCOUTING_STATUS"
 }
 
@@ -11,12 +12,20 @@ interface SetScoutingTargetsAction {
   matchNumber: number;
 }
 
+interface RemoveScoutingTarget {
+  type: ScoutingTypeKeys.REOMVE_SCOUTING_TARGET;
+  target: string;
+}
+
 interface UpdateScoutingStatus {
   type: ScoutingTypeKeys.UPDATE_SCOUTING_STATUS;
   isActive: boolean;
 }
 
-export type ScoutingTypes = SetScoutingTargetsAction | UpdateScoutingStatus;
+export type ScoutingTypes =
+  | SetScoutingTargetsAction
+  | RemoveScoutingTarget
+  | UpdateScoutingStatus;
 
 export function setScoutingTargets(
   targets: ScoutingTargets,
@@ -29,6 +38,13 @@ export function setScoutingTargets(
   };
 }
 
+export function removeScoutingTarget(target: string) {
+  return {
+    type: ScoutingTypeKeys.REOMVE_SCOUTING_TARGET,
+    target
+  };
+}
+
 export function updateScoutingStatus(isActive: boolean) {
   return {
     type: ScoutingTypeKeys.UPDATE_SCOUTING_STATUS,
@@ -36,4 +52,8 @@ export function updateScoutingStatus(isActive: boolean) {
   };
 }
 
-export default { setScoutingTargets, updateScoutingStatus };
+export default {
+  setScoutingTargets,
+  removeScoutingTarget,
+  updateScoutingStatus
+};

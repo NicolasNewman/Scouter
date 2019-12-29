@@ -21,6 +21,7 @@ interface IProps {
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
+  removeScoutingTarget: (target: string) => void;
   keyOfSelectedMainTab: MainTabKeys;
   setFormState: (state: IAdminFormState) => void;
   setFormField: (field: string, value: string) => void;
@@ -51,6 +52,8 @@ export default class ComponentRouter extends Component<IProps> {
                 scoutingTargets={this.props.scoutingTargets}
                 matchNumber={this.props.matchNumber}
                 socket={this.props.socket}
+                requestHandler={this.props.requestHandler}
+                removeScoutingTarget={this.props.removeScoutingTarget}
               />
             )}
           />

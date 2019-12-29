@@ -33,6 +33,21 @@ const falseScoutStatus: IAdminScoutStatus = {
   "b-s3-scout": false
 };
 
+const blankAdminFormState: IAdminFormState = {
+  "r-s1-team": "string",
+  "r-s1-scout": "string",
+  "r-s2-team": "string",
+  "r-s2-scout": "string",
+  "r-s3-team": "string",
+  "r-s3-scout": "string",
+  "b-s1-team": "string",
+  "b-s1-scout": "string",
+  "b-s2-team": "string",
+  "b-s2-scout": "string",
+  "b-s3-team": "string",
+  "b-s3-scout": "string"
+};
+
 export enum MainTabKeys {
   DB_ENTRY = "DB_ENTRY",
   ASSIGNMENT_FORM = "ASSIGNMENT_FORM"
@@ -109,15 +124,30 @@ export default function user(
           state.scoutStatus
         );
         newStatus[action.scout] = action.status;
-        console.log(newStatus);
-        console.log(state.scoutStatus);
 
-        return {
-          formState: state.formState,
-          scoutStatus: newStatus,
-          inProgress: state.inProgress,
-          keyOfSelectedMainTab: state.keyOfSelectedMainTab
-        };
+        let key: keyof IAdminScoutStatus;
+        let isAllDone = true;
+        for (key in newStatus) {
+          if (!newStatus[key]) {
+            isAllDone = false;
+          }
+        }
+
+        if (isAllDone) {
+          return {
+            formState: blankAdminFormState,
+            scoutStatus: falseScoutStatus,
+            inProgress: false,
+            keyOfSelectedMainTab: state.keyOfSelectedMainTab
+          };
+        } else {
+          return {
+            formState: state.formState,
+            scoutStatus: newStatus,
+            inProgress: state.inProgress,
+            keyOfSelectedMainTab: state.keyOfSelectedMainTab
+          };
+        }
       } else {
         return state;
       }

@@ -1,15 +1,19 @@
 import * as React from "react";
 import { Component } from "react";
 
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { SocketController, emitableEvents } from "../classes/socketController";
+import RequestHandler from "../classes/RequestHandler";
 
 interface IProps {
   team: string;
   alliance: "red" | "blue";
   seed: "s1" | "s2" | "s3";
+  matchNumber: number;
   socket: SocketController;
+  requestHandler: RequestHandler;
+  removeScoutingTarget: (target: string) => void;
 }
 
 class DataForm extends Component<IProps & FormComponentProps> {
@@ -27,6 +31,21 @@ class DataForm extends Component<IProps & FormComponentProps> {
           this.props.seed
         }-scout`;
         this.props.socket.emit(emitableEvents.scoutingFormSubmited, identifier);
+        // /:matchNumber/:alliance/:seed/:teamNumber/match
+
+        this.props.requestHandler
+          .post(
+            `${this.props.matchNumber}/${this.props.alliance}/${this.props.seed}/${this.props.team}/match`,
+            values
+          )
+          .then(_data => {
+            message.info("Match data sent successfully!");
+            console.log(`removeScoutingTarget is`);
+            console.log(this.props.removeScoutingTarget);
+            console.log(`Team is ${this.props.team}`);
+
+            this.props.removeScoutingTarget(this.props.team);
+          });
       }
     });
   };
