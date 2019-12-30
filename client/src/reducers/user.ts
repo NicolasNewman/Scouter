@@ -24,8 +24,6 @@ export default function user(
         isAuthenticated: true
       };
     case UserTypeKeys.SET_ADMIN:
-      console.log("SETTING ADMIN STATUS");
-
       return {
         username: state.username,
         isAdmin: action.isAdmin,

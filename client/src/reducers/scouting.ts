@@ -1,8 +1,4 @@
-import {
-  ScoutingTypeKeys,
-  ScoutingTypes,
-  setScoutingTargets
-} from "../actions/scouting";
+import { ScoutingTypeKeys, ScoutingTypes } from "../actions/scouting";
 import { ScoutingTargets } from "../classes/socketController";
 
 export type ScoutingTargetState = {
@@ -29,16 +25,13 @@ export default function scouting(
         isActive: true
       };
     case ScoutingTypeKeys.REOMVE_SCOUTING_TARGET:
-      console.log("In reducer");
-      console.log(state);
-
       let targetsCopy = [...state.targets];
 
-      console.log(targetsCopy);
-      console.log(action.target);
+      // Filter out the specified team by taking team that don't match
       targetsCopy = targetsCopy.filter(
         targets => targets.team !== action.target
       );
+
       return {
         targets: targetsCopy,
         matchNumber: state.matchNumber,

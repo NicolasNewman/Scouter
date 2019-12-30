@@ -27,6 +27,13 @@ export type ScoutingTypes =
   | RemoveScoutingTarget
   | UpdateScoutingStatus;
 
+/**
+ * Sets the targets that the scout should be scouting.
+ *
+ * This is generally called from the socket
+ * @param targets - a list of the team numbers that the scout is scouting
+ * @param matchNumber - the number of the current match
+ */
 export function setScoutingTargets(
   targets: ScoutingTargets,
   matchNumber: number
@@ -38,6 +45,10 @@ export function setScoutingTargets(
   };
 }
 
+/**
+ * Removes a team from the list of targets. This is generally done to clear the form once it is submited
+ * @param target - the team to remove from the list of targets
+ */
 export function removeScoutingTarget(target: string) {
   return {
     type: ScoutingTypeKeys.REOMVE_SCOUTING_TARGET,
@@ -45,6 +56,10 @@ export function removeScoutingTarget(target: string) {
   };
 }
 
+/**
+ * Updates the flag for if the scout is currently scouting
+ * @deprecated
+ */
 export function updateScoutingStatus(isActive: boolean) {
   return {
     type: ScoutingTypeKeys.UPDATE_SCOUTING_STATUS,

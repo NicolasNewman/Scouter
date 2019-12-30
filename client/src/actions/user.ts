@@ -15,6 +15,10 @@ interface SetAdminAction {
 
 export type UserTypes = SetUserAction | SetAdminAction;
 
+/**
+ * Sets the username of the connected scout
+ * @param username - the name of the scout
+ */
 export function setUsername(username: string) {
   return {
     type: UserTypeKeys.SET_USERNAME,
@@ -22,6 +26,12 @@ export function setUsername(username: string) {
   };
 }
 
+/**
+ * Controls wheather or not the user is an admin.
+ *
+ * This is called from the socket and receives its parameter based on server-sided logic
+ * @param isAdmin - wheather or not the user is an admin
+ */
 export function setAdminStatus(isAdmin: boolean) {
   return {
     type: UserTypeKeys.SET_ADMIN,
