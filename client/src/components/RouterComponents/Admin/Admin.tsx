@@ -41,8 +41,6 @@ export default class Admin extends Component<IProps> {
       <div>
         <Tabs
           onChange={(activeKey: MainTabKeys) => {
-            console.log(activeKey);
-
             this.props.setSelectedMainTab(activeKey);
           }}
           defaultActiveKey={this.props.keyOfSelectedMainTab}
@@ -51,8 +49,8 @@ export default class Admin extends Component<IProps> {
             <AdminTeamEntry requestHandler={this.props.requestHandler} />
           </TabPane>
           <TabPane tab="Scouting Assigner" key={MainTabKeys.ASSIGNMENT_FORM}>
+            {/* Swap components from form to scout status if a session is in progress */}
             {this.props.inProgress ? (
-              // {true ? (
               <AdminScoutStatus
                 formState={this.props.formState}
                 scoutStatus={this.props.scoutStatus}

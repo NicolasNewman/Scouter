@@ -58,7 +58,6 @@ export default class ComponentRouter extends Component<IProps> {
             )}
           />
           <Route path="/visualize" component={Visualize} />
-          {/* <Route path="/admin" component={Admin} /> */}
           <ProtectedRoute
             isAuthenticated={this.props.isAdmin}
             component={() => (

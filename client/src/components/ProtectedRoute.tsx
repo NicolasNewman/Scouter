@@ -1,5 +1,4 @@
 import * as React from "react";
-// const { Component } = React;
 import { Route, Redirect } from "react-router-dom";
 
 interface IProps {

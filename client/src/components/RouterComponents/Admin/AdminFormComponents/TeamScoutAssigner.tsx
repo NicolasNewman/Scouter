@@ -34,6 +34,7 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
       </span>
     }
   >
+    {/* If the field is for a team, add a rule stating it is required */}
     {props.componentID.includes("team")
       ? props.getFieldDecorator(props.componentID, {
           rules: [
@@ -48,7 +49,6 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
             onChange={(val: string) =>
               props.setFormField(props.componentID, val)
             }
-            // defaultValue={props.defaultFormValues[props.componentID]}
             className="admin__form--select"
           >
             {props.selectValues.map(val => (
@@ -64,7 +64,6 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
             onChange={(val: string) =>
               props.setFormField(props.componentID, val)
             }
-            // defaultValue={props.defaultFormValues[props.componentID]}
             className="admin__form--select"
           >
             {props.selectValues.map(val => (

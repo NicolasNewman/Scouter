@@ -28,7 +28,7 @@ class AdminTeamEntry extends Component<IProps & FormComponentProps> {
           })
           .catch(_err => {
             message.error(
-              `Something went wrong. Is team ${values.teamNumber} number already in use?`
+              `Something went wrong. Is team ${values.teamNumber} already in use?`
             );
           });
       }

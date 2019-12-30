@@ -90,7 +90,6 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    // this.props.form.validateFields;
     return (
       <Form className="admin__form" onSubmit={this.handleSubmit}>
         <div className="admin">

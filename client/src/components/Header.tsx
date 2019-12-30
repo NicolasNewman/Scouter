@@ -16,15 +16,12 @@ export default class Navigation extends Component<IProps> {
   }
 
   render() {
-    console.log(this.props.username);
-    //TODO authenticate if signed out
     return (
       <div className="header">
         <div className="header__title">
           <h1>Scouter</h1>
         </div>
         <div className="header__info">
-          {/* <a>Login</a> */}
           <span>
             <Icon type="user" /> {this.props.username}
           </span>
