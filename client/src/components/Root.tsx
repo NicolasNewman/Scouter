@@ -89,8 +89,6 @@ export default class Root extends Component<IProps, IState> {
   };
 
   render() {
-    console.log(`IN NAV ${this.props.keyOfSelectedMainTab}`);
-
     return (
       <div>
         <Header

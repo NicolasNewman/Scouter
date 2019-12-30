@@ -3,8 +3,11 @@ import { Component } from "react";
 
 import { Form, Input, Button, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { SocketController, emitableEvents } from "../classes/socketController";
-import RequestHandler from "../classes/RequestHandler";
+import {
+  SocketController,
+  emitableEvents
+} from "../../../../classes/socketController";
+import RequestHandler from "../../../../classes/RequestHandler";
 
 interface IProps {
   team: string;

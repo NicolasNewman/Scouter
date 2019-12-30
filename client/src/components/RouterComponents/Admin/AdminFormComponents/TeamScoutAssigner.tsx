@@ -3,7 +3,7 @@ import * as React from "react";
 import { Form, Select, Tooltip, Icon } from "antd";
 const { Option } = Select;
 import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
-import { IAdminFormState } from "../../reducers/admin";
+import { IAdminFormState } from "../../../../reducers/admin";
 
 interface IProps {
   formLabel: string;

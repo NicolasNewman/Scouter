@@ -4,12 +4,12 @@ import { FormComponentProps } from "antd/lib/form/Form";
 
 import { Form, Button, Input, message } from "antd";
 import TeamScoutAssigner from "../AdminFormComponents/TeamScoutAssigner";
-import RequestHandler from "../../classes/RequestHandler";
+import RequestHandler from "../../../../classes/RequestHandler";
 import {
   SocketController,
   emitableEvents
-} from "../../classes/socketController";
-import { IAdminFormState } from "../../reducers/admin";
+} from "../../../../classes/socketController";
+import { IAdminFormState } from "../../../../reducers/admin";
 
 interface IProps {
   requestHandler: RequestHandler;

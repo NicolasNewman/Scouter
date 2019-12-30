@@ -3,7 +3,7 @@ import { Component } from "react";
 
 import { Table, Icon } from "antd";
 
-import { IAdminFormState, IAdminScoutStatus } from "../../reducers/admin";
+import { IAdminFormState, IAdminScoutStatus } from "../../../../reducers/admin";
 
 interface IProps {
   formState: IAdminFormState;

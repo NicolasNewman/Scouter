@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Component } from "react";
 
-import DataForm from "../DataForm";
+import DataForm from "./DataInputFormComponents/DataForm";
 import {
   ScoutingTargets,
   SocketController
-} from "../../classes/socketController";
+} from "../../../classes/socketController";
 
 import { Tabs } from "antd";
-import RequestHandler from "../../classes/RequestHandler";
+import RequestHandler from "../../../classes/RequestHandler";
 const { TabPane } = Tabs;
 
 interface IProps {

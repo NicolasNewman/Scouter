@@ -4,7 +4,7 @@ import { FormComponentProps } from "antd/lib/form/Form";
 
 import { Form, Input, InputNumber, Button, message } from "antd";
 
-import RequestHandler from "../../classes/RequestHandler";
+import RequestHandler from "../../../../classes/RequestHandler";
 
 interface IProps {
   requestHandler: RequestHandler;

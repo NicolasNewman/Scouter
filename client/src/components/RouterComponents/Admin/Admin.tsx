@@ -4,16 +4,16 @@ import { Component } from "react";
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 
-import RequestHandler from "../../classes/RequestHandler";
-import { SocketController } from "../../classes/socketController";
+import RequestHandler from "../../../classes/RequestHandler";
+import { SocketController } from "../../../classes/socketController";
 import {
   IAdminFormState,
   IAdminScoutStatus,
   MainTabKeys
-} from "../../reducers/admin";
-import AdminForm from "../AdminTabComponents/AdminForm";
-import AdminTeamEntry from "../AdminTabComponents/AdminTeamEntry";
-import AdminScoutStatus from "../AdminTabComponents/AdminScoutStatus";
+} from "../../../reducers/admin";
+import AdminForm from "./AdminTabComponents/AdminForm";
+import AdminTeamEntry from "./AdminTabComponents/AdminTeamEntry";
+import AdminScoutStatus from "./AdminTabComponents/AdminScoutStatus";
 
 interface IProps {
   requestHandler: RequestHandler;
