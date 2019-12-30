@@ -116,8 +116,6 @@ export default function user(
         keyOfSelectedMainTab: state.keyOfSelectedMainTab
       };
     case AdminTypeKeys.SET_SCOUT_STATUS:
-      console.log(state.inProgress);
-
       if (state.inProgress) {
         const newStatus: IAdminScoutStatus = Object.assign(
           {},
@@ -133,6 +131,7 @@ export default function user(
           }
         }
 
+        // If all of the scouts are done, reset the state
         if (isAllDone) {
           return {
             formState: blankAdminFormState,
@@ -152,8 +151,6 @@ export default function user(
         return state;
       }
     case AdminTypeKeys.SET_SELECTED_MAIN_TAB:
-      console.log(`HERE! KEY IS ${action.key}`);
-
       return {
         formState: state.formState,
         scoutStatus: state.scoutStatus,
