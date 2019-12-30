@@ -8,7 +8,7 @@ import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 // import * as SPAs from "../../config/spa.config";
-import NavContainer from "../containers/NavContainer";
+import Root from "../containers/RootContainer";
 import "../app.global.less";
 import { configureStore, history } from "../store/configureStore";
 import { SocketController } from "../classes/socketController";
@@ -21,7 +21,7 @@ const requestHandler = new RequestHandler("http://localhost:3000/data");
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <NavContainer socket={socket} requestHandler={requestHandler} />
+      <Root socket={socket} requestHandler={requestHandler} />
     </ConnectedRouter>
   </Provider>,
   document.getElementById("react-root")

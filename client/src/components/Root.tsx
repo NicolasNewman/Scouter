@@ -1,24 +1,18 @@
 import * as React from "react";
 import { Component } from "react";
-import { bindActionCreators, Dispatch } from "redux";
-import { connect } from "react-redux";
 
 import { Modal, Button, Input, message } from "antd";
-
-import UserActions from "../actions/user";
-import AdminActions from "../actions/admin";
-import ScoutingActions from "../actions/scouting";
 
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
 import ComponentRouter from "../components/ComponentRouter";
+import RequestHandler from "../classes/RequestHandler";
 
 import {
   SocketController,
   emitableEvents,
   ScoutingTargets
 } from "../classes/socketController";
-import RequestHandler from "../classes/RequestHandler";
 
 import {
   IAdminFormState,
@@ -27,11 +21,15 @@ import {
 } from "../reducers/admin";
 
 interface IProps {
+  socket: SocketController;
+  requestHandler: RequestHandler;
+  // user
   username: string;
   isAdmin: boolean;
   isAuthenticated: boolean;
   setUsername: (username: string) => void;
   setAdminStatus: (isAdmin: boolean) => void;
+  // admin
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
@@ -42,8 +40,7 @@ interface IProps {
   startSession: () => void;
   endSession: () => void;
   setSelectedMainTab: (key: MainTabKeys) => void;
-  socket: SocketController;
-  requestHandler: RequestHandler;
+  // scouting
   scoutingTargets: ScoutingTargets;
   matchNumber: number;
   isActive: boolean;
@@ -54,7 +51,7 @@ interface IState {
   inputText: string;
 }
 
-class NavContainer extends Component<IProps, IState> {
+export default class Root extends Component<IProps, IState> {
   props: IProps;
 
   constructor(props: IProps) {
@@ -75,7 +72,6 @@ class NavContainer extends Component<IProps, IState> {
   };
 
   handleModalSubmit = () => {
-    // this.props.setUsername(this.state.inputText);
     this.props.socket.emit(
       emitableEvents.registerUser,
       this.state.inputText,
@@ -143,33 +139,3 @@ class NavContainer extends Component<IProps, IState> {
     );
   }
 }
-
-function mapStateToProps(state: any, ownProps: any) {
-  console.log(state);
-
-  return {
-    username: state.user.username,
-    isAdmin: state.user.isAdmin,
-    isAuthenticated: state.user.isAuthenticated,
-    formState: state.admin.formState,
-    scoutStatus: state.admin.scoutStatus,
-    inProgress: state.admin.inProgress,
-    keyOfSelectedMainTab: state.admin.keyOfSelectedMainTab,
-    scoutingTargets: state.scouting.targets,
-    matchNumber: state.scouting.matchNumber,
-    isActive: state.scouting.isActive
-  };
-}
-
-function mapDispatchToDrops(dispatch: Dispatch) {
-  return bindActionCreators(
-    {
-      ...UserActions,
-      ...AdminActions,
-      ...ScoutingActions
-    },
-    dispatch
-  );
-}
-
-export default connect(mapStateToProps, mapDispatchToDrops)(NavContainer);
