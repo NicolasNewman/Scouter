@@ -1,22 +1,18 @@
-/**
- * In webpack terminology the 'entry point'
- * of the First SPA.
- */
 import * as React from "react";
-import { Component } from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
-// import * as SPAs from "../../config/spa.config";
 import Root from "../containers/RootContainer";
-import "../app.global.less";
 import { configureStore, history } from "../store/configureStore";
 import { SocketController } from "../classes/socketController";
 import RequestHandler from "../classes/RequestHandler";
+import * as constants from "../constants/constants.json";
+
+import "../app.global.less";
 
 const store = configureStore();
-const socket = new SocketController("http://localhost:4000");
-const requestHandler = new RequestHandler("http://localhost:3000/data");
+const socket = new SocketController(constants.socketRoute);
+const requestHandler = new RequestHandler(constants.apiRoute);
 
 ReactDOM.render(
   <Provider store={store}>

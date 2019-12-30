@@ -1,5 +1,5 @@
 import { DataTypeKeys, DataTypes } from "../actions/data";
-import { AdminTypeKeys } from "../actions/admin";
+import * as constants from "../constants/constants.json";
 import RequestHandler from "../classes/RequestHandler";
 
 interface IMatch {
@@ -29,7 +29,7 @@ const initialState: DataState = {
 };
 
 // TODO CONSTANT URL
-const requestHandler = new RequestHandler("http://localhost:3000/data");
+const requestHandler = new RequestHandler(constants.apiRoute);
 
 export default function data(
   state: DataState = initialState,
