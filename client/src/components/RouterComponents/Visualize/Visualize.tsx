@@ -80,7 +80,7 @@ export default class Home extends Component<IProps, IState> {
     }
   }
 
-  barModeRadioChanged = e => {
+  barModeRadioChanged = (e: any) => {
     console.log(e);
     console.log(e.target.value);
     this.setState({ barChartMode: e.target.value });
