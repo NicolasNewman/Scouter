@@ -53,6 +53,9 @@ export default class Home extends Component<IProps, IState> {
     ) {
       this.props.history.push("/");
       this.state = {
+        barChartMode: BarChartModes.FIELD,
+        barTraces: [],
+        barStatistic: "min",
         ejected: true
       };
     } else {
@@ -77,6 +80,12 @@ export default class Home extends Component<IProps, IState> {
     }
   }
 
+  barModeRadioChanged = e => {
+    console.log(e);
+    console.log(e.target.value);
+    this.setState({ barChartMode: e.target.value });
+  };
+
   barTraceSelectChanged = (values: any) => {
     this.setState({ barTraces: values });
   };
@@ -90,10 +99,13 @@ export default class Home extends Component<IProps, IState> {
   render() {
     if (!this.state.ejected) {
       return (
-        <div>
+        <div className="graphs">
           <Tabs>
             <TabPane tab="Barchart" key="barchart">
-              <Radio.Group defaultValue={this.state.barChartMode}>
+              <Radio.Group
+                onChange={this.barModeRadioChanged}
+                defaultValue={this.state.barChartMode}
+              >
                 <Radio value={BarChartModes.FIELD}>
                   Compare all fields of a statistic for a multiple teams
                 </Radio>
@@ -103,25 +115,26 @@ export default class Home extends Component<IProps, IState> {
               </Radio.Group>
               {this.state.barChartMode === BarChartModes.FIELD ? (
                 // Mode is FIELD
-                <div>
-                  <p>Fields: </p>
+                <span>
+                  <span>Fields: </span>
                   <Select mode="multiple" onChange={this.barTraceSelectChanged}>
                     {this.fields.map(field => (
                       <Option key={field}>{field}</Option>
                     ))}
                   </Select>
-                </div>
+                </span>
               ) : (
                 // Mode is TEAM
-                <div>
-                  <p>Teams: </p>
+                <span>
+                  <span>Teams: </span>
                   <Select mode="multiple" onChange={this.barTraceSelectChanged}>
                     {this.teams.map(team => (
                       <Option key={team}>{team}</Option>
                     ))}
                   </Select>
-                </div>
+                </span>
               )}
+              <span>Statistic: </span>
               <Select onChange={this.barStatisticChanged}>
                 <Option key={"avg"}>Average</Option>
                 <Option key={"max"}>Maximum</Option>
