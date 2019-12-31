@@ -17,7 +17,7 @@ const requestHandler = new RequestHandler(constants.apiRoute);
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <Root socket={socket} requestHandler={requestHandler} />
+      <Root history={history} socket={socket} requestHandler={requestHandler} />
     </ConnectedRouter>
   </Provider>,
   document.getElementById("react-root")

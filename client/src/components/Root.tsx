@@ -8,21 +8,26 @@ import Header from "../components/Header";
 import ComponentRouter from "../components/ComponentRouter";
 import RequestHandler from "../classes/RequestHandler";
 
+import * as equal from "fast-deep-equal";
+
 import {
   SocketController,
   emitableEvents,
   ScoutingTargets
 } from "../classes/socketController";
-
+import { History } from "history";
 import {
   IAdminFormState,
   IAdminScoutStatus,
   MainTabKeys
 } from "../reducers/admin";
 
+import { IStatisticData, ICompetitionData } from "../reducers/data";
+
 interface IProps {
   socket: SocketController;
   requestHandler: RequestHandler;
+  history: History;
   // user
   username: string;
   isAdmin: boolean;
@@ -44,6 +49,12 @@ interface IProps {
   scoutingTargets: ScoutingTargets;
   matchNumber: number;
   isActive: boolean;
+  // data
+  competitionData: ICompetitionData;
+  teamMins: IStatisticData;
+  teamMaxes: IStatisticData;
+  teamAverages: IStatisticData;
+  setMatchData: () => void;
 }
 
 interface IState {
@@ -56,6 +67,7 @@ export default class Root extends Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
+    this.props.setMatchData();
 
     this.state = {
       modalVisible: !this.props.isAuthenticated,
@@ -89,6 +101,7 @@ export default class Root extends Component<IProps, IState> {
   };
 
   render() {
+    // TODO integrate on user submit form
     return (
       <div>
         <Header
@@ -106,6 +119,7 @@ export default class Root extends Component<IProps, IState> {
             <ComponentRouter
               requestHandler={this.props.requestHandler}
               socket={this.props.socket}
+              history={this.props.history}
               isAdmin={this.props.isAdmin}
               formState={this.props.formState}
               scoutStatus={this.props.scoutStatus}
@@ -119,6 +133,9 @@ export default class Root extends Component<IProps, IState> {
               endSession={this.props.endSession}
               setSelectedMainTab={this.props.setSelectedMainTab}
               matchNumber={this.props.matchNumber}
+              teamMins={this.props.teamMins}
+              teamMaxes={this.props.teamMaxes}
+              teamAverages={this.props.teamAverages}
             />
           </div>
         </div>

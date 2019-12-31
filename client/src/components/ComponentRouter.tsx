@@ -13,11 +13,14 @@ import {
   IAdminScoutStatus,
   MainTabKeys
 } from "../reducers/admin";
+import { IStatisticData } from "../reducers/data";
+import { History } from "history";
 
 interface IProps {
   isAdmin: boolean;
   requestHandler: RequestHandler;
   socket: SocketController;
+  history: History;
   formState: IAdminFormState;
   scoutStatus: IAdminScoutStatus;
   inProgress: boolean;
@@ -28,9 +31,11 @@ interface IProps {
   startSession: () => void;
   endSession: () => void;
   setSelectedMainTab: (key: MainTabKeys) => void;
-
   scoutingTargets: ScoutingTargets;
   matchNumber: number;
+  teamMins: IStatisticData;
+  teamMaxes: IStatisticData;
+  teamAverages: IStatisticData;
 }
 
 export default class ComponentRouter extends Component<IProps> {
@@ -57,7 +62,17 @@ export default class ComponentRouter extends Component<IProps> {
               />
             )}
           />
-          <Route path="/visualize" component={Visualize} />
+          <Route
+            path="/visualize"
+            component={() => (
+              <Visualize
+                history={this.props.history}
+                teamMins={this.props.teamMins}
+                teamMaxes={this.props.teamMaxes}
+                teamAverages={this.props.teamAverages}
+              />
+            )}
+          />
           <ProtectedRoute
             isAuthenticated={this.props.isAdmin}
             component={() => (

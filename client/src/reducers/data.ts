@@ -1,8 +1,12 @@
 import { DataTypeKeys, DataTypes } from "../actions/data";
-import * as constants from "../constants/constants.json";
-import RequestHandler from "../classes/RequestHandler";
+import * as equal from "fast-deep-equal";
+import {
+  compileData,
+  calculateExtrema,
+  calculateAverage
+} from "../helper/matchDataCompiler";
 
-interface IMatch {
+export interface IMatch {
   csHatch: number;
   csCargo: number;
   r1Hatch: number;
@@ -14,22 +18,29 @@ interface IMatch {
   // [other: string]: any;
 }
 
-type TeamData = Array<IMatch>;
+export type TeamData = Array<IMatch>;
 
 export interface ICompetitionData {
   [team: string]: TeamData;
 }
 
+export interface IStatisticData {
+  [team: string]: IMatch;
+}
+
 export type DataState = {
-  matchData: ICompetitionData;
+  competitionData: ICompetitionData;
+  teamMins: IStatisticData;
+  teamMaxes: IStatisticData;
+  teamAverages: IStatisticData;
 };
 
 const initialState: DataState = {
-  matchData: {}
+  competitionData: {},
+  teamMins: {},
+  teamMaxes: {},
+  teamAverages: {}
 };
-
-// TODO CONSTANT URL
-const requestHandler = new RequestHandler(constants.apiRoute);
 
 export default function data(
   state: DataState = initialState,
@@ -37,9 +48,16 @@ export default function data(
 ) {
   switch (action.type) {
     case DataTypeKeys.UPDATE_MATCH_DATA:
-      return {
-        matchData: {}
-      };
+      if (equal(state.competitionData, action.data)) {
+        return state;
+      } else {
+        return {
+          competitionData: action.data,
+          teamMins: calculateExtrema(action.data, "min"),
+          teamMaxes: calculateExtrema(action.data, "max"),
+          teamAverages: calculateAverage(action.data)
+        };
+      }
     default:
       return state;
   }
