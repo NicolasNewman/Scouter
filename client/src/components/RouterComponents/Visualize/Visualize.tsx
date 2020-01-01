@@ -35,6 +35,9 @@ interface IState {
   ejected: boolean;
 }
 
+/**
+ * Component for the plotly graphical display pane
+ */
 export default class Home extends Component<IProps, IState> {
   props: IProps;
   teams: Array<string>;
@@ -98,7 +101,9 @@ export default class Home extends Component<IProps, IState> {
       return (
         <div className="graphs">
           <Tabs>
+            {/* SECTION FOR BARCHARTS */}
             <TabPane tab="Barchart" key="barchart">
+              {/* Radio selection for the mode */}
               <Radio.Group
                 onChange={this.barModeRadioChanged}
                 defaultValue={this.state.barChartMode}
@@ -110,6 +115,7 @@ export default class Home extends Component<IProps, IState> {
                   Compare all teams to multiple fields of a statistic
                 </Radio>
               </Radio.Group>
+              {/* Conditional selection for fields / teams based on the mode */}
               {this.state.barChartMode === BarChartModes.TEAM ? (
                 // Mode is TEAM
                 <span>

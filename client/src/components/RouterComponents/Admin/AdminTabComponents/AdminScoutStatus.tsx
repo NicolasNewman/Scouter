@@ -10,7 +10,10 @@ interface IProps {
   scoutStatus: IAdminScoutStatus;
 }
 
-export default class Home extends Component<IProps> {
+/**
+ * A component for viewing the status of the scouting session in progress
+ */
+export default class AdminScoutStatus extends Component<IProps> {
   props: IProps;
   tableColumns = [
     {
@@ -39,6 +42,11 @@ export default class Home extends Component<IProps> {
     super(props);
   }
 
+  /**
+   * Uses the status flag to determine if the status column should show a check or close icon
+   * @params status - the status of the scout
+   * @returns a styled span containing a check or close icon
+   */
   getStatusIcon = (status: boolean) => {
     console.log(`STATUS IS ${status}`);
 

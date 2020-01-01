@@ -10,6 +10,9 @@ interface IProps {
   requestHandler: RequestHandler;
 }
 
+/**
+ * Component for entering a new team into the database
+ */
 class AdminTeamEntry extends Component<IProps & FormComponentProps> {
   constructor(props: IProps & FormComponentProps) {
     super(props);
@@ -19,6 +22,7 @@ class AdminTeamEntry extends Component<IProps & FormComponentProps> {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
+        // Send a POST request to the API, signaling a team should be created
         this.props.requestHandler
           .post("/teams", values)
           .then(_res => {
@@ -40,6 +44,7 @@ class AdminTeamEntry extends Component<IProps & FormComponentProps> {
 
     return (
       <Form onSubmit={this.handleSubmit}>
+        {/* Team number field */}
         <Form.Item label="Team Number:">
           {getFieldDecorator("teamNumber", {
             rules: [
@@ -53,11 +58,13 @@ class AdminTeamEntry extends Component<IProps & FormComponentProps> {
             ]
           })(<InputNumber />)}
         </Form.Item>
+        {/* Team name field */}
         <Form.Item label="Team Name:">
           {getFieldDecorator("teamName", {
             rules: [{ required: true, message: "The team name is required!" }]
           })(<Input />)}
         </Form.Item>
+        {/* Submit button */}
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit

@@ -29,6 +29,9 @@ interface IProps {
   setSelectedMainTab: (key: MainTabKeys) => void;
 }
 
+/**
+ * Component for the admin control pane
+ */
 export default class Admin extends Component<IProps> {
   constructor(props: IProps) {
     super(props);
@@ -45,9 +48,11 @@ export default class Admin extends Component<IProps> {
           }}
           defaultActiveKey={this.props.keyOfSelectedMainTab}
         >
+          {/* Tab for entering and mofiying db entries */}
           <TabPane tab="Team Entry" key={MainTabKeys.DB_ENTRY}>
             <AdminTeamEntry requestHandler={this.props.requestHandler} />
           </TabPane>
+          {/* Tab for assigning scouts and viewing the status */}
           <TabPane tab="Scouting Assigner" key={MainTabKeys.ASSIGNMENT_FORM}>
             {/* Swap components from form to scout status if a session is in progress */}
             {this.props.inProgress ? (

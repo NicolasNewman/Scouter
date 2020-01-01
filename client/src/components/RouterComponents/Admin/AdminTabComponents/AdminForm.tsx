@@ -20,12 +20,18 @@ interface IProps {
   startSession: () => void;
 }
 
+/**
+ * Stores the registered users and teams on the server and db. Used to populate the form
+ */
 interface IState {
   teams: Array<string>;
   users: Array<string>;
 }
 
-class Admin extends Component<IProps & FormComponentProps, IState> {
+/**
+ * Component for the form to assign scouts their targets
+ */
+class AdminForm extends Component<IProps & FormComponentProps, IState> {
   constructor(props: IProps & FormComponentProps) {
     super(props);
     this.state = {
@@ -34,15 +40,21 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
     };
   }
 
+  /**
+   * Sends a signal to the socket to receive the teams from the db and users registered the scouting system
+   */
   async componentDidMount() {
+    // Calls for the team data from the API request handler
     const data = await this.props.requestHandler.get("teams");
 
+    // Filter out the unneeded data from the API
     const teams = data.data.data.teams;
     const teamNumbers: Array<string> = [];
     teams.forEach((team: any) => {
       teamNumbers.push(team.teamNumber);
     });
 
+    // Send a signal to the socket to receive the connected users
     this.props.socket.emit(emitableEvents.getUsers, undefined, users => {
       //TODO refresh if another user connects while page is loaded
       this.setState({ users });
@@ -55,23 +67,23 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
 
   handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log(e);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.setFormState(values);
-        console.log("Received values of form: ", values);
         const teams = [];
-        // Verify each team is unique
+        // Verify that each team is unique
         for (let key in values) {
           if (key.includes("team")) {
             teams.push(values[key]);
           }
         }
         const unique = [...new Set(teams)];
-        // If not unique
+        // If not unique, throw error
         if (unique.length !== teams.length) {
           message.error("You have the same team selected multiple times!");
         } else {
+          // Emits the event so the socket can signal the clients, once they are ready,
+          // the callback is triggered and the session is started
           this.props.socket.emit(
             emitableEvents.adminFormSubmited,
             values,
@@ -94,6 +106,7 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
       <Form className="admin__form" onSubmit={this.handleSubmit}>
         <div className="admin">
           <div className="admin__col">
+            {/* Column for the red alliance */}
             <h1 className="admin__heading red">Red Alliance</h1>
             <div className="admin__form--row">
               <TeamScoutAssigner
@@ -163,6 +176,7 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
             </div>
           </div>
           <div className="admin__col">
+            {/* Column for the blue alliance */}
             <h1 className="admin__heading blue">Blue Alliance</h1>
             <div className="admin__form--row">
               <TeamScoutAssigner
@@ -232,6 +246,7 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
             </div>
           </div>
         </div>
+        {/* Input field for the match number */}
         <Form.Item className="admin__form--item-global" label="Match number:">
           {getFieldDecorator("matchNumber", {
             rules: [
@@ -242,6 +257,7 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
             ]
           })(<Input />)}
         </Form.Item>
+        {/* Button to submit the form */}
         <Form.Item>
           <Button
             className="admin__form--submit"
@@ -256,4 +272,6 @@ class Admin extends Component<IProps & FormComponentProps, IState> {
   }
 }
 
-export default Form.create<IProps & FormComponentProps>({ name: "" })(Admin);
+export default Form.create<IProps & FormComponentProps>({ name: "" })(
+  AdminForm
+);

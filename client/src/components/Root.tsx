@@ -113,12 +113,14 @@ export default class Root extends Component<IProps, IState> {
           isAuthenticated={this.props.isAuthenticated}
         />
         <div className="two-col-nav">
+          {/* Left-hand naviation column */}
           <div className="two-col-nav__left">
             <Navigation
               isActive={this.props.isActive}
               isAdmin={this.props.isAdmin}
             />
           </div>
+          {/* Right-hand pane that displays the path's corrosponding component */}
           <div className="two-col-nav__right">
             <ComponentRouter
               requestHandler={this.props.requestHandler}
@@ -143,6 +145,8 @@ export default class Root extends Component<IProps, IState> {
             />
           </div>
         </div>
+        {/* The popup modal that asks the user to register */}
+        {/* See https://ant.design/components/modal/ */}
         <Modal
           visible={this.state.modalVisible}
           title="Please enter your name:"

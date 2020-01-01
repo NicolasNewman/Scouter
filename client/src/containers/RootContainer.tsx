@@ -40,4 +40,7 @@ function mapDispatchToDrops(dispatch: Dispatch) {
   );
 }
 
+/**
+ * Maps the redux store props to the Root component
+ */
 export default connect(mapStateToProps, mapDispatchToDrops)(Root);

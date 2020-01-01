@@ -20,6 +20,10 @@ interface IProps {
   ) => (node: React.ReactNode) => React.ReactNode;
 }
 
+/**
+ * A sub-component of the admin assignment form that contains an input for the team/scout
+ * @param props
+ */
 const TeamScoutAssigner: React.FC<IProps> = props => (
   <Form.Item
     className="admin__form--item"
@@ -56,7 +60,8 @@ const TeamScoutAssigner: React.FC<IProps> = props => (
             ))}
           </Select>
         )
-      : props.getFieldDecorator(props.componentID, {
+      : // Otherwise don't make the field required
+        props.getFieldDecorator(props.componentID, {
           rules: [],
           initialValue: props.defaultFormValues[props.componentID]
         })(

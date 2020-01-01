@@ -9,7 +9,7 @@ interface IProps {
 }
 
 /**
- * Component for the headerbar containing the app's title and user's name
+ * Component for the header-bar containing the app's title and user's name
  */
 export default class Navigation extends Component<IProps> {
   props: IProps;
