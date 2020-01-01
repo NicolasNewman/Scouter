@@ -7,7 +7,7 @@ import Scatterplot from "./PlotComponents/Scatterplot";
 import { History } from "history";
 
 import { Tabs, Select, Radio } from "antd";
-const Option = Select;
+const { Option } = Select;
 const { TabPane } = Tabs;
 
 interface IProps {
@@ -43,9 +43,7 @@ export default class Home extends Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    console.log(this.props.teamMaxes);
-    console.log(this.props.teamMins);
-    console.log(this.props.teamAverages);
+
     if (
       isEmpty(this.props.teamAverages) ||
       isEmpty(this.props.teamMaxes) ||
@@ -81,11 +79,10 @@ export default class Home extends Component<IProps, IState> {
   }
 
   barModeRadioChanged = (e: any) => {
-    console.log(e);
-    console.log(e.target.value);
-    this.setState({ barChartMode: e.target.value });
+    this.setState({ barChartMode: e.target.value, barTraces: [] });
   };
 
+  // COMPONENT NOT RERENDERING BAR CHART
   barTraceSelectChanged = (values: any) => {
     this.setState({ barTraces: values });
   };
@@ -113,21 +110,30 @@ export default class Home extends Component<IProps, IState> {
                   Compare all teams to multiple fields of a statistic
                 </Radio>
               </Radio.Group>
-              {this.state.barChartMode === BarChartModes.FIELD ? (
-                // Mode is FIELD
+              {this.state.barChartMode === BarChartModes.TEAM ? (
+                // Mode is TEAM
                 <span>
                   <span>Fields: </span>
-                  <Select mode="multiple" onChange={this.barTraceSelectChanged}>
+                  <Select
+                    className="multiple"
+                    mode="multiple"
+                    onChange={this.barTraceSelectChanged}
+                    value={this.state.barTraces}
+                  >
                     {this.fields.map(field => (
                       <Option key={field}>{field}</Option>
                     ))}
                   </Select>
                 </span>
               ) : (
-                // Mode is TEAM
+                // Mode is FIELD
                 <span>
                   <span>Teams: </span>
-                  <Select mode="multiple" onChange={this.barTraceSelectChanged}>
+                  <Select
+                    className="multiple"
+                    mode="multiple"
+                    onChange={this.barTraceSelectChanged}
+                  >
                     {this.teams.map(team => (
                       <Option key={team}>{team}</Option>
                     ))}
@@ -140,14 +146,14 @@ export default class Home extends Component<IProps, IState> {
                 <Option key={"max"}>Maximum</Option>
                 <Option key={"min"}>Minimum</Option>
               </Select>
-              {/* <Barchart
-              statistic={this.state.barStatistic}
-              traces={this.state.barTraces}
-              data={this.statToData[this.state.barStatistic]}
-              mode={this.state.barChartMode}
-              fields={this.fields}
-              teams={this.teams}
-            /> */}
+              <Barchart
+                statistic={this.state.barStatistic}
+                traces={this.state.barTraces}
+                data={this.statToData[this.state.barStatistic]}
+                mode={this.state.barChartMode}
+                fields={this.fields}
+                teams={this.teams}
+              />
             </TabPane>
             <TabPane tab="Scatterplot" key="scatterplot">
               <Tabs>

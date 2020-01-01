@@ -19,14 +19,28 @@ export default class Barchart extends Component<IProps> {
 
   constructor(props: IProps) {
     super(props);
+    console.log("IN CONSTRUCTOR");
 
     // data[team][field];
+    console.log(this.props.mode);
+    console.log(this.props.traces);
+
+    this.generateChart();
+  }
+
+  generateChart = () => {
     if (this.props.mode === BarChartModes.FIELD) {
       this.traces = this.props.traces.map(traceName => {
+        console.log(traceName);
+
         const xLabels = this.props.fields;
+        console.log(xLabels);
+
         let yData: Array<number> = [];
 
         this.props.fields.forEach(field => {
+          console.log(field);
+
           yData.push(this.props.data[traceName][field]);
         });
 
@@ -54,23 +68,31 @@ export default class Barchart extends Component<IProps> {
         };
       });
     }
-  }
+    console.log("The traces are: ");
+    console.log(this.traces);
+  };
   render() {
+    this.generateChart();
+
     return (
       <div>
         <Plot
-          data={[
-            {
-              x: [1, 2, 3, 4],
-              y: [1, 2, 3, 4],
-              mode: "markers",
-              type: "scatter"
-            }
-          ]}
+          data={this.traces}
           layout={{
             width: 960,
             height: 540,
-            title: "A Fancy Plot"
+            // title: "A Fancy Plot",
+            barmode: "group",
+            plot_bgcolor: "#eef5f9",
+            paper_bgcolor: "#eef5f9",
+            xaxis: {
+              type: "category",
+              rangemode: "nonnegative"
+            },
+            yaxis: {
+              type: "linear",
+              rangemode: "nonnegative"
+            }
           }}
         />
       </div>
