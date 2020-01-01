@@ -1,0 +1,46 @@
+.admin {
+  display: flex;
+
+  & .red {
+    color: @first-red;
+  }
+  & .blue {
+    color: @first-blue;
+  }
+
+  &__col {
+    width: 50%;
+  }
+
+  &__heading {
+    text-align: center;
+  }
+
+  &__form {
+    &--row {
+      display: flex;
+    }
+    &--item {
+      display: flex;
+      flex-basis: 50%;
+      justify-content: center;
+
+      & > .ant-form-item-control-wrapper {
+        width: 50%;
+      }
+    }
+
+    &--item-global {
+      display: flex;
+      flex-basis: 50%;
+      justify-content: center;
+      & > .atnd-form-item-control-wrapper {
+        width: 25%;
+      }
+    }
+
+    &--submit {
+      margin-left: 50%;
+    }
+  }
+}

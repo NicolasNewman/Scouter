@@ -8,5 +8,16 @@
     "titleBar.inactiveBackground": "#3d3939",
     "titleBar.inactiveForeground": "#cccccc49"
   },
-  "editor.tabSize": 2,
+
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "typescript.validate.enable": false,
+  "typescript.format.enable": false,
+
+  "search.exclude": {
+    ".git": true,
+    "node_modules": true,
+    "yarn.lock": true
+  },
+  "editor.formatOnSave": true
 }

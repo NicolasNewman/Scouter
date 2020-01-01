@@ -38,8 +38,8 @@ var ConfiguredSPAs = function() {
   /****************** Start SPA Configuration ******************/
   var SPAs = [
     new SPA({
-      name: "first",
-      entryPoint: "./src/entrypoints/first.tsx",
+      name: "home",
+      entryPoint: "./src/entrypoints/home.tsx",
       redirect: true
     }),
     new SPA({

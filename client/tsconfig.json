@@ -1,29 +1,20 @@
 {
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [ 
-    "node_modules",
-    "dist",
-    "**/*.spec.ts"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"],
   "compilerOptions": {
     "outDir": "./dist/js/",
-    "allowSyntheticDefaultImports": false,           
+    "allowSyntheticDefaultImports": false,
     "target": "es5",
     "downlevelIteration": true,
-    "importHelpers": true,                           
+    "importHelpers": true,
     "sourceMap": true,
-    "module": "esnext",                            
+    "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
     "allowJs": false,
     "checkJs": false,
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
+    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
@@ -35,7 +26,7 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": false,
     "removeComments": true,
-    "typeRoots" : ["./node_modules/@types"],
-    "esModuleInterop": false         // we don't have issues related to imports      
+    "typeRoots": ["./node_modules/@types"],
+    "esModuleInterop": false // we don't have issues related to imports
   }
 }
