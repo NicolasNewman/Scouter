@@ -38,6 +38,11 @@ interface IProps {
   teamAverages: IStatisticData;
 }
 
+/**
+ * Component used to map the router's path to the corrosponding component
+ *
+ * The path is generally set through the Navigation component
+ */
 export default class ComponentRouter extends Component<IProps> {
   props: IProps;
 

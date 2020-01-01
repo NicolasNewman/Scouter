@@ -3,25 +3,26 @@ import { Component } from "react";
 
 import { Modal, Button, Input, message } from "antd";
 
+// Component imports
 import Navigation from "../components/Navigation";
 import Header from "../components/Header";
 import ComponentRouter from "../components/ComponentRouter";
+
+// Class imports
 import RequestHandler from "../classes/RequestHandler";
-
-import * as equal from "fast-deep-equal";
-
 import {
   SocketController,
   emitableEvents,
   ScoutingTargets
 } from "../classes/socketController";
+
+// Type imports
 import { History } from "history";
 import {
   IAdminFormState,
   IAdminScoutStatus,
   MainTabKeys
 } from "../reducers/admin";
-
 import { IStatisticData, ICompetitionData } from "../reducers/data";
 
 interface IProps {
@@ -62,6 +63,9 @@ interface IState {
   inputText: string;
 }
 
+/**
+ * The root component containing all the other components needed by Scouter
+ */
 export default class Root extends Component<IProps, IState> {
   props: IProps;
 

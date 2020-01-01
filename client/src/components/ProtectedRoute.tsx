@@ -6,7 +6,11 @@ interface IProps {
   isAuthenticated: boolean;
   path: string;
 }
-
+/**
+ * A route that requires a flag to be true in order to render the component
+ * @param component - component to render if the flag is true
+ * @param isAuthenticated - flag to determine if to allow access to the route
+ */
 const ProtectedRoute: React.FC<IProps> = ({
   component: Component,
   isAuthenticated,

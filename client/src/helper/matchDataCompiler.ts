@@ -1,6 +1,10 @@
 import RequestHandler from "../classes/RequestHandler";
 import { ICompetitionData, IMatch, IStatisticData } from "../reducers/data";
 
+/**
+ * Initializes an object following the Match interface
+ * @param defaultNum the number to initialize the fields to
+ */
 function generateMatchData(defaultNum: number): IMatch {
   return {
     csHatch: defaultNum,
@@ -14,15 +18,22 @@ function generateMatchData(defaultNum: number): IMatch {
   };
 }
 
+/**
+ * Asynchronously requests the team data from the API and compiles it into a format better suited for graphs via Plotly
+ */
 export async function compileData(): Promise<ICompetitionData> {
+  // Initialize the request handler to pull from the API
   const requestHandler: RequestHandler = new RequestHandler("data/");
   const data = await requestHandler.get("teams/");
   const teams = data.data.data.teams;
 
   const competitionData: ICompetitionData = {};
 
+  // Loop through each team
   teams.forEach((team: any) => {
+    // Initialize the array for a specific team
     competitionData[team.teamNumber] = [];
+    // Add the matches to the previously initalized array
     team.matches.forEach((match: IMatch) => {
       competitionData[team.teamNumber].push(match);
     });
@@ -31,6 +42,10 @@ export async function compileData(): Promise<ICompetitionData> {
   return competitionData;
 }
 
+/**
+ * Calculates the average for each matching field in an object array
+ * @param competitionData - an array of matches
+ */
 export function calculateAverage(
   competitionData: ICompetitionData
 ): IStatisticData {
@@ -59,6 +74,11 @@ export function calculateAverage(
   return statisticData;
 }
 
+/**
+ * Finds the extrema (min / max) for each matching field in an object array
+ * @param competitionData - an array of matches
+ * @param extrema - wheather to find the "min" or "max" of the field
+ */
 export function calculateExtrema(
   competitionData: ICompetitionData,
   extrema: "max" | "min"

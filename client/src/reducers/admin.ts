@@ -132,6 +132,7 @@ export default function user(
         }
 
         // If all of the scouts are done, reset the state
+        // TODO something is undefined, caught in debugger
         if (isAllDone) {
           return {
             formState: blankAdminFormState,

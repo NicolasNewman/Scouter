@@ -9,6 +9,11 @@ interface IProps {
   isActive: boolean;
 }
 
+/**
+ * The navigation bar used to move between pages
+ *
+ * This is the left hand bar on maximimzed computer browser
+ */
 export default class Navigation extends Component<IProps> {
   props: IProps;
 
