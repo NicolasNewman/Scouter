@@ -33,24 +33,28 @@
             "app/main.prod.js.map",
             "package.json"
         ],
-        "extraFiles": [
+        "extraResources": [
             {
                 "from": "../server/",
-                "to": "./res/server",
+                "to": "./server",
                 "filter": [
                     "!node_modules/"
                 ]
             },
             {
                 "from": "../client/",
-                "to": "./res/client",
+                "to": "./client",
                 "filter": [
                     "!node_modules/"
                 ]
             },
             {
+                "from": "./scripts",
+                "to": "./scripts"
+            },
+            {
                 "from": "../package.json",
-                "to": "./res/"
+                "to": "."
             }
         ],
         "dmg": {
