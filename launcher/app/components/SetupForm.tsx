@@ -8,7 +8,8 @@ import {
     Button,
     Tooltip,
     Icon,
-    Upload
+    // Upload,
+    Input
 } from 'antd';
 import DataStore from 'app/classes/DataStore';
 
@@ -149,8 +150,31 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                         ]
                     })(<InputNumber className="form__item--number-input" />)}
                 </Form.Item>
+                <Form.Item
+                    className="form__item"
+                    label={
+                        <span className="form__item--label">
+                            Admin Password
+                            <Tooltip
+                                className="form__item--tooltip"
+                                title="The username needed to login as admin"
+                            >
+                                <Icon type="question-circle" />
+                            </Tooltip>
+                        </span>
+                    }
+                >
+                    {getFieldDecorator('adminPassword', {
+                        rules: [
+                            {
+                                required: true,
+                                message: <p>The admin password is required!</p>
+                            }
+                        ]
+                    })(<Input className="form__item--number-input" />)}
+                </Form.Item>
                 {/* File uploader */}
-                <Form.Item>
+                {/* <Form.Item>
                     {getFieldDecorator('moduleDragger', {
                         rules: [
                             {
@@ -176,7 +200,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             </p>
                         </Upload.Dragger>
                     )}
-                </Form.Item>
+                </Form.Item> */}
                 {/* Save checkbox & submit button */}
                 <Form.Item>
                     {getFieldDecorator('save', {

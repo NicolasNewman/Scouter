@@ -12,15 +12,7 @@ interface IProps {
   teamAverages: IStatisticData;
 }
 
-interface IState {
-  xSelector: keyof DataFields;
-  ySelector: keyof DataFields;
-  data: {
-    x: Array<number>;
-    y: Array<number>;
-    label: Array<string>;
-  };
-}
+interface IState {}
 
 type CompiledData = {
   min: Array<number>;
@@ -45,14 +37,6 @@ export default class Scatterplot extends Component<IProps, IState> {
         label: []
       }
     };
-
-    const minData = [];
-    const maxData = [];
-    const avgData = [];
-    const labels = [];
-
-    for (let teamKey in this.props.teamMins) {
-    }
 
     // this.keyToData = {
     //   min: this.props.teamMins,
