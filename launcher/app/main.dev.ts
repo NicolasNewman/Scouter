@@ -26,9 +26,9 @@ export default class AppUpdater {
 
 let mainWindow = null;
 
-log.silly('========================================');
-log.silly('||               Scouter              ||');
-log.silly('========================================');
+log.silly('=========================================');
+log.silly('||               Scouter               ||');
+log.silly('=========================================');
 log.info(
     `The runtime environment is in ${process.env.NODE_ENV} on ${process.platform}`
 );
