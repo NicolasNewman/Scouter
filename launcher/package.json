@@ -1,7 +1,7 @@
 {
     "name": "scouter",
     "version": "0.0.1",
-    "description": "A scouting utility to for use in FRC regional events",
+    "description": "A scouting utility for use in FRC regional events",
     "author": "NicolasNewman <nnewman01@gmail.com> (https://github.com/NicolasNewman/)",
     "contributors": [
         "NicolasNewman <nnewman01@gmail.com> (https://github.com/NicolasNewman/)"
@@ -24,8 +24,8 @@
         "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js"
     },
     "build": {
-        "productName": "ElectronReact",
-        "appId": "org.develar.ElectronReact",
+        "productName": "Scouter",
+        "appId": "com.nicolasnewman.scouter",
         "files": [
             "app/dist/",
             "app/app.html",
@@ -34,8 +34,24 @@
             "package.json"
         ],
         "extraFiles": [
-            "../server/*",
-            "../client/*"
+            {
+                "from": "../server/",
+                "to": "./res/server",
+                "filter": [
+                    "!node_modules/"
+                ]
+            },
+            {
+                "from": "../client/",
+                "to": "./res/client",
+                "filter": [
+                    "!node_modules/"
+                ]
+            },
+            {
+                "from": "../package.json",
+                "to": "./res/"
+            }
         ],
         "dmg": {
             "contents": [
@@ -72,8 +88,8 @@
         },
         "publish": {
             "provider": "github",
-            "owner": "electron-react-boilerplate",
-            "repo": "electron-react-boilerplate",
+            "owner": "NicolasNewman",
+            "repo": "https://github.com/NicolasNewman/Scouter/",
             "private": false
         }
     },
