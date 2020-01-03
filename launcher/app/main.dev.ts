@@ -112,7 +112,7 @@ app.on('ready', async () => {
             log.error('The platform is unsupported! Killing process');
             dialog.showErrorBox(
                 'Unsupported platform',
-                'You are currently using an unsupported platform to run Scouter. Please switch to a macOS, Windows, or Linux device'
+                'You are currently using an unsupported platform to run Scouter. Please switch to a macOS, Windows, or Linux device.'
             );
         } else {
             // Make sure there is an internet connection for downloading the packages
@@ -157,6 +157,7 @@ app.on('ready', async () => {
             );
 
             // A module script needs to be run, which requires a connection to connect to NPM
+            //TODO detect is node, npm, or yarn isn't installed!
             if (scriptsToRun.length !== 0) {
                 dialog.showMessageBox(
                     mainWindow,
@@ -164,18 +165,18 @@ app.on('ready', async () => {
                         type: 'info',
                         buttons: [],
                         message:
-                            'Missing Node packages were detected, the npm installer will now launch. Please wait for any opened window(s) to close after pressing "Ok"'
+                            'Missing Node packages were detected, the npm installer will now launch. Please wait for any opened window(s) to close after pressing "Ok".'
                     },
                     res => {}
                 );
                 isOnline(async isConnected => {
                     if (!isConnected) {
                         log.error(
-                            "There is no internet connection and the npm packages aren't installed, killing process"
+                            "There is no internet connection and the npm packages aren't installed. Scouter will now exit."
                         );
                         dialog.showErrorBox(
                             'Could not connect to the internet',
-                            'This device is currently not connected to the internet. A connection is needed for the first time startup or if the packages are modified'
+                            'This device is currently not connected to the internet. A connection is needed for the first time startup.'
                         );
                     } else {
                         await scriptsToRun.forEach(async script => {
