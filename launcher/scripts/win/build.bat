@@ -10,5 +10,5 @@
 :: │       └── [you are here]
 :: └── package.json
 
-cd ../../
+cd resources/
 yarn build:prod
