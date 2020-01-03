@@ -8,9 +8,11 @@ interface ILocations {
         WIN: string;
     };
     SERVER: {
+        ROOT: string;
         NODE_MODULES: string;
     };
     CLIENT: {
+        ROOT: string;
         NODE_MODULES: string;
     };
 }
@@ -32,17 +34,28 @@ export default class ResourceManager {
                 WIN: path.join(this.root, 'scripts/win')
             },
             SERVER: {
+                ROOT: path.join(this.root, 'server'),
                 NODE_MODULES: path.join(this.root, 'server/node_modules')
             },
             CLIENT: {
+                ROOT: path.join(this.root, 'client'),
                 NODE_MODULES: path.join(this.root, 'client/node_modules')
             }
         };
         this.SCRIPTS = {
-            build: `build.${this.extension}`,
-            run: `run.${this.extension}`,
-            installClientModules: `install_client_modules.${this.extension}`,
-            installServerModules: `install_server_modules.${this.extension}`
+            build: path.join(
+                this.LOCATIONS.SCRIPTS[os],
+                `build.${this.extension}`
+            ),
+            run: path.join(this.LOCATIONS.SCRIPTS[os], `run.${this.extension}`),
+            installClientModules: path.join(
+                this.LOCATIONS.SCRIPTS[os],
+                `install_client_modules.${this.extension}`
+            ),
+            installServerModules: path.join(
+                this.LOCATIONS.SCRIPTS[os],
+                `install_server_modules.${this.extension}`
+            )
         };
     }
 

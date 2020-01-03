@@ -12,9 +12,9 @@ import { app, BrowserWindow, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-
 import ResourceManager from './classes/ResourceManager';
 import { isOnline } from './helper/helper';
+import ScriptExecutor from './classes/ScriptExecutor';
 
 export default class AppUpdater {
     constructor() {
@@ -84,6 +84,14 @@ app.on('ready', async () => {
     ) {
         log.info(`Resources located at ${process.resourcesPath}`);
 
+        mainWindow = new BrowserWindow({
+            show: false,
+            frame: false,
+            width: 400,
+            height: 550,
+            resizable: false
+        });
+
         // Modify the process variables to match the parameter for the ResourceManager
         const platform = (() => {
             switch (process.platform) {
@@ -112,14 +120,17 @@ app.on('ready', async () => {
             const LOCATIONS = manager.getLocations();
             const SCRIPTS = manager.getScripts();
 
-            const scriptsToRun = [];
+            const scriptsToRun: Array<{ script: string; cwd: string }> = [];
             log.info('Checking if the modules are installed...');
             const clientPath = LOCATIONS.CLIENT.NODE_MODULES;
             log.info(`Checking ${clientPath}`);
             if (!manager.exists(clientPath)) {
                 manager.mkdir(clientPath);
                 if (manager.empty(clientPath)) {
-                    scriptsToRun.push(SCRIPTS.installClientModules);
+                    scriptsToRun.push({
+                        script: SCRIPTS.installClientModules,
+                        cwd: LOCATIONS.CLIENT.ROOT
+                    });
                     log.warn(
                         'The node_modules for the client is empty, flagging for install'
                     );
@@ -131,7 +142,11 @@ app.on('ready', async () => {
             if (!manager.exists(serverPath)) {
                 manager.mkdir(serverPath);
                 if (manager.empty(serverPath)) {
-                    scriptsToRun.push(SCRIPTS.installServerModules);
+                    scriptsToRun.push({
+                        script: SCRIPTS.installServerModules,
+                        cwd: LOCATIONS.SERVER.ROOT
+                    });
+
                     log.warn(
                         'The node_modules for the server is empty, flagging for install'
                     );
@@ -143,22 +158,41 @@ app.on('ready', async () => {
 
             // A module script needs to be run, which requires a connection to connect to NPM
             if (scriptsToRun.length !== 0) {
-                isOnline(isConnected => {
+                dialog.showMessageBox(
+                    mainWindow,
+                    {
+                        type: 'info',
+                        buttons: [],
+                        message:
+                            'Missing Node packages were detected, the npm installer will now launch. Please wait for any opened window(s) to close after pressing "Ok"'
+                    },
+                    res => {}
+                );
+                isOnline(async isConnected => {
                     if (!isConnected) {
                         log.error(
-                            "There is no internet connection and the npm modules aren't installed, killing process"
+                            "There is no internet connection and the npm packages aren't installed, killing process"
                         );
                         dialog.showErrorBox(
                             'Could not connect to the internet',
                             'This device is currently not connected to the internet. A connection is needed for the first time startup or if the packages are modified'
                         );
                     } else {
-                        mainWindow = new BrowserWindow({
-                            show: false,
-                            frame: false,
-                            width: 400,
-                            height: 550,
-                            resizable: false
+                        await scriptsToRun.forEach(async script => {
+                            const res = await new ScriptExecutor(
+                                script.script,
+                                { shell: true, detached: true },
+                                data => {
+                                    log.info(`> ${data}`.replace('\n', ''));
+                                }
+                            ).executeAndWait();
+                            log.info(
+                                `Script [${
+                                    script.script
+                                }] finished with error status ${res.error} ${
+                                    res.error ? `: ${res.errorMsg} ` : ''
+                                }`
+                            );
                         });
 
                         mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -189,6 +223,41 @@ app.on('ready', async () => {
                         // new AppUpdater();
                     }
                 });
+            } else {
+                mainWindow = new BrowserWindow({
+                    show: false,
+                    frame: false,
+                    width: 400,
+                    height: 550,
+                    resizable: false
+                });
+
+                mainWindow.loadURL(`file://${__dirname}/app.html`);
+
+                // @TODO: Use 'ready-to-show' event
+                //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
+                mainWindow.webContents.on('did-finish-load', () => {
+                    if (!mainWindow) {
+                        throw new Error('"mainWindow" is not defined');
+                    }
+                    if (process.env.START_MINIMIZED) {
+                        mainWindow.minimize();
+                    } else {
+                        mainWindow.show();
+                        mainWindow.focus();
+                    }
+                });
+
+                mainWindow.on('closed', () => {
+                    mainWindow = null;
+                });
+
+                const menuBuilder = new MenuBuilder(mainWindow);
+                menuBuilder.buildMenu();
+
+                // Remove this if your app does not use auto updates
+                // eslint-disable-next-line
+                // new AppUpdater();
             }
         }
         // dialog.showMessageBox();

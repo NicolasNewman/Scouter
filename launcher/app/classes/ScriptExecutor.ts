@@ -6,24 +6,34 @@ type ExecutorError = {
     errorMsg: string;
 };
 
+type SpawnOptions = {
+    cdw?: string;
+    shell?: boolean;
+    detached?: boolean;
+};
+
 export default class ScriptExecutor {
     private cmd: string;
+    private options: SpawnOptions;
     private stdoutCB: (data: string) => void;
 
-    constructor(cmd: string, stdoutCB: (data: string) => void) {
+    constructor(
+        cmd: string,
+        options: SpawnOptions,
+        stdoutCB: (data: string) => void
+    ) {
         log.info(`Loaded command [${cmd}] into memory`);
         this.cmd = cmd;
+        this.options = options;
         this.stdoutCB = stdoutCB;
     }
 
     executeAndWait(): Promise<ExecutorError> {
         return new Promise((res, rej) => {
-            const process = spawn(this.cmd);
+            log.info('========== STARTING COMMAND EXECUTION ==========');
+            const process = spawn(this.cmd, this.options);
             process.stdout.on('data', this.stdoutCB);
             process.stdout.on('close', code => {
-                log.info(
-                    `The script [${this.cmd}] finished successfully with code ${code}`
-                );
                 res({ error: false, errorMsg: '' });
             });
             process.stderr.on('data', data => {
