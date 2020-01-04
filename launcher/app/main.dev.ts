@@ -78,10 +78,7 @@ app.on('ready', async () => {
     }
 
     // Verify that the npm modules are installed
-    if (
-        process.env.NODE_ENV === 'production' ||
-        process.env.NODE_ENV === 'development'
-    ) {
+    if (process.env.NODE_ENV === 'production') {
         log.info(`Resources located at ${process.resourcesPath}`);
 
         mainWindow = new BrowserWindow({
@@ -115,11 +112,11 @@ app.on('ready', async () => {
                 'You are currently using an unsupported platform to run Scouter. Please switch to a macOS, Windows, or Linux device.'
             );
         } else {
-            // Make sure there is an internet connection for downloading the packages
             const manager = new ResourceManager(platform);
             const LOCATIONS = manager.getLocations();
             const SCRIPTS = manager.getScripts();
 
+            // Check each node_modules location and see if packages need to be installed
             const scriptsToRun: Array<{ script: string; cwd: string }> = [];
             log.info('Checking if the modules are installed...');
             const clientPath = LOCATIONS.CLIENT.NODE_MODULES;
@@ -156,8 +153,9 @@ app.on('ready', async () => {
                 `There are ${scriptsToRun.length} module folders that are empty`
             );
 
-            // A module script needs to be run, which requires a connection to connect to NPM
             //TODO detect is node, npm, or yarn isn't installed!
+
+            // A module script needs to be run
             if (scriptsToRun.length !== 0) {
                 dialog.showMessageBox(
                     mainWindow,
@@ -167,63 +165,78 @@ app.on('ready', async () => {
                         message:
                             'Missing Node packages were detected, the npm installer will now launch. Please wait for any opened window(s) to close after pressing "Ok".'
                     },
-                    res => {}
-                );
-                isOnline(async isConnected => {
-                    if (!isConnected) {
-                        log.error(
-                            "There is no internet connection and the npm packages aren't installed. Scouter will now exit."
-                        );
-                        dialog.showErrorBox(
-                            'Could not connect to the internet',
-                            'This device is currently not connected to the internet. A connection is needed for the first time startup.'
-                        );
-                    } else {
-                        await scriptsToRun.forEach(async script => {
-                            const res = await new ScriptExecutor(
-                                script.script,
-                                { shell: true, detached: true },
-                                data => {
-                                    log.info(`> ${data}`.replace('\n', ''));
-                                }
-                            ).executeAndWait();
-                            log.info(
-                                `Script [${
-                                    script.script
-                                }] finished with error status ${res.error} ${
-                                    res.error ? `: ${res.errorMsg} ` : ''
-                                }`
-                            );
-                        });
-
-                        mainWindow.loadURL(`file://${__dirname}/app.html`);
-
-                        // @TODO: Use 'ready-to-show' event
-                        //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-                        mainWindow.webContents.on('did-finish-load', () => {
-                            if (!mainWindow) {
-                                throw new Error('"mainWindow" is not defined');
-                            }
-                            if (process.env.START_MINIMIZED) {
-                                mainWindow.minimize();
+                    res => {
+                        // Make sure the user is connected to the internet
+                        isOnline(async isConnected => {
+                            if (!isConnected) {
+                                log.error(
+                                    "There is no internet connection and the npm packages aren't installed. Scouter will now exit."
+                                );
+                                dialog.showErrorBox(
+                                    'Could not connect to the internet',
+                                    'This device is currently not connected to the internet. A connection is needed for the first time startup.'
+                                );
                             } else {
-                                mainWindow.show();
-                                mainWindow.focus();
+                                // Loop through scripts and install them
+                                scriptsToRun.forEach(async script => {
+                                    const executor = await new ScriptExecutor(
+                                        script.script,
+                                        { shell: true, detached: true },
+                                        data => {
+                                            log.info(
+                                                `> ${data}`.replace('\n', '')
+                                            );
+                                        }
+                                    );
+                                    const res = await executor.executeAndWait();
+                                    log.info(
+                                        `Script [${
+                                            script.script
+                                        }] finished with error status ${
+                                            res.error
+                                        } ${
+                                            res.error
+                                                ? `: ${res.errorMsg} `
+                                                : ''
+                                        }`
+                                    );
+                                });
+
+                                mainWindow.loadURL(
+                                    `file://${__dirname}/app.html`
+                                );
+
+                                mainWindow.webContents.on(
+                                    'did-finish-load',
+                                    () => {
+                                        if (!mainWindow) {
+                                            throw new Error(
+                                                '"mainWindow" is not defined'
+                                            );
+                                        }
+                                        if (process.env.START_MINIMIZED) {
+                                            mainWindow.minimize();
+                                        } else {
+                                            mainWindow.show();
+                                            mainWindow.focus();
+                                        }
+                                    }
+                                );
+
+                                mainWindow.on('closed', () => {
+                                    mainWindow = null;
+                                });
+
+                                const menuBuilder = new MenuBuilder(mainWindow);
+                                menuBuilder.buildMenu();
+
+                                // Remove this if your app does not use auto updates
+                                // eslint-disable-next-line
+                                // new AppUpdater();
                             }
                         });
-
-                        mainWindow.on('closed', () => {
-                            mainWindow = null;
-                        });
-
-                        const menuBuilder = new MenuBuilder(mainWindow);
-                        menuBuilder.buildMenu();
-
-                        // Remove this if your app does not use auto updates
-                        // eslint-disable-next-line
-                        // new AppUpdater();
                     }
-                });
+                );
             } else {
                 mainWindow = new BrowserWindow({
                     show: false,
@@ -235,8 +248,6 @@ app.on('ready', async () => {
 
                 mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-                // @TODO: Use 'ready-to-show' event
-                //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
                 mainWindow.webContents.on('did-finish-load', () => {
                     if (!mainWindow) {
                         throw new Error('"mainWindow" is not defined');
@@ -248,6 +259,8 @@ app.on('ready', async () => {
                         mainWindow.focus();
                     }
                 });
+
+                // TODO replace fields in env file and start server
 
                 mainWindow.on('closed', () => {
                     mainWindow = null;

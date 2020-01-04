@@ -10,6 +10,7 @@ interface ILocations {
     SERVER: {
         ROOT: string;
         NODE_MODULES: string;
+        ENV: string;
     };
     CLIENT: {
         ROOT: string;
@@ -17,12 +18,19 @@ interface ILocations {
     };
 }
 
+interface IScripts {
+    build: string;
+    run: string;
+    installClientModules: string;
+    installServerModules: string;
+}
+
 export default class ResourceManager {
     private root: string;
     // private os: 'WIN' | 'UNIX';
     private extension: string;
     private LOCATIONS: ILocations;
-    private SCRIPTS;
+    private SCRIPTS: IScripts;
 
     constructor(os: 'WIN' | 'UNIX') {
         // this.os = os;
@@ -35,7 +43,8 @@ export default class ResourceManager {
             },
             SERVER: {
                 ROOT: path.join(this.root, 'server'),
-                NODE_MODULES: path.join(this.root, 'server/node_modules')
+                NODE_MODULES: path.join(this.root, 'server/node_modules'),
+                ENV: path.join(this.root, 'server/.env')
             },
             CLIENT: {
                 ROOT: path.join(this.root, 'client'),

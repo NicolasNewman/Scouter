@@ -20,6 +20,14 @@ export default class DataStore {
             dbPort: {
                 type: 'number',
                 description: 'The port used to connect to the database'
+            },
+            dbName: {
+                type: 'string',
+                description: 'The name of the Mongoose database document'
+            },
+            adminPassword: {
+                type: 'string',
+                description: 'The password to log into the site as an admin'
             }
         };
         this.store = new Store({ schema: this.schema });

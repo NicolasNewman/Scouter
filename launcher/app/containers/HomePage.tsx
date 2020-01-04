@@ -9,6 +9,8 @@ function mapStateToProps(state, ownProps) {
         dataStore: ownProps.dataStore,
         serverPort: state.form.serverPort,
         dbPort: state.form.dbPort,
+        dbName: state.form.dbName,
+        adminPassword: state.form.adminPassword,
         logText: state.log.text
     };
 }

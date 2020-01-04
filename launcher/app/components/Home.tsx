@@ -13,8 +13,15 @@ interface IProps extends RouteComponentProps<any> {
     dataStore: DataStore;
     serverPort: number;
     dbPort: number;
+    dbName: string;
+    adminPassword: string;
     logText: string;
-    updateFormState: (serverPort: number, dbPort: number) => void;
+    updateFormState: (
+        serverPort: number,
+        dbPort: number,
+        dbName: string,
+        adminPassword: string
+    ) => void;
     logEvent: (event: string) => void;
 }
 
@@ -46,7 +53,6 @@ export default class Home extends Component<IProps, IState> {
      * To be called from the child form when submitted
      */
     handleFormSubmit = (): void => {
-        console.log('here');
         this.setState({
             formTabDisabled: true,
             logTabDisabled: false,
@@ -78,6 +84,10 @@ export default class Home extends Component<IProps, IState> {
                     <Log
                         logText={this.props.logText}
                         logEvent={this.props.logEvent}
+                        serverPort={this.props.serverPort}
+                        dbPort={this.props.dbPort}
+                        dbName={this.props.dbName}
+                        adminPassword={this.props.adminPassword}
                     />
                 </TabPane>
             </Tabs>

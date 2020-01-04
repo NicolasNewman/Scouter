@@ -17,7 +17,12 @@ interface IProps {
     dataStore: DataStore;
     serverPort: number;
     dbPort: number;
-    updateFormState: (serverPort: number, dbPort: number) => void;
+    updateFormState: (
+        serverPort: number,
+        dbPort: number,
+        dbName: string,
+        adminPassword: string
+    ) => void;
     handleFormSubmit: () => void;
 }
 
@@ -44,9 +49,16 @@ class SetupForm extends Component<IProps & FormComponentProps> {
             if (!err && vals.save) {
                 this.props.dataStore.set('serverPort', vals.serverPort);
                 this.props.dataStore.set('dbPort', vals.dbPort);
+                this.props.dataStore.set('dbName', vals.dbName);
+                this.props.dataStore.set('adminPassword', vals.adminPassword);
             }
             if (!err) {
-                this.props.updateFormState(vals.serverPort, vals.dbPort);
+                this.props.updateFormState(
+                    vals.serverPort,
+                    vals.dbPort,
+                    vals.dbName,
+                    vals.adminPassword
+                );
                 this.props.handleFormSubmit();
             }
         });
@@ -91,7 +103,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
         return (
             <Form className="form" onSubmit={this.handleSubmit}>
                 {/* Website port field */}
-                <Form.Item
+                {/* <Form.Item
                     className="form__item"
                     label={
                         <span className="form__item--label">
@@ -119,7 +131,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             }
                         ]
                     })(<InputNumber className="form__item--number-input" />)}
-                </Form.Item>
+                </Form.Item> */}
                 {/* Database port field */}
                 <Form.Item
                     className="form__item"
@@ -150,6 +162,31 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                         ]
                     })(<InputNumber className="form__item--number-input" />)}
                 </Form.Item>
+                {/* Database name field */}
+                <Form.Item
+                    className="form__item"
+                    label={
+                        <span className="form__item--label">
+                            DB Name
+                            <Tooltip
+                                className="form__item--tooltip"
+                                title="The name of the database document in MongoDB"
+                            >
+                                <Icon type="question-circle" />
+                            </Tooltip>
+                        </span>
+                    }
+                >
+                    {getFieldDecorator('dbName', {
+                        rules: [
+                            {
+                                required: true,
+                                message: <p>The database name is required!</p>
+                            }
+                        ]
+                    })(<Input className="form__item--number-input" />)}
+                </Form.Item>
+                {/* Admin password field */}
                 <Form.Item
                     className="form__item"
                     label={
@@ -171,7 +208,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                                 message: <p>The admin password is required!</p>
                             }
                         ]
-                    })(<Input className="form__item--number-input" />)}
+                    })(<Input.Password className="form__item--number-input" />)}
                 </Form.Item>
                 {/* File uploader */}
                 {/* <Form.Item>
@@ -200,7 +237,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             </p>
                         </Upload.Dragger>
                     )}
-                </Form.Item> */}
+                </Form.Item>
                 {/* Save checkbox & submit button */}
                 <Form.Item>
                     {getFieldDecorator('save', {

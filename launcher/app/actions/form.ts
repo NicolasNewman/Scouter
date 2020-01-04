@@ -6,6 +6,8 @@ interface UpdateFormAction {
     type: FormTypeKeys.UPDATE_FORM_STATE;
     serverPort: number;
     dbPort: number;
+    dbName: string;
+    adminPassword: string;
 }
 
 export type FormTypes = UpdateFormAction;
@@ -17,12 +19,16 @@ export type FormTypes = UpdateFormAction;
  */
 export function updateFormState(
     serverPort: number,
-    dbPort: number
+    dbPort: number,
+    dbName: string,
+    adminPassword: string
 ): UpdateFormAction {
     return {
         type: FormTypeKeys.UPDATE_FORM_STATE,
         serverPort,
-        dbPort
+        dbPort,
+        dbName,
+        adminPassword
     };
 }
 
