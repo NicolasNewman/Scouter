@@ -12,6 +12,10 @@ type SpawnOptions = {
     detached?: boolean;
 };
 
+// TODO DRY
+const scriptLogger = log.create('script');
+scriptLogger.transports.file.format = '[{level}]> {text}';
+
 export default class ScriptExecutor {
     private cmd: string;
     private options: SpawnOptions;
@@ -37,8 +41,7 @@ export default class ScriptExecutor {
                 res({ error: false, errorMsg: '' });
             });
             process.stderr.on('data', data => {
-                log.info(`The script [${this.cmd}] exited with an error:`);
-                log.info(data);
+                scriptLogger.error(data);
                 rej({ error: true, errorMsg: data });
             });
         });

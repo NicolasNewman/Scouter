@@ -68,13 +68,23 @@ export default class Log extends Component<IProps, IState> {
                 this.props.logEvent('Done');
                 this.props.logEvent('Building the server...');
                 // 2) Build the server
-                const executor = await new ScriptExecutor(
+                const buildExecutor = new ScriptExecutor(
                     SCRIPTS.build,
                     { shell: true, detached: true },
                     data => {}
                 );
-                await executor.executeAndWait();
+                await buildExecutor.executeAndWait();
                 this.props.logEvent('Done');
+
+                // 3) Run the server
+                this.props.logEvent('Starting the server...');
+                const runExecutor = new ScriptExecutor(
+                    SCRIPTS.run,
+                    { shell: true, detached: true },
+                    data => {}
+                );
+                await runExecutor.executeAndWait();
+                this.props.logEvent('The server has shutdown');
             }
         }
     };

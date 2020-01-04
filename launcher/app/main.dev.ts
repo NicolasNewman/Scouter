@@ -26,6 +26,9 @@ export default class AppUpdater {
 
 let mainWindow = null;
 
+const scriptLogger = log.create('script');
+scriptLogger.transports.file.format = '[{level}]> {text}';
+
 log.silly('=========================================');
 log.silly('||               Scouter               ||');
 log.silly('=========================================');
@@ -123,31 +126,31 @@ app.on('ready', async () => {
             log.info(`Checking ${clientPath}`);
             if (!manager.exists(clientPath)) {
                 manager.mkdir(clientPath);
-                if (manager.empty(clientPath)) {
-                    scriptsToRun.push({
-                        script: SCRIPTS.installClientModules,
-                        cwd: LOCATIONS.CLIENT.ROOT
-                    });
-                    log.warn(
-                        'The node_modules for the client is empty, flagging for install'
-                    );
-                }
+            }
+            if (manager.empty(clientPath)) {
+                scriptsToRun.push({
+                    script: SCRIPTS.installClientModules,
+                    cwd: LOCATIONS.CLIENT.ROOT
+                });
+                log.warn(
+                    'The node_modules for the client is empty, flagging for install'
+                );
             }
 
             const serverPath = LOCATIONS.SERVER.NODE_MODULES;
             log.info(`Checking ${serverPath}`);
             if (!manager.exists(serverPath)) {
                 manager.mkdir(serverPath);
-                if (manager.empty(serverPath)) {
-                    scriptsToRun.push({
-                        script: SCRIPTS.installServerModules,
-                        cwd: LOCATIONS.SERVER.ROOT
-                    });
+            }
+            if (manager.empty(serverPath)) {
+                scriptsToRun.push({
+                    script: SCRIPTS.installServerModules,
+                    cwd: LOCATIONS.SERVER.ROOT
+                });
 
-                    log.warn(
-                        'The node_modules for the server is empty, flagging for install'
-                    );
-                }
+                log.warn(
+                    'The node_modules for the server is empty, flagging for install'
+                );
             }
             log.info(
                 `There are ${scriptsToRun.length} module folders that are empty`
@@ -178,14 +181,12 @@ app.on('ready', async () => {
                                 );
                             } else {
                                 // Loop through scripts and install them
-                                scriptsToRun.forEach(async script => {
-                                    const executor = await new ScriptExecutor(
+                                for (const script of scriptsToRun) {
+                                    const executor = new ScriptExecutor(
                                         script.script,
                                         { shell: true, detached: true },
                                         data => {
-                                            log.info(
-                                                `> ${data}`.replace('\n', '')
-                                            );
+                                            scriptLogger.info(`${data}`);
                                         }
                                     );
                                     const res = await executor.executeAndWait();
@@ -200,7 +201,30 @@ app.on('ready', async () => {
                                                 : ''
                                         }`
                                     );
-                                });
+                                }
+                                // scriptsToRun.forEach(async script => {
+                                //     const executor = await new ScriptExecutor(
+                                //         script.script,
+                                //         { shell: true, detached: true },
+                                //         data => {
+                                //             log.info(
+                                //                 `> ${data}`.replace('\n', '')
+                                //             );
+                                //         }
+                                //     );
+                                //     const res = await executor.executeAndWait();
+                                //     log.info(
+                                //         `Script [${
+                                //             script.script
+                                //         }] finished with error status ${
+                                //             res.error
+                                //         } ${
+                                //             res.error
+                                //                 ? `: ${res.errorMsg} `
+                                //                 : ''
+                                //         }`
+                                //     );
+                                // });
 
                                 mainWindow.loadURL(
                                     `file://${__dirname}/app.html`

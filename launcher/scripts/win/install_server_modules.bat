@@ -10,5 +10,5 @@
 :: │       └── [you are here]
 :: └── package.json
 
-cd resources/client
+cd resources/server
 yarn install
