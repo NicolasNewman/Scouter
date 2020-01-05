@@ -1,7 +1,11 @@
 import { Schema, model, Document } from 'mongoose';
 const ObjectId = Schema.Types.ObjectId;
 
-interface ITeam extends Document {}
+interface ITeam extends Document {
+    teamName: string;
+    teamNumber: number;
+    matches: Array<string>;
+}
 
 const teamSchema: Schema = new Schema({
     teamName: {

@@ -12,11 +12,38 @@ const matchSchema = new Schema({
         type: ObjectId,
         ref: 'Team'
     },
-    cargoPoints: {
+    csHatch: {
         type: Number
     },
-    hatchPoints: {
+    csCargo: {
         type: Number
+    },
+    r1Hatch: {
+        type: Number
+    },
+    r2Hatch: {
+        type: Number
+    },
+    r3Hatch: {
+        type: Number
+    },
+    r1Cargo: {
+        type: Number
+    },
+    r2Cargo: {
+        type: Number
+    },
+    r3Cargo: {
+        type: Number
+    },
+    habOne: {
+        type: Boolean
+    },
+    habTwo: {
+        type: Boolean
+    },
+    habThree: {
+        type: Boolean
     }
 });
 

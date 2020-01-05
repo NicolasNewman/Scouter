@@ -41,7 +41,7 @@ const gameSchema = new Schema({
 
 gameSchema.pre<IGame>(/^find/, function(next) {
     this.populate({
-        path: 'red.s1',
+        path: 'red.s1 red.s2 red.s3 blue.s1 blue.s2 blue.s3',
         select: '-matchNumber'
     });
     next();

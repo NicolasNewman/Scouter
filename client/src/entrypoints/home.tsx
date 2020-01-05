@@ -1,65 +1,26 @@
-/**
- * In webpack terminology the 'entry point'
- * of the First SPA.
- */
 import * as React from "react";
-import { Component } from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
-import { Route, Switch } from "react-router-dom";
-import Home from "../components/Home";
-import DataInput from "../components/DataInput";
-import Visualize from "../components/Visualize";
-// import * as SPAs from "../../config/spa.config";
-import NavContainer from "../containers/NavContainer";
-import "../app.global.less";
+import Root from "../containers/RootContainer";
 import { configureStore, history } from "../store/configureStore";
+import { SocketController } from "../classes/socketController";
+import RequestHandler from "../classes/RequestHandler";
+import * as constants from "../constants/constants.json";
 
-interface IProps {
-  inputText: string;
-}
+import "../app.global.less";
 
-interface IState {
-  modalVisible: boolean;
-  loggedIn: boolean;
-  isAdmin: boolean;
-  user: string | undefined;
-}
-
-class Root extends Component<IProps, IState> {
-  props: IProps;
-
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      modalVisible: true,
-      loggedIn: false,
-      isAdmin: false,
-      user: undefined
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/entry" component={DataInput} />
-          <Route path="/visualize" component={Visualize} />
-          <Route component={Home} />
-        </Switch>
-      </div>
-    );
-  }
-}
 const store = configureStore();
+const socket = new SocketController(constants.socketRoute);
+const requestHandler = new RequestHandler(constants.apiRoute);
 
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <NavContainer rightComponent={Root} />
+      <Root history={history} socket={socket} requestHandler={requestHandler} />
     </ConnectedRouter>
   </Provider>,
   document.getElementById("react-root")
 );
+
+export default store;

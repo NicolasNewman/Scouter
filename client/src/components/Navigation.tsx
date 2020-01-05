@@ -2,10 +2,17 @@ import * as React from "react";
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
-const { SubMenu } = Menu;
 
-interface IProps {}
+interface IProps {
+  isAdmin: boolean;
+  isActive: boolean;
+}
 
+/**
+ * The navigation bar used to move between pages
+ *
+ * This is the left hand bar on maximimzed computer browser
+ */
 export default class Navigation extends Component<IProps> {
   props: IProps;
 
@@ -23,7 +30,7 @@ export default class Navigation extends Component<IProps> {
           </span>
           <Link to="/home" />
         </Menu.Item>
-        <Menu.Item key="entry">
+        <Menu.Item disabled={!this.props.isActive} key="entry">
           <span>
             <Icon type="form" />
             <span>Entry</span>
@@ -36,6 +43,13 @@ export default class Navigation extends Component<IProps> {
             <span>Visualize</span>
           </span>
           <Link to="/visualize" />
+        </Menu.Item>
+        <Menu.Item key="admin" hidden={!this.props.isAdmin}>
+          <span>
+            <Icon type="tool" />
+            <span>Admin</span>
+          </span>
+          <Link to="/admin" />
         </Menu.Item>
       </Menu>
     );

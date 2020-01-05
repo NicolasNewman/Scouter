@@ -1,7 +1,3 @@
-/**
- * In webpack terminology the 'entry point'
- * of the Second SPA.
- */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Helmet } from "react-helmet";

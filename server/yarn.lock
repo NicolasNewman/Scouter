@@ -510,6 +510,11 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/flat@^0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@types/flat/-/flat-0.0.28.tgz#5c788149d85a6cf8ff5f5f000acdd912cdea4274"
+  integrity sha1-XHiBSdhabPj/X18ACs3ZEs3qQnQ=
+
 "@types/glob@^7.1.1":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.1.tgz#aa59a1c6e3fbc421e07ccd31a944c30eba521575"
