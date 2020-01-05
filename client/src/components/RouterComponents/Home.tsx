@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Component } from "react";
-// import { BaseComponent } from "./BaseComponent";
+import { Icon } from "antd";
 
-interface IProps {}
+interface IProps {
+  isAdmin: boolean;
+}
 
 export default class Home extends Component<IProps> {
   props: IProps;
@@ -14,7 +16,25 @@ export default class Home extends Component<IProps> {
   render() {
     return (
       <div>
-        <p>Hi!</p>
+        <h1>Scouter</h1>
+        {this.props.isAdmin ? (
+          <p>
+            Welcome to Scouter! When you are ready to have your scouts beign
+            entering data for a match, head to the Admin tab
+            <span style={{ margin: "0 0.25rem" }}>
+              (<Icon type="tool" />)
+            </span>{" "}
+            to assign your scouts to a team
+          </p>
+        ) : (
+          <p>
+            Welcome to Scouter! When your lead scout is ready, the Entry tab
+            <span style={{ margin: "0 0.25rem" }}>
+              (<Icon type="form" />)
+            </span>
+            will be enabled and you can begin scouting.
+          </p>
+        )}
       </div>
     );
   }

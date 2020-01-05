@@ -54,7 +54,11 @@ export default class ComponentRouter extends Component<IProps> {
     return (
       <div>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route
+            exact
+            path="/"
+            component={() => <Home isAdmin={this.props.isAdmin} />}
+          />
           <Route
             path="/entry"
             component={() => (
