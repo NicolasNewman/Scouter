@@ -1,7 +1,7 @@
 {
     "name": "scouter",
     "version": "0.0.1",
-    "description": "A scouting utility to for use in FRC regional events",
+    "description": "A scouting utility for use in FRC regional events",
     "author": "NicolasNewman <nnewman01@gmail.com> (https://github.com/NicolasNewman/)",
     "contributors": [
         "NicolasNewman <nnewman01@gmail.com> (https://github.com/NicolasNewman/)"
@@ -24,8 +24,8 @@
         "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js"
     },
     "build": {
-        "productName": "ElectronReact",
-        "appId": "org.develar.ElectronReact",
+        "productName": "Scouter",
+        "appId": "com.nicolasnewman.scouter",
         "files": [
             "app/dist/",
             "app/app.html",
@@ -33,9 +33,29 @@
             "app/main.prod.js.map",
             "package.json"
         ],
-        "extraFiles": [
-            "../server/*",
-            "../client/*"
+        "extraResources": [
+            {
+                "from": "../server/",
+                "to": "./server",
+                "filter": [
+                    "!node_modules/"
+                ]
+            },
+            {
+                "from": "../client/",
+                "to": "./client",
+                "filter": [
+                    "!node_modules/"
+                ]
+            },
+            {
+                "from": "./scripts",
+                "to": "./scripts"
+            },
+            {
+                "from": "../package.json",
+                "to": "."
+            }
         ],
         "dmg": {
             "contents": [
@@ -72,20 +92,20 @@
         },
         "publish": {
             "provider": "github",
-            "owner": "electron-react-boilerplate",
-            "repo": "electron-react-boilerplate",
+            "owner": "NicolasNewman",
+            "repo": "https://github.com/NicolasNewman/Scouter/",
             "private": false
         }
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.8.1",
-        "antd": "^3.20.5",
+        "antd": "^3.26.2",
         "connected-react-router": "^6.3.2",
         "core-js": "2",
         "custom-electron-titlebar": "^3.1.0",
         "devtron": "^1.4.0",
         "electron-debug": "^2.1.0",
-        "electron-log": "^3.0.4",
+        "electron-log": "^4.0.2",
         "electron-store": "^5.0.0",
         "electron-updater": "^4.0.6",
         "history": "^4.9.0",
@@ -123,6 +143,7 @@
         "@babel/preset-react": "^7.0.0",
         "@babel/preset-typescript": "^7.1.0",
         "@babel/register": "^7.0.0",
+        "@types/node": "^13.1.2",
         "@types/react": "^16.7.18",
         "@types/react-dom": "^16.0.11",
         "@types/react-redux": "^6.0.12",

@@ -3,7 +3,7 @@ import { Component } from "react";
 import { IStatisticData, IMatch } from "../../../reducers/data";
 import { keys, isEmpty } from "../../../helper/helper";
 import Barchart from "./PlotComponents/Barchart";
-import Scatterplot from "./PlotComponents/Scatterplot";
+// import Scatterplot from "./PlotComponents/Scatterplot";
 import { History } from "history";
 
 import { Tabs, Select, Radio } from "antd";

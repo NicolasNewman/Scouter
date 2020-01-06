@@ -1,9 +1,5 @@
-import * as constants from "../constants/constants.json";
-import RequestHandler from "../classes/RequestHandler";
 import { compileData } from "../helper/matchDataCompiler";
 import { ICompetitionData } from "../reducers/data";
-
-const requestHandler = new RequestHandler(constants.apiRoute);
 
 export enum DataTypeKeys {
   UPDATE_MATCH_DATA = "UPDATE_MATCH_DATA"

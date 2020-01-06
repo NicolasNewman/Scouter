@@ -1,7 +1,6 @@
 import { DataTypeKeys, DataTypes } from "../actions/data";
 import * as equal from "fast-deep-equal";
 import {
-  compileData,
   calculateExtrema,
   calculateAverage
 } from "../helper/matchDataCompiler";
