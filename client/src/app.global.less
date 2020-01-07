@@ -12,10 +12,47 @@
 @import "less/components/_scouting.less";
 @import "less/components/_visualization.less";
 
+// Left over styling from Semantic-UI
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+}
+
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child {
+  margin-bottom: 0;
+}
+
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  line-height: 1.28571429em;
+  margin: calc(2rem - 0.14285714em) 0 1rem;
+  padding: 0;
+}
+
+p {
+  margin: 0 0 1em;
+  line-height: 1.4285em;
 }

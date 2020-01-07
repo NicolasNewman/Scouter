@@ -211,9 +211,9 @@ const getWebpackConfig = (env, argv) => {
         filename: `${entryPoint}.html`,
         chunks: [`${entryPoint}`, "vendor", "runtime"],
         addBrotliExtension: isProduction,
-        links: [
-          "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
-        ],
+        // links: [
+        //   "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+        // ],
         meta: [
           {
             name: "viewport",
