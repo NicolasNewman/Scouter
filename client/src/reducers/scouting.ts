@@ -32,11 +32,19 @@ export default function scouting(
         targets => targets.team !== action.target
       );
 
+      if (targetsCopy.length === 0) {
+        return {
+          targets: targetsCopy,
+          matchNumber: state.matchNumber,
+          isActive: false
+        };
+      }
       return {
         targets: targetsCopy,
         matchNumber: state.matchNumber,
         isActive: state.isActive
       };
+
     case ScoutingTypeKeys.UPDATE_SCOUTING_STATUS:
       return {
         targets: state.targets,
