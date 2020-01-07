@@ -39,6 +39,8 @@ export default class DataStore {
      * @param {*} value - the new value for the data
      */
     set = (key: string, value: any): void => {
+        console.log('checking key ', key);
+
         if (this.schema[key]) {
             console.log('contains key ', key);
             this.store.set(key, value);

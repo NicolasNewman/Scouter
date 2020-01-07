@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { FormComponentProps } from 'antd/lib/form/Form';
 import {
     Form,
-    InputNumber,
+    // InputNumber,
     Checkbox,
     Button,
     Tooltip,
@@ -47,12 +47,19 @@ class SetupForm extends Component<IProps & FormComponentProps> {
             console.log(vals);
             console.log(err);
             if (!err && vals.save) {
-                this.props.dataStore.set('serverPort', vals.serverPort);
-                this.props.dataStore.set('dbPort', vals.dbPort);
+                // console.log('serverPort');
+                // this.props.dataStore.set('serverPort', vals.serverPort);
+                // console.log('dbPort');
+                // this.props.dataStore.set('dbPort', vals.dbPort);
+                // console.log('dbName');
                 this.props.dataStore.set('dbName', vals.dbName);
                 this.props.dataStore.set('adminPassword', vals.adminPassword);
             }
+            console.log('here-1');
+
             if (!err) {
+                console.log('here');
+
                 this.props.updateFormState(
                     vals.serverPort,
                     vals.dbPort,
@@ -132,7 +139,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                         ]
                     })(<InputNumber className="form__item--number-input" />)}
                 </Form.Item> */}
-                {/* Database port field */}
+                {/* Database port field
                 <Form.Item
                     className="form__item"
                     label={
@@ -161,7 +168,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             }
                         ]
                     })(<InputNumber className="form__item--number-input" />)}
-                </Form.Item>
+                </Form.Item> */}
                 {/* Database name field */}
                 <Form.Item
                     className="form__item"

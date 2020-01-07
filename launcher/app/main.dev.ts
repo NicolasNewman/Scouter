@@ -299,5 +299,40 @@ app.on('ready', async () => {
             }
         }
         // dialog.showMessageBox();
+    } else {
+        mainWindow = new BrowserWindow({
+            show: false,
+            frame: false,
+            width: 400,
+            height: 550,
+            resizable: false
+        });
+
+        mainWindow.loadURL(`file://${__dirname}/app.html`);
+
+        mainWindow.webContents.on('did-finish-load', () => {
+            if (!mainWindow) {
+                throw new Error('"mainWindow" is not defined');
+            }
+            if (process.env.START_MINIMIZED) {
+                mainWindow.minimize();
+            } else {
+                mainWindow.show();
+                mainWindow.focus();
+            }
+        });
+
+        // TODO replace fields in env file and start server
+
+        mainWindow.on('closed', () => {
+            mainWindow = null;
+        });
+
+        const menuBuilder = new MenuBuilder(mainWindow);
+        menuBuilder.buildMenu();
+
+        // Remove this if your app does not use auto updates
+        // eslint-disable-next-line
+        // new AppUpdater();
     }
 });
