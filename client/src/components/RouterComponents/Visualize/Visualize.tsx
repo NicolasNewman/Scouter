@@ -52,13 +52,18 @@ export default class Home extends Component<IProps, IState> {
       isEmpty(this.props.teamMaxes) ||
       isEmpty(this.props.teamMins)
     ) {
-      this.props.history.push("/");
+      this.statToData = {
+        min: {},
+        max: {},
+        avg: {}
+      };
       this.state = {
         barChartMode: BarChartModes.FIELD,
         barTraces: [],
         barStatistic: "min",
         ejected: true
       };
+      // this.props.history.push("/");
     } else {
       this.teams = Object.keys(this.props.teamMaxes);
       this.fields = keys(this.props.teamMaxes[this.teams[0]]);
@@ -97,81 +102,99 @@ export default class Home extends Component<IProps, IState> {
   componentDidUpdate() {}
 
   render() {
-    if (!this.state.ejected) {
-      return (
-        <div className="graphs">
-          <Tabs>
-            {/* SECTION FOR BARCHARTS */}
-            <TabPane tab="Barchart" key="barchart">
-              {/* Radio selection for the mode */}
-              <Radio.Group
-                onChange={this.barModeRadioChanged}
-                defaultValue={this.state.barChartMode}
-              >
-                <Radio value={BarChartModes.FIELD}>
-                  Compare all fields of a statistic for a multiple teams
-                </Radio>
-                <Radio value={BarChartModes.TEAM}>
-                  Compare all teams to multiple fields of a statistic
-                </Radio>
-              </Radio.Group>
-              {/* Conditional selection for fields / teams based on the mode */}
-              {this.state.barChartMode === BarChartModes.TEAM ? (
-                // Mode is TEAM
-                <span>
-                  <span>Fields: </span>
-                  <Select
-                    className="multiple"
-                    mode="multiple"
-                    onChange={this.barTraceSelectChanged}
-                    value={this.state.barTraces}
-                  >
-                    {this.fields.map(field => (
-                      <Option key={field}>{field}</Option>
-                    ))}
-                  </Select>
-                </span>
-              ) : (
-                // Mode is FIELD
-                <span>
-                  <span>Teams: </span>
-                  <Select
-                    className="multiple"
-                    mode="multiple"
-                    onChange={this.barTraceSelectChanged}
-                  >
-                    {this.teams.map(team => (
-                      <Option key={team}>{team}</Option>
-                    ))}
-                  </Select>
-                </span>
-              )}
-              <span>Statistic: </span>
-              <Select onChange={this.barStatisticChanged}>
-                <Option key={"avg"}>Average</Option>
-                <Option key={"max"}>Maximum</Option>
-                <Option key={"min"}>Minimum</Option>
-              </Select>
-              <Barchart
-                statistic={this.state.barStatistic}
-                traces={this.state.barTraces}
-                data={this.statToData[this.state.barStatistic]}
-                mode={this.state.barChartMode}
-                fields={this.fields}
-                teams={this.teams}
-              />
-            </TabPane>
-            <TabPane tab="Scatterplot" key="scatterplot">
-              <Tabs>
-                <TabPane tab="Compare fields" key="fields"></TabPane>
-                <TabPane tab="Compare stats" key="stats"></TabPane>
-              </Tabs>
-            </TabPane>
-          </Tabs>
-        </div>
-      );
-    } else {
-      return <p>Something went wrong, please go back to home</p>;
-    }
+    // if (!this.state.ejected) {
+    console.log(this.state);
+
+    return (
+      <div className="graphs">
+        {this.state.ejected ? (
+          <p>
+            WARNING: You need to have match data entered before you can use the
+            visualizers
+          </p>
+        ) : (
+          undefined
+        )}
+        <Tabs>
+          {/* SECTION FOR BARCHARTS */}
+          <TabPane tab="Barchart" key="barchart">
+            {/* Radio selection for the mode */}
+            <Radio.Group
+              disabled={this.state.ejected}
+              onChange={this.barModeRadioChanged}
+              defaultValue={this.state.barChartMode}
+            >
+              <Radio value={BarChartModes.FIELD}>
+                Compare all fields of a statistic for a multiple teams
+              </Radio>
+              <Radio value={BarChartModes.TEAM}>
+                Compare all teams to multiple fields of a statistic
+              </Radio>
+            </Radio.Group>
+            {/* Conditional selection for fields / teams based on the mode */}
+            {this.state.barChartMode === BarChartModes.TEAM ? (
+              // Mode is TEAM
+              <span>
+                <span>Fields: </span>
+                <Select
+                  disabled={this.state.ejected}
+                  className="multiple"
+                  mode="multiple"
+                  onChange={this.barTraceSelectChanged}
+                  value={this.state.barTraces}
+                >
+                  {!this.state.ejected
+                    ? this.fields.map(field => (
+                        <Option key={field}>{field}</Option>
+                      ))
+                    : undefined}
+                </Select>
+              </span>
+            ) : (
+              // Mode is FIELD
+              <span>
+                <span>Teams: </span>
+                <Select
+                  disabled={this.state.ejected}
+                  className="multiple"
+                  mode="multiple"
+                  onChange={this.barTraceSelectChanged}
+                >
+                  {!this.state.ejected
+                    ? this.teams.map(team => <Option key={team}>{team}</Option>)
+                    : undefined}
+                </Select>
+              </span>
+            )}
+            <span>Statistic: </span>
+            <Select
+              disabled={this.state.ejected}
+              onChange={this.barStatisticChanged}
+            >
+              <Option key={"avg"}>Average</Option>
+              <Option key={"max"}>Maximum</Option>
+              <Option key={"min"}>Minimum</Option>
+            </Select>
+            <Barchart
+              statistic={this.state.barStatistic}
+              traces={this.state.barTraces}
+              data={this.statToData[this.state.barStatistic]}
+              mode={this.state.barChartMode}
+              fields={this.fields}
+              teams={this.teams}
+            />
+          </TabPane>
+          <TabPane tab="Scatterplot" key="scatterplot">
+            <Tabs>
+              <TabPane tab="Compare fields" key="fields"></TabPane>
+              <TabPane tab="Compare stats" key="stats"></TabPane>
+            </Tabs>
+          </TabPane>
+        </Tabs>
+      </div>
+    );
+    // } else {
+    //   return <p>Something went wrong, please go back to home</p>;
+    // }
   }
 }

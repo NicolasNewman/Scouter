@@ -17,6 +17,7 @@ interface IProps {
   socket: SocketController;
   requestHandler: RequestHandler;
   removeScoutingTarget: (target: string) => void;
+  setMatchData: () => void;
 }
 
 class DataForm extends Component<IProps & FormComponentProps> {
@@ -48,6 +49,7 @@ class DataForm extends Component<IProps & FormComponentProps> {
             console.log(`Team is ${this.props.team}`);
 
             this.props.removeScoutingTarget(this.props.team);
+            this.props.setMatchData();
           });
       }
     });

@@ -36,6 +36,7 @@ interface IProps {
   teamMins: IStatisticData;
   teamMaxes: IStatisticData;
   teamAverages: IStatisticData;
+  setMatchData: () => void;
 }
 
 /**
@@ -64,6 +65,7 @@ export default class ComponentRouter extends Component<IProps> {
                 socket={this.props.socket}
                 requestHandler={this.props.requestHandler}
                 removeScoutingTarget={this.props.removeScoutingTarget}
+                setMatchData={this.props.setMatchData}
               />
             )}
           />

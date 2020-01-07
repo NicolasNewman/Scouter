@@ -142,6 +142,7 @@ export default class Root extends Component<IProps, IState> {
               teamMins={this.props.teamMins}
               teamMaxes={this.props.teamMaxes}
               teamAverages={this.props.teamAverages}
+              setMatchData={this.props.setMatchData}
             />
           </div>
         </div>

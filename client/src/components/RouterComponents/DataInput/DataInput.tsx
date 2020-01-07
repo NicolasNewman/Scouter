@@ -17,6 +17,7 @@ interface IProps {
   socket: SocketController;
   requestHandler: RequestHandler;
   removeScoutingTarget: (target: string) => void;
+  setMatchData: () => void;
 }
 
 export default class Home extends Component<IProps> {
@@ -47,6 +48,7 @@ export default class Home extends Component<IProps> {
                 socket={this.props.socket}
                 requestHandler={this.props.requestHandler}
                 removeScoutingTarget={this.props.removeScoutingTarget}
+                setMatchData={this.props.setMatchData}
               />
             </TabPane>
           ))}
