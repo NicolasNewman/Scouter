@@ -1,21 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { catchAsync } from '../utils/catchAsync';
 import Match from '../models/matchModel';
-import { CustomError } from '../utils/error';
 
-// export function middlewareExample(
-//     _req: Request,
-//     res: Response,
-//     next: NextFunction
-// ) {
-//     if (2 > 3) {
-//         return res.status(404).json({
-//             status: 'fail',
-//             message: 'Invalid ID'
-//         });
-//     }
-//     next();
-// }
+import { CustomError } from '../utils/error';
 
 export const getAllMatches = catchAsync(
     async (req: Request, res: Response, _next: NextFunction) => {

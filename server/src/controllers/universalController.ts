@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-// import * as flatten from 'flat';
 import { catchAsync } from '../utils/catchAsync';
 import { CustomError } from '../utils/error';
-// import { Types } from 'mongoose';
-
-// const ObjectId = Types.ObjectId;
 
 import Game from '../models/gameModel';
 import Match from '../models/matchModel';
