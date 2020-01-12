@@ -12,6 +12,7 @@ interface IProps {
     dbPort: number;
     dbName: string;
     adminPassword: string;
+    mode: 'form' | 'timeseries';
     logText: string;
     logEvent: (event: string) => void;
 }
@@ -59,7 +60,8 @@ export default class Log extends Component<IProps, IState> {
             const res = await writeEnv(
                 this.props.dbPort,
                 this.props.dbName,
-                this.props.adminPassword
+                this.props.adminPassword,
+                this.props.mode
             );
 
             if (res.error) {

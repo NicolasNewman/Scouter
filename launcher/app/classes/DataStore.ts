@@ -28,6 +28,10 @@ export default class DataStore {
             adminPassword: {
                 type: 'string',
                 description: 'The password to log into the site as an admin'
+            },
+            mode: {
+                type: 'string',
+                description: 'The mode used to record data'
             }
         };
         this.store = new Store({ schema: this.schema });

@@ -11,6 +11,7 @@ function mapStateToProps(state, ownProps) {
         dbPort: state.form.dbPort,
         dbName: state.form.dbName,
         adminPassword: state.form.adminPassword,
+        mode: state.form.mode,
         logText: state.log.text
     };
 }

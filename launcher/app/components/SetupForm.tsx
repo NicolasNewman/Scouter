@@ -8,20 +8,25 @@ import {
     Button,
     Tooltip,
     Icon,
+    Select,
     // Upload,
     Input
 } from 'antd';
+const { Option } = Select;
+
 import DataStore from 'app/classes/DataStore';
 
 interface IProps {
     dataStore: DataStore;
     serverPort: number;
     dbPort: number;
+    mode: 'form' | 'timeseries';
     updateFormState: (
         serverPort: number,
         dbPort: number,
         dbName: string,
-        adminPassword: string
+        adminPassword: string,
+        mode: 'form' | 'timeseries'
     ) => void;
     handleFormSubmit: () => void;
 }
@@ -37,7 +42,8 @@ class SetupForm extends Component<IProps & FormComponentProps> {
     componentDidMount() {
         this.props.form.setFieldsValue({
             serverPort: this.props.serverPort,
-            dbPort: this.props.dbPort
+            dbPort: this.props.dbPort,
+            mode: this.props.mode
         });
     }
 
@@ -54,17 +60,16 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                 // console.log('dbName');
                 this.props.dataStore.set('dbName', vals.dbName);
                 this.props.dataStore.set('adminPassword', vals.adminPassword);
+                this.props.dataStore.set('mode', vals.mode);
             }
-            console.log('here-1');
 
             if (!err) {
-                console.log('here');
-
                 this.props.updateFormState(
                     vals.serverPort,
                     vals.dbPort,
                     vals.dbName,
-                    vals.adminPassword
+                    vals.adminPassword,
+                    vals.mode
                 );
                 this.props.handleFormSubmit();
             }
@@ -198,7 +203,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                     className="form__item"
                     label={
                         <span className="form__item--label">
-                            Admin Password
+                            Password
                             <Tooltip
                                 className="form__item--tooltip"
                                 title="The username needed to login as admin"
@@ -216,6 +221,38 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             }
                         ]
                     })(<Input.Password className="form__item--number-input" />)}
+                </Form.Item>
+                {/* Mode */}
+                <Form.Item
+                    className="form__item"
+                    label={
+                        <span className="form__item--label">
+                            Mode
+                            <Tooltip
+                                className="form__item--tooltip"
+                                title="The mode for how data is gathered"
+                            >
+                                <Icon type="question-circle" />
+                            </Tooltip>
+                        </span>
+                    }
+                >
+                    {getFieldDecorator('mode', {
+                        rules: [
+                            {
+                                required: true,
+                                message: <p>The mode is required!</p>
+                            }
+                        ]
+                    })(
+                        <Select
+                            className="form__item--select"
+                            placeholder="Please select a mode"
+                        >
+                            <Option value="form">Form</Option>
+                            <Option value="timeseries">Timeseries</Option>
+                        </Select>
+                    )}
                 </Form.Item>
                 {/* File uploader */}
                 {/* <Form.Item>

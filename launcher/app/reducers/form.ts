@@ -8,13 +8,15 @@ interface IFormState {
     dbPort: number;
     dbName: string;
     adminPassword: string;
+    mode: 'form' | 'timeseries';
 }
 
 const initialState: IFormState = {
     serverPort: dataStore.get('serverPort') || 3000,
     dbPort: dataStore.get('dbPort') || 27017,
     dbName: dataStore.get('dbName') || 'regional_data',
-    adminPassword: dataStore.get('adminPassword') || ''
+    adminPassword: dataStore.get('adminPassword') || '',
+    mode: dataStore.get('mode') || ''
 };
 
 export default function form(
@@ -27,7 +29,8 @@ export default function form(
                 serverPort: action.serverPort,
                 dbPort: action.dbPort,
                 dbName: action.dbName,
-                adminPassword: action.adminPassword
+                adminPassword: action.adminPassword,
+                mode: action.mode
             };
         default:
             return state;
