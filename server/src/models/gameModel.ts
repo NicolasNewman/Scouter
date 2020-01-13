@@ -1,7 +1,20 @@
 import { Schema, model, Document } from 'mongoose';
 const ObjectId = Schema.Types.ObjectId;
 
-interface IGame extends Document {}
+import { TeamEvent, TeamEventTypes } from '../types/gameTypes';
+
+interface AllianceData {
+    s1: any;
+    s2: any;
+    s3: any;
+    teamEvents: Array<TeamEvent>;
+}
+
+interface IGame extends Document {
+    matchNumber: number;
+    red: AllianceData;
+    blue: AllianceData;
+}
 
 const gameSchema = new Schema({
     matchNumber: {
@@ -21,7 +34,17 @@ const gameSchema = new Schema({
         s3: {
             type: ObjectId,
             ref: 'Match'
-        }
+        },
+        teamEvents: [
+            {
+                type: {
+                    type: String,
+                    enum: [...TeamEventTypes],
+                    required: [true, 'A events type is required!']
+                },
+                start: { type: Date, default: Date.now }
+            }
+        ]
     },
     blue: {
         s1: {
@@ -35,7 +58,17 @@ const gameSchema = new Schema({
         s3: {
             type: ObjectId,
             ref: 'Match'
-        }
+        },
+        teamEvents: [
+            {
+                type: {
+                    type: String,
+                    enum: [...TeamEventTypes],
+                    required: [true, 'A events type is required!']
+                },
+                start: { type: Date, default: Date.now }
+            }
+        ]
     }
 });
 

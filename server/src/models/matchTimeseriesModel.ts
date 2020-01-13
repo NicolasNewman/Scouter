@@ -1,7 +1,18 @@
 import { Schema, model, Document } from 'mongoose';
+import {
+    RobotEvent,
+    RobotEventTypes,
+    RobotState,
+    RobotStateTypes
+} from '../types/gameTypes';
 const ObjectId = Schema.Types.ObjectId;
 
-export interface IMatch extends Document {}
+export interface IMatch extends Document {
+    matchNumber: number;
+    team: any;
+    robotEvents: Array<RobotEvent>;
+    robotState: Array<RobotState>;
+}
 
 const matchSchema = new Schema({
     matchNumber: {
@@ -12,39 +23,28 @@ const matchSchema = new Schema({
         type: ObjectId,
         ref: 'Team'
     },
-    csHatch: {
-        type: Number
-    },
-    csCargo: {
-        type: Number
-    },
-    r1Hatch: {
-        type: Number
-    },
-    r2Hatch: {
-        type: Number
-    },
-    r3Hatch: {
-        type: Number
-    },
-    r1Cargo: {
-        type: Number
-    },
-    r2Cargo: {
-        type: Number
-    },
-    r3Cargo: {
-        type: Number
-    },
-    habOne: {
-        type: Boolean
-    },
-    habTwo: {
-        type: Boolean
-    },
-    habThree: {
-        type: Boolean
-    }
+    robotEvent: [
+        {
+            type: {
+                type: String,
+                enum: [...RobotEventTypes],
+                required: [true, 'A event type is required!']
+            },
+            points: Number,
+            start: { type: Date, default: Date.now }
+        }
+    ],
+    robotState: [
+        {
+            type: {
+                type: String,
+                enum: [...RobotStateTypes],
+                required: [true, 'A state type is required!']
+            },
+            start: { type: Date, default: Date.now },
+            end: { type: Date }
+        }
+    ]
 });
 
 matchSchema.pre<IMatch>(/^find/, function(next) {
