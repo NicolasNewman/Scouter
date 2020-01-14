@@ -5,6 +5,7 @@ import { FormComponentProps } from "antd/lib/form/Form";
 import { Form, Button, Input, message } from "antd";
 import TeamScoutAssigner from "../AdminFormComponents/TeamScoutAssigner";
 import RequestHandler from "../../../../classes/RequestHandler";
+import { isUnique } from "../../../../helper/helper";
 import {
   SocketController,
   emitableEvents
@@ -70,17 +71,21 @@ class AdminForm extends Component<IProps & FormComponentProps, IState> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.setFormState(values);
+
+        // Build an array to check if the teams and scouts are unique
         const teams = [];
-        // Verify that each team is unique
+        const scouts = [];
         for (let key in values) {
           if (key.includes("team")) {
             teams.push(values[key]);
+          } else if (key.includes("scout")) {
+            scouts.push(values[key]);
           }
         }
-        const unique = [...new Set(teams)];
-        // If not unique, throw error
-        if (unique.length !== teams.length) {
+        if (!isUnique(teams)) {
           message.error("You have the same team selected multiple times!");
+        } else if (!isUnique(scouts)) {
+          message.error("You have the same scouts selected multiple times!");
         } else {
           // Emits the event so the socket can signal the clients, once they are ready,
           // the callback is triggered and the session is started
