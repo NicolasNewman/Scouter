@@ -19,9 +19,9 @@ const matchSchema = new Schema({
         type: Number,
         required: [true, 'A match must have a number!']
     },
-    team: {
-        type: ObjectId,
-        ref: 'Team'
+    teamNumber: {
+        type: Number,
+        required: [true, 'A match must have a team number!']
     },
     robotEvent: [
         {
@@ -48,11 +48,11 @@ const matchSchema = new Schema({
 });
 
 matchSchema.pre<IMatch>(/^find/, function(next) {
-    this.populate({
-        path: 'team',
-        select: '-matches'
-    });
-    next();
+    // this.populate({
+    //     path: 'team',
+    //     select: '-matches'
+    // });
+    // next();
 });
 
 export default model<IMatch>('Match', matchSchema);
