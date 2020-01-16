@@ -3,7 +3,7 @@ import { catchAsync } from '../utils/catchAsync';
 import { CustomError } from '../utils/error';
 
 import Game from '../models/gameModel';
-import Match from '../models/matchTimeseriesModel';
+import Match from '../models/matchModel';
 import Team from '../models/teamModel';
 import { logger } from '../utils/logger';
 

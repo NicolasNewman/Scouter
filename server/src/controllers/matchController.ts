@@ -5,12 +5,12 @@ import Match from '../models/matchModel';
 import { CustomError } from '../utils/error';
 
 export const getAllMatches = catchAsync(
-    async (req: Request, res: Response, _next: NextFunction) => {
+    async (_req: Request, res: Response, _next: NextFunction) => {
         let filter = {};
         // Nested route filtering
-        if (req.params.teamId) {
-            filter = { team: req.params.teamId };
-        }
+        // if (req.params.teamId) {
+        //     filter = { team: req.params.teamId };
+        // }
 
         const matches = await Match.find(filter);
 
@@ -44,9 +44,9 @@ export const getMatch = catchAsync(
 export const createMatch = catchAsync(
     async (req: Request, res: Response, _next: NextFunction) => {
         // Detect nested routes
-        if (!req.body.team) {
-            req.body.team = req.params.teamId;
-        }
+        // if (!req.body.team) {
+        //     req.body.team = req.params.teamId;
+        // }
 
         const newMatch = await Match.create(req.body);
         res.status(201).json({

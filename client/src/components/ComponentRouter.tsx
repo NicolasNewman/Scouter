@@ -17,8 +17,8 @@ import { IStatisticData } from "../reducers/data";
 import { History } from "history";
 
 interface IProps {
-  isAdmin: boolean;
   requestHandler: RequestHandler;
+  isAdmin: boolean;
   socket: SocketController;
   history: History;
   formState: IAdminFormState;
