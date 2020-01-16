@@ -1,15 +1,16 @@
 import * as React from "react";
 import { Component } from "react";
 
-import DataForm from "./DataInputFormComponents/DataForm";
+// import DataForm from "./DataInputFormComponents/DataForm";
 import {
   ScoutingTargets,
-  SocketController
+  SocketController,
+  emitableEvents
 } from "../../../classes/socketController";
 
 import { Tabs } from "antd";
 import RequestHandler from "../../../classes/RequestHandler";
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs;
 
 interface IProps {
   scoutingTargets: ScoutingTargets;
@@ -20,11 +21,34 @@ interface IProps {
   setMatchData: () => void;
 }
 
-export default class Home extends Component<IProps> {
+interface IState {
+  matchTime: number;
+  phase: "NONE" | "AUTO" | "TELEOP" | "ENDGAME";
+}
+
+export default class Home extends Component<IProps, IState> {
   props: IProps;
 
   constructor(props: IProps) {
     super(props);
+
+    this.state = {
+      matchTime: 0,
+      phase: "NONE"
+    };
+
+    setInterval(() => {
+      this.props.socket.emit(
+        emitableEvents.getRemainingTime,
+        undefined,
+        (remainingTime: number, phase: "AUTO" | "TELEOP" | "ENDGAME") => {
+          this.setState({
+            matchTime: remainingTime,
+            phase
+          });
+        }
+      );
+    }, 500);
   }
 
   render() {
@@ -37,7 +61,8 @@ export default class Home extends Component<IProps> {
       <div className="scouting">
         <h1>Match: {this.props.matchNumber}</h1>
         <h1>Scouting: {scoutingTargets}</h1>
-        <Tabs>
+        <h1>Time Left: {this.state.matchTime}</h1>
+        {/* <Tabs> // REWORK target removal
           {this.props.scoutingTargets.map(target => (
             <TabPane tab={target.team} key={target.team}>
               <DataForm
@@ -52,7 +77,7 @@ export default class Home extends Component<IProps> {
               />
             </TabPane>
           ))}
-        </Tabs>
+        </Tabs> */}
       </div>
     );
   }

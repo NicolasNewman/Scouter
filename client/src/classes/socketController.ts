@@ -17,7 +17,8 @@ export const emitableEvents = {
   registerUser: "registerUser",
   getUsers: "getUsers",
   adminFormSubmited: "adminFormSubmited",
-  scoutingFormSubmited: "scoutingFormSubmited"
+  scoutingFormSubmited: "scoutingFormSubmited",
+  getRemainingTime: "getRemainingTime"
 };
 
 export interface IScoutingTarget {
@@ -45,12 +46,18 @@ export class SocketController {
   socket: SocketIOClient.Socket;
   constructor(address: string) {
     this.socket = socketIOClient(address);
+    /**
+     * Received once the server has verified wheather or not this user is an admin
+     */
     this.socket.on(socketEvents.isAdmin, (isAdmin: boolean) => {
       console.log(`The admin status is ${isAdmin}`);
       if (isAdmin) {
         store.dispatch(setAdminStatus(true));
       }
     });
+    /**
+     * Received once the server has pre-configured the database for a game and has sent each scout their targets
+     */
     this.socket.on(socketEvents.assignScout, (data: IAssignScoutPacket) => {
       console.log(`You are scouting ${data.teams}`);
       console.log(`With match number ${data.matchNumber}`);

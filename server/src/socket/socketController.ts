@@ -3,12 +3,15 @@ import * as http from 'http';
 import * as socketIO from 'socket.io';
 import { logger } from '../utils/logger';
 import Game from '../models/gameModel';
+import Timer from '../utils/Timer';
+import { gameProperties } from '../types/gameTypes';
 
 export const socketEvents = {
     registerUser: 'registerUser',
     getUsers: 'getUsers',
     adminFormSubmited: 'adminFormSubmited',
-    scoutingFormSubmited: 'scoutingFormSubmited'
+    scoutingFormSubmited: 'scoutingFormSubmited',
+    getRemainingTime: 'getRemainingTime'
 };
 
 export const emitableEvents = {
@@ -57,6 +60,7 @@ export default class SocketController {
     idToUserMap: IIDtoUserMap;
     userToIdMap: IIDtoUserMap;
     adminPassword: string;
+    timer: Timer;
 
     constructor(app: Application) {
         this.app = app;
@@ -65,6 +69,7 @@ export default class SocketController {
         this.userToIdMap = {};
         this.adminPassword = '';
 
+        this.timer = new Timer();
         this.httpServer = http.createServer(this.app);
         this.io = socketIO(this.httpServer);
         this.io.on('connection', socket => {
@@ -126,6 +131,30 @@ export default class SocketController {
                 const id = this.userToIdMap[this.adminPassword];
                 this.io.to(id).emit(emitableEvents.scoutFinished, identifier);
             });
+            /**
+             * Sends the client the remaining time left in a game and the phase the game is in
+             */
+            socket.on(socketEvents.getRemainingTime, (_data, timeCallback) => {
+                const remainingTime = this.timer.getEllapsedCountdownInSec(
+                    gameProperties.matchDuration
+                );
+                const timeLeft = this.timer.getEllapsedTimeInSec();
+                let phase;
+                if (timeLeft <= gameProperties.autoDuration) {
+                    phase = 'AUTO';
+                } else if (
+                    timeLeft <= gameProperties.teleopDuration ||
+                    timeLeft <= gameProperties.endgame.start
+                ) {
+                    phase = 'TELEOP';
+                } else {
+                    phase = 'ENDGAME';
+                }
+                timeCallback(remainingTime, phase);
+            });
+            /**
+             * Received once the admin has submitted their data and the scouting session is ready to begin
+             */
             socket.on(
                 socketEvents.adminFormSubmited,
                 (formValues: IAdminFormState, callback) => {
@@ -190,6 +219,7 @@ export default class SocketController {
                                             matchNumber: formValues.matchNumber
                                         });
                                 }
+                                this.timer.start();
                                 Game.create({
                                     matchNumber: formValues.matchNumber
                                 }).then(_game => {
