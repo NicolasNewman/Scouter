@@ -53,6 +53,13 @@ export default class Navigation extends Component<IProps> {
           </span>
           <Link to="/admin" />
         </Menu.Item>
+        <Menu.Item key="visualize">
+          <span>
+            <Icon type="bug" />
+            <span>Debug</span>
+          </span>
+          <Link to="/debug" />
+        </Menu.Item>
       </Menu>
     );
   }

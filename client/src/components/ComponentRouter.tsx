@@ -5,6 +5,7 @@ import Home from "./RouterComponents/Home";
 import DataInput from "./RouterComponents/DataInput/DataInput";
 import Visualize from "./RouterComponents/Visualize/Visualize";
 import Admin from "./RouterComponents/Admin/Admin";
+import Debug from "./RouterComponents/Debug/Debug";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
 import { SocketController, ScoutingTargets } from "../classes/socketController";
@@ -103,6 +104,15 @@ export default class ComponentRouter extends Component<IProps> {
             )}
             path="/admin"
           />
+          <Route
+            path="/debug"
+            component={() => (
+              <Debug
+                socket={this.props.socket}
+                requestHandler={this.props.requestHandler}
+              />
+            )}
+          ></Route>
           <Route component={Home} />
         </Switch>
       </div>
