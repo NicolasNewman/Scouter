@@ -36,4 +36,12 @@ export default class Timer {
     getEllapsedCountdownInSec = (point: number): number => {
         return point - process.hrtime(this.t_start)[0];
     };
+
+    getEllapsedTimeInMs = (): number => {
+        return this.nanoToMs(process.hrtime(this.t_start)[1]);
+    };
+
+    private nanoToMs = (nano: number): number => {
+        return nano / 1000000;
+    };
 }

@@ -9,7 +9,7 @@ import {
 
 export interface IMatch extends Document {
     matchNumber: number;
-    team: any;
+    teamNumber: number;
     robotEvents: Array<RobotEvent>;
     robotState: Array<RobotState>;
 }
