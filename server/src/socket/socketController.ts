@@ -7,7 +7,7 @@ import Match from '../models/matchModel';
 import Team from '../models/teamModel';
 import Timer from '../utils/Timer';
 import { gameProperties } from '../types/gameTypes';
-import { IMatch } from '../models/matchModel';
+// import { IMatch } from '../models/matchModel';
 
 export const socketEvents = {
     registerUser: 'registerUser',
@@ -175,15 +175,15 @@ export default class SocketController {
                                 const gameObj = {
                                     matchNumber: formValues.matchNumber,
                                     red: {
-                                        s1: {},
-                                        s2: {},
-                                        s3: {},
+                                        s1: undefined,
+                                        s2: undefined,
+                                        s3: undefined,
                                         teamEvents: []
                                     },
                                     blue: {
-                                        s1: {},
-                                        s2: {},
-                                        s3: {},
+                                        s1: undefined,
+                                        s2: undefined,
+                                        s3: undefined,
                                         teamEvents: []
                                     }
                                 };
@@ -213,7 +213,14 @@ export default class SocketController {
                                             const teamDoc = await Team.findOne({
                                                 teamNumber
                                             });
+                                            console.log(
+                                                'Checking if team doc exists...'
+                                            );
+
                                             if (teamDoc) {
+                                                logger.info(
+                                                    `Found team #${teamDoc?.teamNumber}`
+                                                );
                                                 const matchObj = {
                                                     matchNumber: parseInt(
                                                         formValues.matchNumber
@@ -227,12 +234,21 @@ export default class SocketController {
                                                 const matchDoc = await Match.create(
                                                     matchObj
                                                 );
+                                                logger.info('Created match');
+                                                logger.info(matchDoc);
 
                                                 // Push the newly created match's ObjectID to the team's match list
                                                 teamDoc.matches.push(
                                                     matchDoc._id
                                                 );
+                                                logger.info(
+                                                    'Saving teamDoc...'
+                                                );
+
                                                 await teamDoc.save();
+                                                logger.info(
+                                                    `Saved match #${matchObj.matchNumber} to team ${teamDoc.teamNumber}`
+                                                );
 
                                                 // Keys are stored as alliance-seed-type and can be split to get specific information
                                                 const splitFields = key.split(
@@ -257,11 +273,17 @@ export default class SocketController {
 
                                                 // Update the game document's match for the corrosponding seed and alliance
                                                 const loc = `${alliance}.${seed}`;
-                                                gameDoc.update({
-                                                    Sset: {
-                                                        [loc]: matchDoc._id
+                                                logger.info(
+                                                    `Updating the game with match id ${matchDoc._id} at location ${loc}`
+                                                );
+                                                const temp = await gameDoc.update(
+                                                    {
+                                                        $set: {
+                                                            [loc]: matchDoc._id
+                                                        }
                                                     }
-                                                });
+                                                ); //TODO NOT WORKING - testing by logging temp
+                                                console.log(temp);
 
                                                 // push the team the user needs to scout to their object map
                                                 if (teamsForUser[scout]) {
@@ -279,7 +301,6 @@ export default class SocketController {
                                                         }
                                                     ];
                                                 }
-                                                console.log(teamsForUser);
 
                                                 // Loop through each user's team map and send them their corrosponding info
                                                 for (key in teamsForUser) {

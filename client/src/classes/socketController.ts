@@ -67,6 +67,9 @@ export class SocketController {
       message.info("The scouting form is now active!");
     });
 
+    /**
+     * Used to notify the admin once a scout has finished
+     */
     this.socket.on(
       socketEvents.scoutFinished,
       (identifier: ScoutIdentifier) => {
