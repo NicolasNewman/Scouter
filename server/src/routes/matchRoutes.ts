@@ -14,4 +14,12 @@ router
     .patch(matchController.updateMatch)
     .delete(matchController.deleteMatch);
 
+router
+    .route('/:matchNumber/:teamNumber/event')
+    .post(matchController.updateMatchEvent);
+
+router
+    .route('/:matchNumber/:teamNumber/state')
+    .post(matchController.updateMatchState);
+
 export default router;
