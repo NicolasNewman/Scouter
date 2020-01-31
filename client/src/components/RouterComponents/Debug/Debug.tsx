@@ -21,7 +21,18 @@ export default class Debug extends Component<IProps> {
     super(props);
   }
 
-  genTeams = () => {};
+  genTeams = () => {
+    for (let i = 1; i <= 6; i++) {
+      this.props.requestHandler
+        .post("/teams", { teamNumber: i, teamName: "placeholder" })
+        .then(_res => {
+          message.success(`Team ${i} was successfully created`);
+        })
+        .catch(_err => {
+          message.error(`Something went wrong. Is team ${i} already in use?`);
+        });
+    }
+  };
 
   genUsers = () => {
     for (let i = 1; i <= 6; i++) {
