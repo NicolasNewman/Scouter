@@ -4,7 +4,6 @@ import { Button, message } from "antd";
 
 import RequestHandler from "../../../classes/RequestHandler";
 import {
-  ScoutingTargets,
   SocketController,
   emitableEvents
 } from "../../../classes/socketController";
