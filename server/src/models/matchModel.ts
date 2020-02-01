@@ -23,7 +23,7 @@ const matchSchema = new Schema({
         type: Number,
         required: [true, 'A match must have a team number!']
     },
-    robotEvent: [
+    robotEvents: [
         {
             type: {
                 type: String,
@@ -34,7 +34,7 @@ const matchSchema = new Schema({
             start: { type: Date, default: Date.now }
         }
     ],
-    robotState: [
+    robotStates: [
         {
             type: {
                 type: String,

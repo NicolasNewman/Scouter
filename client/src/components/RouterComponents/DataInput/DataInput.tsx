@@ -8,7 +8,10 @@ import {
   emitableEvents
 } from "../../../classes/socketController";
 
-import { Tabs } from "antd";
+import RobotEventButton from "./RobotEventButton";
+import { ScorableRobotEvents } from "../../../../../global/gameTypes";
+
+// import { Tabs } from "antd";
 import RequestHandler from "../../../classes/RequestHandler";
 // const { TabPane } = Tabs;
 
@@ -57,11 +60,22 @@ export default class Home extends Component<IProps, IState> {
         return obj.team;
       })
       .join(", ");
+
     return (
       <div className="scouting">
         <h1>Match: {this.props.matchNumber}</h1>
         <h1>Scouting: {scoutingTargets}</h1>
         <h1>Time Left: {this.state.matchTime}</h1>
+
+        <RobotEventButton
+          label="test"
+          handler={this.props.requestHandler}
+          type={ScorableRobotEvents.POSITION_CONTROL}
+          phase={this.state.phase === "NONE" ? "AUTO" : this.state.phase}
+          time={this.state.matchTime}
+          matchNumber={this.props.matchNumber}
+          teamNumber={parseInt(this.props.scoutingTargets[0].team)}
+        />
         {/* <Tabs> // REWORK target removal
           {this.props.scoutingTargets.map(target => (
             <TabPane tab={target.team} key={target.team}>
