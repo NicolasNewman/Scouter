@@ -7,9 +7,9 @@ import {
   RobotEvents,
   Phase,
   IRobotEvent
-} from "../../../../../global/gameTypes";
-import resolveScore from "../../../../../global/scoreResolver";
-import { IConstantProps } from "./DataInput";
+} from "../../../../../../global/gameTypes";
+import resolveScore from "../../../../../../global/scoreResolver";
+import { IConstantProps } from "../DataInput";
 
 interface IProps {
   constants: IConstantProps;

@@ -3,13 +3,8 @@ import { Component } from "react";
 
 import { Button } from "antd";
 
-import {
-  RobotStates,
-  Phase,
-  IRobotEvent
-} from "../../../../../global/gameTypes";
-import resolveScore from "../../../../../global/scoreResolver";
-import { IConstantProps } from "./DataInput";
+import { RobotStates, Phase } from "../../../../../../global/gameTypes";
+import { IConstantProps } from "../DataInput";
 
 interface IProps {
   constants: IConstantProps;

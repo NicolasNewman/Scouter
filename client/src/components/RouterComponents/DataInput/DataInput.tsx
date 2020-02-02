@@ -1,23 +1,23 @@
 import * as React from "react";
 import { Component } from "react";
 
-// import DataForm from "./DataInputFormComponents/DataForm";
 import {
   ScoutingTargets,
   SocketController,
   emitableEvents
 } from "../../../classes/socketController";
 
-import RobotEventButton from "./RobotEventButton";
-import StateButton from "./StateButton";
-import {
-  ScorableRobotEvents,
-  RobotStates
-} from "../../../../../global/gameTypes";
+import Grid from "../../Grid/Grid";
+import ButtonGridGroup from "./DataInputFormComponents/ButtonGridGroup";
 
-// import { Tabs } from "antd";
+// import RobotEventButton from "./DataInputFormComponents/RobotEventButton";
+// import StateButton from "./DataInputFormComponents/StateButton";
+// import {
+//   ScorableRobotEvents,
+//   RobotStates
+// } from "../../../../../global/gameTypes";
+
 import RequestHandler from "../../../classes/RequestHandler";
-// const { TabPane } = Tabs;
 
 interface IProps {
   scoutingTargets: ScoutingTargets;
@@ -89,7 +89,20 @@ export default class Home extends Component<IProps, IState> {
         <h1>Scouting: {scoutingTargets}</h1>
         <h1>Time Left: {this.state.matchTime}</h1>
 
-        <RobotEventButton
+        <Grid
+          templateArea="'one two . three' 'four four five five'"
+          cols="1fr 1fr 1fr 1fr"
+          rows="1fr 1fr"
+          gridGroup={[
+            <ButtonGridGroup gridAreaName="one" />,
+            <ButtonGridGroup gridAreaName="two" />,
+            <ButtonGridGroup gridAreaName="three" />,
+            <ButtonGridGroup gridAreaName="four" />,
+            <ButtonGridGroup gridAreaName="five" />
+          ]}
+        />
+
+        {/* <RobotEventButton
           constants={this.constantProps}
           label="event"
           type={ScorableRobotEvents.POSITION_CONTROL}
@@ -100,7 +113,7 @@ export default class Home extends Component<IProps, IState> {
           label="state"
           type={RobotStates.DEFENDING}
           phase={this.state.phase === "NONE" ? "AUTO" : this.state.phase}
-        />
+        /> */}
         {/* <Tabs> // REWORK target removal
           {this.props.scoutingTargets.map(target => (
             <TabPane tab={target.team} key={target.team}>
