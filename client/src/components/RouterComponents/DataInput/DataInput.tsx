@@ -9,7 +9,11 @@ import {
 } from "../../../classes/socketController";
 
 import RobotEventButton from "./RobotEventButton";
-import { ScorableRobotEvents } from "../../../../../global/gameTypes";
+import StateButton from "./StateButton";
+import {
+  ScorableRobotEvents,
+  RobotStates
+} from "../../../../../global/gameTypes";
 
 // import { Tabs } from "antd";
 import RequestHandler from "../../../classes/RequestHandler";
@@ -24,6 +28,13 @@ interface IProps {
   setMatchData: () => void;
 }
 
+export interface IConstantProps {
+  handler: RequestHandler;
+  getTime: () => number;
+  matchNumber: number;
+  teamNumber: number;
+}
+
 interface IState {
   matchTime: number;
   phase: "NONE" | "AUTO" | "TELEOP" | "ENDGAME";
@@ -31,6 +42,7 @@ interface IState {
 
 export default class Home extends Component<IProps, IState> {
   props: IProps;
+  constantProps: IConstantProps;
 
   constructor(props: IProps) {
     super(props);
@@ -38,6 +50,13 @@ export default class Home extends Component<IProps, IState> {
     this.state = {
       matchTime: 0,
       phase: "NONE"
+    };
+
+    this.constantProps = {
+      handler: this.props.requestHandler,
+      getTime: this.getTime,
+      matchNumber: this.props.matchNumber,
+      teamNumber: parseInt(this.props.scoutingTargets[0].team)
     };
 
     setInterval(() => {
@@ -54,13 +73,16 @@ export default class Home extends Component<IProps, IState> {
     }, 500);
   }
 
+  getTime = (): number => {
+    return this.state.matchTime;
+  };
+
   render() {
     const scoutingTargets = this.props.scoutingTargets
       .map(obj => {
         return obj.team;
       })
       .join(", ");
-
     return (
       <div className="scouting">
         <h1>Match: {this.props.matchNumber}</h1>
@@ -68,13 +90,16 @@ export default class Home extends Component<IProps, IState> {
         <h1>Time Left: {this.state.matchTime}</h1>
 
         <RobotEventButton
-          label="test"
-          handler={this.props.requestHandler}
+          constants={this.constantProps}
+          label="event"
           type={ScorableRobotEvents.POSITION_CONTROL}
           phase={this.state.phase === "NONE" ? "AUTO" : this.state.phase}
-          time={this.state.matchTime}
-          matchNumber={this.props.matchNumber}
-          teamNumber={parseInt(this.props.scoutingTargets[0].team)}
+        />
+        <StateButton
+          constants={this.constantProps}
+          label="state"
+          type={RobotStates.DEFENDING}
+          phase={this.state.phase === "NONE" ? "AUTO" : this.state.phase}
         />
         {/* <Tabs> // REWORK target removal
           {this.props.scoutingTargets.map(target => (

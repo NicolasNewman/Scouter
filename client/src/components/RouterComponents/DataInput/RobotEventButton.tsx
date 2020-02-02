@@ -3,47 +3,38 @@ import { Component } from "react";
 
 import { Button } from "antd";
 
-import RequestHandler from "../../../classes/RequestHandler";
 import {
   RobotEvents,
   Phase,
   IRobotEvent
 } from "../../../../../global/gameTypes";
 import resolveScore from "../../../../../global/scoreResolver";
+import { IConstantProps } from "./DataInput";
 
 interface IProps {
+  constants: IConstantProps;
   label: string;
-  handler: RequestHandler;
   type: RobotEvents;
   phase: Phase;
-  time: number;
-  matchNumber: number;
-  teamNumber: number;
 }
 
 export default class RobotEventButton extends Component<IProps> {
   constructor(props: IProps) {
     super(props);
-
-    this.state = {
-      state: {
-        type: this.props.type
-      }
-    };
   }
 
   clicked = () => {
     const score = resolveScore(this.props.type, this.props.phase);
     const event: IRobotEvent = {
       type: this.props.type,
-      start: this.props.time
+      start: this.props.constants.getTime()
     };
     if (score > 0) {
       event.score = score;
     }
 
-    this.props.handler.post(
-      `matches/${this.props.matchNumber}/${this.props.teamNumber}/event`,
+    this.props.constants.handler.post(
+      `matches/${this.props.constants.matchNumber}/${this.props.constants.teamNumber}/event`,
       event
     );
   };
