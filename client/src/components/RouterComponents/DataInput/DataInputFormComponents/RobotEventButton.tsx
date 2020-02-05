@@ -8,14 +8,16 @@ import {
   Phase,
   IRobotEvent
 } from "../../../../../../global/gameTypes";
+import { IGridElementProps } from "../../../Grid/Grid";
 import resolveScore from "../../../../../../global/scoreResolver";
 import { IConstantProps } from "../DataInput";
 
-interface IProps {
+interface IProps extends IGridElementProps {
   constants: IConstantProps;
   label: string;
   type: RobotEvents;
   phase: Phase;
+  color?: string;
 }
 
 export default class RobotEventButton extends Component<IProps> {
@@ -40,6 +42,22 @@ export default class RobotEventButton extends Component<IProps> {
   };
 
   render() {
-    return <Button onClick={this.clicked}>{this.props.label}</Button>;
+    return (
+      <div
+        style={{
+          gridArea: this.props.gridAreaName
+        }}
+      >
+        <Button
+          style={{
+            backgroundColor: this.props.color,
+            borderColor: this.props.color
+          }}
+          onClick={this.clicked}
+        >
+          {this.props.label}
+        </Button>
+      </div>
+    );
   }
 }

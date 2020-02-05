@@ -3,10 +3,11 @@ import { Component } from "react";
 
 import { Button } from "antd";
 
+import { IGridElementProps } from "../../../Grid/Grid";
 import { RobotStates, Phase } from "../../../../../../global/gameTypes";
 import { IConstantProps } from "../DataInput";
 
-interface IProps {
+interface IProps extends IGridElementProps {
   constants: IConstantProps;
   label: string;
   type: RobotStates;
@@ -62,12 +63,23 @@ export default class RobotEventButton extends Component<IProps, IState> {
 
   render() {
     return (
-      <Button
-        style={this.state.started ? { color: "#e60019" } : { color: "#00c06a" }}
-        onClick={this.clicked}
+      <div
+        style={{
+          gridArea: this.props.gridAreaName
+        }}
       >
-        {this.props.label}
-      </Button>
+        <Button
+          style={
+            this.state.started
+              ? { backgroundColor: "#e60019" }
+              : { backgroundColor: "#00c06a" }
+          }
+          onClick={this.clicked}
+          type="primary"
+        >
+          {this.props.label}
+        </Button>
+      </div>
     );
   }
 }
