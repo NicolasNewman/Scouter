@@ -108,6 +108,9 @@ export const postMatch = catchAsync(
 //     }
 // );
 
+// OLD
+// /:matchNumber/:alliance/:seed/:teamNumber/match
+
 // /:matchNumber/:alliance/event
 // Pushes a team event to the alliance for a game
 export const postTeamEvent = catchAsync(

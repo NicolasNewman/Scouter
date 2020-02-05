@@ -11,7 +11,7 @@ export interface IMatch extends Document {
     matchNumber: number;
     teamNumber: number;
     robotEvents: Array<RobotEvent>;
-    robotState: Array<RobotState>;
+    robotStates: Array<RobotState>;
 }
 
 const matchSchema = new Schema({
@@ -31,7 +31,7 @@ const matchSchema = new Schema({
                 required: [true, 'A event type is required!']
             },
             points: Number,
-            start: { type: Date, default: Date.now }
+            start: Number
         }
     ],
     robotStates: [
@@ -41,8 +41,8 @@ const matchSchema = new Schema({
                 enum: [...RobotStateTypes],
                 required: [true, 'A state type is required!']
             },
-            start: { type: Date, default: Date.now },
-            end: { type: Date }
+            start: Number,
+            end: Number
         }
     ]
 });

@@ -137,7 +137,7 @@ export const updateMatchState = catchAsync(
             );
         }
 
-        match.robotState.push(req.body);
+        match.robotStates.push(req.body);
         await match.save();
 
         res.status(204).json({
