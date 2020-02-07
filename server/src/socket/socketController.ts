@@ -276,6 +276,7 @@ export default class SocketController {
                                                 logger.info(
                                                     `Updating the game with match id ${matchDoc._id} at location ${loc}`
                                                 );
+                                                console.log(gameDoc);
                                                 const temp = await gameDoc.update(
                                                     {
                                                         $set: {

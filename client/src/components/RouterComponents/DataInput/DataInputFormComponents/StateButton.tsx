@@ -35,6 +35,15 @@ export default class RobotEventButton extends Component<IProps, IState> {
     };
   }
 
+  componentDidUpdate(_prevProps: IProps, prevState: IState) {
+    if (prevState.started && !this.state.started) {
+      this.props.constants.handler.post(
+        `matches/${this.props.constants.matchNumber}/${this.props.constants.teamNumber}/state`,
+        this.state.state
+      );
+    }
+  }
+
   clicked = () => {
     if (!this.state.started) {
       this.setState({
@@ -53,11 +62,12 @@ export default class RobotEventButton extends Component<IProps, IState> {
           end: this.props.constants.getTime()
         }
       });
+      // console.log(`The sent state is:`);
 
-      this.props.constants.handler.post(
-        `matches/${this.props.constants.matchNumber}/${this.props.constants.teamNumber}/state`,
-        this.state.state
-      );
+      // this.props.constants.handler.post(
+      //   `matches/${this.props.constants.matchNumber}/${this.props.constants.teamNumber}/state`,
+      //   this.state.state
+      // );
     }
   };
 
