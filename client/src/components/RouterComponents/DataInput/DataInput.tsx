@@ -85,9 +85,25 @@ export default class Home extends Component<IProps, IState> {
       .join(", ");
     return (
       <div className="scouting">
-        <h1>Match: {this.props.matchNumber}</h1>
+        {/* <h1>Match: {this.props.matchNumber}</h1>
         <h1>Scouting: {scoutingTargets}</h1>
-        <h1>Time Left: {this.state.matchTime}</h1>
+        <h1>Time Left: {this.state.matchTime}</h1> */}
+        <Grid
+          className="dashboard"
+          templateArea="
+          'time phase'
+          'match team'"
+          rows="1fr 1fr"
+          cols="1fr 1fr"
+          gridElements={[
+            <h1 style={{ gridArea: "time" }}>Time: {this.state.matchTime}s</h1>,
+            <h1 style={{ gridArea: "phase" }}>Phase: {this.state.phase}</h1>,
+            <h2 style={{ gridArea: "match" }}>
+              Match: {this.props.matchNumber}
+            </h2>,
+            <h2 style={{ gridArea: "team" }}>Team: {scoutingTargets}</h2>
+          ]}
+        />
         <Grid
           className="input-grid"
           cols="20% 40% 40%"
