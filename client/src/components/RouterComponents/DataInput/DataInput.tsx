@@ -8,14 +8,8 @@ import {
 } from "../../../classes/socketController";
 
 import Grid from "../../Grid/Grid";
-import GridGroup from "./DataInputFormComponents/GridGroup";
 
-// import RobotEventButton from "./DataInputFormComponents/RobotEventButton";
 import StateButton from "./DataInputFormComponents/StateButton";
-// import {
-//   ScorableRobotEvents,
-//   RobotStates
-// } from "../../../../../global/gameTypes";
 
 import RequestHandler from "../../../classes/RequestHandler";
 import RobotEventButton from "./DataInputFormComponents/RobotEventButton";
