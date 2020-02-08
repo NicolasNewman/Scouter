@@ -38,6 +38,9 @@ export interface IConstantProps {
 interface IState {
   matchTime: number;
   phase: "NONE" | "AUTO" | "TELEOP" | "ENDGAME";
+  autoButtonsDisabled: boolean;
+  teleopButtonsDisabled: boolean;
+  endgameButtonsDisabled: boolean;
 }
 
 export default class Home extends Component<IProps, IState> {
@@ -49,7 +52,10 @@ export default class Home extends Component<IProps, IState> {
 
     this.state = {
       matchTime: 0,
-      phase: "NONE"
+      phase: "NONE",
+      autoButtonsDisabled: true,
+      teleopButtonsDisabled: true,
+      endgameButtonsDisabled: true
     };
 
     this.constantProps = {
@@ -66,7 +72,10 @@ export default class Home extends Component<IProps, IState> {
         (remainingTime: number, phase: "AUTO" | "TELEOP" | "ENDGAME") => {
           this.setState({
             matchTime: remainingTime,
-            phase
+            phase,
+            autoButtonsDisabled: phase === "AUTO" ? false : true,
+            teleopButtonsDisabled: phase === "TELEOP" ? false : true,
+            endgameButtonsDisabled: phase === "ENDGAME" ? false : true
           });
         }
       );
@@ -107,14 +116,15 @@ export default class Home extends Component<IProps, IState> {
         <Grid
           className="input-grid"
           cols="20% 40% 40%"
-          rows="1fr 1fr"
+          rows="1fr 1fr 1fr"
           templateArea="
           'multi-event single-event  state' 
-          'multi-event  foul-event   state'"
+          'multi-event  foul-event   state'
+          '    .       wheel-event     .  '"
           gridElements={[
             <Grid
-              className="input-grid__child"
               gridAreaName="multi-event"
+              className="input-grid__child"
               cols="1fr"
               rows="10% 30% 30% 30%"
               templateArea="
@@ -156,8 +166,8 @@ export default class Home extends Component<IProps, IState> {
               ]}
             />,
             <Grid
-              className="input-grid__child"
               gridAreaName="foul-event"
+              className="input-grid__child"
               cols="1fr 1fr"
               rows="20% 40% 40%"
               templateArea="
@@ -207,8 +217,8 @@ export default class Home extends Component<IProps, IState> {
               ]}
             />,
             <Grid
-              className="input-grid__child"
               gridAreaName="state"
+              className="input-grid__child"
               cols="1fr 1fr"
               rows="10% 30% 30% 30%"
               templateArea="
@@ -226,6 +236,10 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Wheel"
                   type={RobotStates.WHEEL}
+                  disabled={
+                    this.state.teleopButtonsDisabled &&
+                    this.state.endgameButtonsDisabled
+                  }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -253,6 +267,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Climbing"
                   type={RobotStates.CLIMBING}
+                  disabled={this.state.endgameButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -277,8 +292,8 @@ export default class Home extends Component<IProps, IState> {
             //   gridElements={[]}
             // />,
             <Grid
-              className="input-grid__child"
               gridAreaName="single-event"
+              className="input-grid__child"
               cols="1fr 1fr"
               rows="20% 40% 40%"
               templateArea="
@@ -294,6 +309,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Initiation"
                   type={ScorableRobotEvents.INITIATION}
+                  disabled={this.state.autoButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -303,6 +319,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Hang"
                   type={ScorableRobotEvents.HANG}
+                  disabled={this.state.endgameButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -312,6 +329,43 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Park"
                   type={ScorableRobotEvents.PARK}
+                  disabled={this.state.endgameButtonsDisabled}
+                  phase={
+                    this.state.phase === "NONE" ? "AUTO" : this.state.phase
+                  }
+                />
+              ]}
+            />,
+            <Grid
+              gridAreaName="wheel-event"
+              className="input-grid__child"
+              cols="1f 1fr"
+              rows="20% 80%"
+              templateArea="
+              'title       title'
+              'position rotation'"
+              gridElements={[
+                <div className="input-grid__title">
+                  <p>Wheel Events</p>
+                </div>,
+                <RobotEventButton
+                  gridAreaName="position"
+                  constants={this.constantProps}
+                  label="Position"
+                  type={ScorableRobotEvents.POSITION_CONTROL}
+                  disabled={
+                    this.state.teleopButtonsDisabled &&
+                    this.state.endgameButtonsDisabled
+                  }
+                  phase={
+                    this.state.phase === "NONE" ? "AUTO" : this.state.phase
+                  }
+                />,
+                <RobotEventButton
+                  gridAreaName="rotation"
+                  constants={this.constantProps}
+                  label="Rotation"
+                  type={ScorableRobotEvents.ROTATION_CONTROL}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }

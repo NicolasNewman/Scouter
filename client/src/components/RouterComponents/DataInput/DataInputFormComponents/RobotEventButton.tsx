@@ -18,6 +18,7 @@ interface IProps extends IGridElementProps {
   type: RobotEvents;
   phase: Phase;
   color?: string;
+  disabled?: boolean;
 }
 
 export default class RobotEventButton extends Component<IProps> {
@@ -54,6 +55,7 @@ export default class RobotEventButton extends Component<IProps> {
             borderColor: this.props.color
           }}
           onClick={this.clicked}
+          disabled={this.props.disabled}
         >
           {this.props.label}
         </Button>

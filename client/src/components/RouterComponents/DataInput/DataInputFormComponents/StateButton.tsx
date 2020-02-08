@@ -12,6 +12,7 @@ interface IProps extends IGridElementProps {
   label: string;
   type: RobotStates;
   phase: Phase;
+  disabled?: boolean;
 }
 
 interface IState {
@@ -86,6 +87,7 @@ export default class RobotEventButton extends Component<IProps, IState> {
           }
           onClick={this.clicked}
           type="primary"
+          disabled={this.props.disabled}
         >
           {this.props.label}
         </Button>
