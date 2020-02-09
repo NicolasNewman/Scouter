@@ -3,7 +3,13 @@ import { Component } from "react";
 
 import { Button } from "antd";
 
-import { ERobotEvents, Phase, IRobotEvent } from "../../../../global/gameTypes";
+import {
+  ERobotEvents,
+  EScorableRobotEvents,
+  Phase,
+  IRobotEvent,
+  EFoulEvents
+} from "../../../../global/gameTypes";
 import { IGridElementProps } from "../../../Grid/Grid";
 import resolveScore from "../../../../../../global/scoreResolver";
 import { IConstantProps } from "../DataInput";
@@ -11,7 +17,7 @@ import { IConstantProps } from "../DataInput";
 interface IProps extends IGridElementProps {
   constants: IConstantProps;
   label: string;
-  type: ERobotEvents;
+  type: ERobotEvents | EScorableRobotEvents | EFoulEvents;
   phase: Phase;
   color?: string;
   disabled?: boolean;

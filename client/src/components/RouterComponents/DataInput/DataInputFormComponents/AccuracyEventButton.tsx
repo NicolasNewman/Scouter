@@ -3,7 +3,12 @@ import { Component } from "react";
 
 import { Button } from "antd";
 
-import { ERobotEvents, Phase, IRobotEvent } from "../../../../global/gameTypes";
+import {
+  ERobotEvents,
+  EScorableRobotEvents,
+  Phase,
+  IRobotEvent
+} from "../../../../global/gameTypes";
 import { IGridElementProps } from "../../../Grid/Grid";
 import resolveScore from "../../../../../../global/scoreResolver";
 import { IConstantProps } from "../DataInput";
@@ -11,7 +16,7 @@ import { IConstantProps } from "../DataInput";
 interface IProps extends IGridElementProps {
   constants: IConstantProps;
   label: string;
-  type: ERobotEvents;
+  type: ERobotEvents | EScorableRobotEvents;
   phase: Phase;
   color?: string;
   disabled?: boolean;
@@ -22,14 +27,14 @@ export default class AccuracyEventButton extends Component<IProps> {
     super(props);
   }
 
-  clicked = (success: 1 | 0) => {
+  clicked = (e: React.SyntheticEvent, success: 1 | 0) => {
     const points = resolveScore(this.props.type, this.props.phase);
     const event: IRobotEvent = {
       type: this.props.type,
       start: this.props.constants.getTime(),
       success
     };
-    if (points > 0) {
+    if (points > 0 && success > 0) {
       event.points = points;
     }
     console.log(event);
@@ -67,7 +72,7 @@ export default class AccuracyEventButton extends Component<IProps> {
               color: "#fff",
               width: "45%"
             }}
-            onClick={this.clicked.bind(false)}
+            onClick={e => this.clicked(e, 1)}
             disabled={this.props.disabled}
           >
             Hit
@@ -78,7 +83,7 @@ export default class AccuracyEventButton extends Component<IProps> {
               marginRight: "2px",
               width: "45%"
             }}
-            onClick={this.clicked.bind(true)}
+            onClick={e => this.clicked(e, 0)}
             disabled={this.props.disabled}
           >
             Miss
