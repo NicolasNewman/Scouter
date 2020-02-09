@@ -1,17 +1,12 @@
 import { Schema, model, Document } from 'mongoose';
-import {
-    RobotEvent,
-    RobotEventTypes,
-    RobotState,
-    RobotStateTypes
-} from '../types/gameTypes';
+import { RobotEventList, State, RobotEvent } from '../global/gameTypes';
 // const ObjectId = Schema.Types.ObjectId;
 
 export interface IMatch extends Document {
     matchNumber: number;
     teamNumber: number;
     robotEvents: Array<RobotEvent>;
-    robotStates: Array<RobotState>;
+    robotStates: Array<State>;
 }
 
 const matchSchema = new Schema({
@@ -27,10 +22,14 @@ const matchSchema = new Schema({
         {
             type: {
                 type: String,
-                enum: [...RobotEventTypes],
+                enum: RobotEventList,
                 required: [true, 'A event type is required!']
             },
             points: Number,
+            success: {
+                type: Number,
+                enum: [1, 0]
+            },
             start: Number
         }
     ],
@@ -38,7 +37,7 @@ const matchSchema = new Schema({
         {
             type: {
                 type: String,
-                enum: [...RobotStateTypes],
+                // enum: [...RobotStateTypes],
                 required: [true, 'A state type is required!']
             },
             start: Number,
@@ -54,5 +53,7 @@ const matchSchema = new Schema({
 //     });
 //     next();
 // });
+
+matchSchema.virtual('').get(() => {});
 
 export default model<IMatch>('Match', matchSchema);

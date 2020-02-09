@@ -1,6 +1,6 @@
-import { Phase, Events } from "./gameTypes";
+import { Phase, Event } from "./gameTypes";
 
-const resolveScore = (event: Events, phase: Phase): number => {
+const resolveScore = (event: Event, phase: Phase): number => {
   switch (event) {
     // Scorable Robot Events
     case "POWERCELLS_BOTTOM":

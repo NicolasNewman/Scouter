@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 const ObjectId = Schema.Types.ObjectId;
 
-import { TeamEvent, TeamEventTypes } from '../types/gameTypes';
+import { TeamEvent, TeamEventList } from '../global/gameTypes';
 
 interface AllianceData {
     s1: any;
@@ -39,7 +39,7 @@ const gameSchema = new Schema({
             {
                 type: {
                     type: String,
-                    enum: [...TeamEventTypes],
+                    enum: TeamEventList,
                     required: [true, 'A events type is required!']
                 },
                 start: { type: Date, default: Date.now }
@@ -63,7 +63,7 @@ const gameSchema = new Schema({
             {
                 type: {
                     type: String,
-                    enum: [...TeamEventTypes],
+                    enum: TeamEventList,
                     required: [true, 'A events type is required!']
                 },
                 start: { type: Date, default: Date.now }

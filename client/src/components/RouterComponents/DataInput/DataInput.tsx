@@ -13,11 +13,12 @@ import StateButton from "./DataInputFormComponents/StateButton";
 
 import RequestHandler from "../../../classes/RequestHandler";
 import RobotEventButton from "./DataInputFormComponents/RobotEventButton";
+import AccuracyEventButton from "./DataInputFormComponents/AccuracyEventButton";
 import {
-  ScorableRobotEvents,
-  FoulEvents,
-  RobotStates
-} from "../../../../../global/gameTypes";
+  EScorableRobotEvents,
+  EFoulEvents,
+  ERobotStates
+} from "../../../global/gameTypes";
 
 interface IProps {
   scoutingTargets: ScoutingTargets;
@@ -136,29 +137,29 @@ export default class Home extends Component<IProps, IState> {
                 <div className="input-grid__title">
                   <p>Powercells</p>
                 </div>,
-                <RobotEventButton
+                <AccuracyEventButton
                   gridAreaName="inner"
                   constants={this.constantProps}
                   label="Inner"
-                  type={ScorableRobotEvents.POWERCELLS_INNER}
+                  type={EScorableRobotEvents.POWERCELLS_INNER}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
                 />,
-                <RobotEventButton
+                <AccuracyEventButton
                   gridAreaName="outer"
                   constants={this.constantProps}
                   label="Outer"
-                  type={ScorableRobotEvents.POWERCELLS_OUTER}
+                  type={EScorableRobotEvents.POWERCELLS_OUTER}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
                 />,
-                <RobotEventButton
+                <AccuracyEventButton
                   gridAreaName="bottom"
                   constants={this.constantProps}
                   label="Bottom "
-                  type={ScorableRobotEvents.POWERCELLS_BOTTOM}
+                  type={EScorableRobotEvents.POWERCELLS_BOTTOM}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -182,7 +183,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="foul"
                   constants={this.constantProps}
                   label="Foul"
-                  type={FoulEvents.FOUL}
+                  type={EFoulEvents.FOUL}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -191,7 +192,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="tech"
                   constants={this.constantProps}
                   label="Tech Foul"
-                  type={FoulEvents.TECH_FOUL}
+                  type={EFoulEvents.TECH_FOUL}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -200,7 +201,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="yellow"
                   constants={this.constantProps}
                   label="Yellow Card"
-                  type={FoulEvents.YELLOW_CARD}
+                  type={EFoulEvents.YELLOW_CARD}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -209,7 +210,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="red"
                   constants={this.constantProps}
                   label="Red Card"
-                  type={FoulEvents.RED_CARD}
+                  type={EFoulEvents.RED_CARD}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -235,7 +236,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="wheel"
                   constants={this.constantProps}
                   label="Wheel"
-                  type={RobotStates.WHEEL}
+                  type={ERobotStates.WHEEL}
                   disabled={
                     this.state.teleopButtonsDisabled &&
                     this.state.endgameButtonsDisabled
@@ -248,7 +249,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="shooting"
                   constants={this.constantProps}
                   label="Shooting"
-                  type={RobotStates.SHOOTING}
+                  type={ERobotStates.SHOOTING}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -257,7 +258,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="gather"
                   constants={this.constantProps}
                   label="Gathering"
-                  type={RobotStates.GATHERING}
+                  type={ERobotStates.GATHERING}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -266,7 +267,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="climbing"
                   constants={this.constantProps}
                   label="Climbing"
-                  type={RobotStates.CLIMBING}
+                  type={ERobotStates.CLIMBING}
                   disabled={this.state.endgameButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
@@ -276,7 +277,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="defending"
                   constants={this.constantProps}
                   label="Defending"
-                  type={RobotStates.DEFENDING}
+                  type={ERobotStates.DEFENDING}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -308,7 +309,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="initiation"
                   constants={this.constantProps}
                   label="Initiation"
-                  type={ScorableRobotEvents.INITIATION}
+                  type={EScorableRobotEvents.INITIATION}
                   disabled={this.state.autoButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
@@ -318,7 +319,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="hang"
                   constants={this.constantProps}
                   label="Hang"
-                  type={ScorableRobotEvents.HANG}
+                  type={EScorableRobotEvents.HANG}
                   disabled={this.state.endgameButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
@@ -328,7 +329,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="park"
                   constants={this.constantProps}
                   label="Park"
-                  type={ScorableRobotEvents.PARK}
+                  type={EScorableRobotEvents.PARK}
                   disabled={this.state.endgameButtonsDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
@@ -352,7 +353,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="position"
                   constants={this.constantProps}
                   label="Position"
-                  type={ScorableRobotEvents.POSITION_CONTROL}
+                  type={EScorableRobotEvents.POSITION_CONTROL}
                   disabled={
                     this.state.teleopButtonsDisabled &&
                     this.state.endgameButtonsDisabled
@@ -365,7 +366,7 @@ export default class Home extends Component<IProps, IState> {
                   gridAreaName="rotation"
                   constants={this.constantProps}
                   label="Rotation"
-                  type={ScorableRobotEvents.ROTATION_CONTROL}
+                  type={EScorableRobotEvents.ROTATION_CONTROL}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }

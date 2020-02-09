@@ -17,21 +17,23 @@ interface IProps extends IGridElementProps {
   disabled?: boolean;
 }
 
-export default class RobotEventButton extends Component<IProps> {
+export default class AccuracyEventButton extends Component<IProps> {
   constructor(props: IProps) {
     super(props);
   }
 
-  clicked = () => {
+  clicked = (success: 1 | 0) => {
     const points = resolveScore(this.props.type, this.props.phase);
     const event: IRobotEvent = {
       type: this.props.type,
-      start: this.props.constants.getTime()
+      start: this.props.constants.getTime(),
+      success
     };
     if (points > 0) {
       event.points = points;
     }
     console.log(event);
+
     this.props.constants.handler.post(
       `matches/${this.props.constants.matchNumber}/${this.props.constants.teamNumber}/event`,
       event
@@ -45,16 +47,43 @@ export default class RobotEventButton extends Component<IProps> {
           gridArea: this.props.gridAreaName
         }}
       >
-        <Button
+        <p
           style={{
-            backgroundColor: this.props.color,
-            borderColor: this.props.color
+            marginBottom: "5px"
           }}
-          onClick={this.clicked}
-          disabled={this.props.disabled}
         >
           {this.props.label}
-        </Button>
+        </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "#00c06a",
+              marginLeft: "2px",
+              color: "#fff",
+              width: "45%"
+            }}
+            onClick={this.clicked.bind(false)}
+            disabled={this.props.disabled}
+          >
+            Hit
+          </Button>
+          <Button
+            style={{
+              backgroundColor: "#e60019",
+              marginRight: "2px",
+              width: "45%"
+            }}
+            onClick={this.clicked.bind(true)}
+            disabled={this.props.disabled}
+          >
+            Miss
+          </Button>
+        </div>
       </div>
     );
   }

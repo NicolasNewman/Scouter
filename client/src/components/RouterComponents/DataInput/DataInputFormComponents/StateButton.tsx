@@ -4,13 +4,13 @@ import { Component } from "react";
 import { Button } from "antd";
 
 import { IGridElementProps } from "../../../Grid/Grid";
-import { RobotStates, Phase } from "../../../../../../global/gameTypes";
+import { ERobotStates, Phase } from "../../../../global/gameTypes";
 import { IConstantProps } from "../DataInput";
 
 interface IProps extends IGridElementProps {
   constants: IConstantProps;
   label: string;
-  type: RobotStates;
+  type: ERobotStates;
   phase: Phase;
   disabled?: boolean;
 }
@@ -18,7 +18,7 @@ interface IProps extends IGridElementProps {
 interface IState {
   started: boolean;
   state: {
-    type: RobotStates;
+    type: ERobotStates;
     start?: number;
     end?: number;
   };

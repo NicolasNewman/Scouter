@@ -1,4 +1,4 @@
-import { CustomEvents, CustomStates } from "./customTypes";
+import { ECustomEvents, ECustomStates } from "./customTypes";
 
 /*==============================
 ||     General Properties     ||
@@ -46,7 +46,9 @@ export const gameProperties: IGameProperties = {
 //   POWERCELLS_INNER = 6
 // }
 
-export enum ScorableRobotEvents {
+export enum ERobotEvents {}
+
+export enum EScorableRobotEvents {
   INITIATION = "INITIATION",
   POWERCELLS_BOTTOM = "POWERCELLS_BOTTOM",
   POWERCELLS_OUTER = "POWERCELLS_OUTER",
@@ -57,11 +59,7 @@ export enum ScorableRobotEvents {
   PARK = "PARK"
 }
 
-export enum ScorableTeamEvents {
-  LEVEL = "LEVEL"
-}
-
-export enum FoulEvents {
+export enum EFoulEvents {
   FOUL = "FOUL",
   TECH_FOUL = "TECH_FOUL",
   YELLOW_CARD = "YELLOW_CARD",
@@ -69,7 +67,7 @@ export enum FoulEvents {
   DISABLE = "DISABLE"
 }
 
-export enum TeamEvents {
+export enum ETeamEvents {
   OPERATIONAL = "OPERATIONAL",
   ENERGIZED = "ENERGIZED",
   TIE = "TIE",
@@ -80,11 +78,15 @@ export enum TeamEvents {
   STAGE_THREE = "STAGE_THREE"
 }
 
+export enum EScorableTeamEvents {
+  LEVEL = "LEVEL"
+}
+
 /*==============================
 ||           State            ||
 ==============================*/
 
-export enum RobotStates {
+export enum ERobotStates {
   WHEEL = "WHEEL",
   SHOOTING = "SHOOTING",
   GATHERING = "GATHERING",
@@ -93,18 +95,28 @@ export enum RobotStates {
 }
 
 /*==============================
-||   Interfaces / Type Keys   ||
+||           Types            ||
 ==============================*/
 
-// ========== Robot ==========
-export type RobotEvents = ScorableRobotEvents | FoulEvents | CustomEvents;
-export type ScorableEvents = ScorableRobotEvents | ScorableTeamEvents;
-export type Events =
-  | ScorableRobotEvents
-  | FoulEvents
-  | CustomEvents
-  | TeamEvents
-  | ScorableTeamEvents;
+export type RobotEvent =
+  | ERobotEvents
+  | EScorableRobotEvents
+  | EFoulEvents
+  | ECustomEvents;
+
+export type TeamEvent = ETeamEvents | EScorableTeamEvents;
+
+export type ScorableEvent = EScorableRobotEvents | EScorableTeamEvents;
+
+export type Event =
+  | ERobotEvents
+  | EScorableRobotEvents
+  | EFoulEvents
+  | ECustomEvents
+  | ETeamEvents
+  | EScorableTeamEvents;
+
+export type State = ERobotStates | ECustomStates;
 
 // export const RobotEventTypes = [
 //   ...Object.values(ScorableRobotEvents),
@@ -112,40 +124,60 @@ export type Events =
 //   ...Object.values(CustomEvents)
 // ];
 
-export interface IRobotEvent {
-  type: ScorableRobotEvents | FoulEvents | CustomEvents;
-  start: number;
-  score?: number;
-}
+/*==============================
+||     DB Model Interfaces    ||
+==============================*/
 
-// ========== Team ==========
-// export const TeamEventTypes = [
-//   ...Object.values(TeamEvents),
-//   ...Object.values(ScorableTeamEvents)
-// ];
+export interface IRobotEvent {
+  type: RobotEvent;
+  start: number;
+  points?: number;
+  success?: 1 | 0;
+}
 
 export interface ITeamEvent {
-  type: TeamEvents | ScorableTeamEvents;
+  type: TeamEvent;
   start: number;
-  score?: number;
+  points?: number;
 }
 
-// ========== Scorable ==========
-// export const ScorableEventTypes = [
-//   ...Object.values(ScorableRobotEvents),
-//   ...Object.values(ScorableTeamEvents)
-// ];
-
-// ========== State ==========
-export type StateTypes = RobotStates | CustomStates;
-
-// export const RobotStateTypes = [
-//   ...Object.values(RobotStates),
-//   ...Object.values(CustomStates)
-// ];
-
-export interface RobotState {
-  type: StateTypes;
+export interface IRobotState {
+  type: State;
   start?: number;
   end?: number;
 }
+
+/*==============================
+||        Event Arrays        ||
+==============================*/
+
+export const RobotEventList = [
+  ...Object.values(ERobotEvents),
+  ...Object.values(EScorableRobotEvents),
+  ...Object.values(EFoulEvents),
+  ...Object.values(ECustomEvents)
+];
+
+export const TeamEventList = [
+  ...Object.values(ETeamEvents),
+  ...Object.values(EScorableTeamEvents)
+];
+
+export const ScorableEventList = [
+  ...Object.values(EScorableRobotEvents),
+  ...Object.values(EScorableTeamEvents)
+];
+
+export const EventList = [
+  ...Object.values(ERobotEvents),
+  ...Object.values(EScorableRobotEvents),
+  ...Object.values(EFoulEvents),
+  ...Object.values(ECustomEvents),
+  ...Object.values(ETeamEvents),
+  ...Object.values(EScorableTeamEvents)
+];
+
+export const StateList = [
+  ...Object.values(ERobotStates),
+  ...Object.values(ECustomStates)
+];
