@@ -5,15 +5,11 @@ import { ECustomEvents, ECustomStates } from "./customTypes";
 ==============================*/
 
 export type Duration = {
-  start: number;
-  end: number;
+  start?: number;
+  end?: number;
 };
 
 export type Phase = "AUTO" | "TELEOP" | "ENDGAME";
-
-/*==============================
-||      Game Properties       ||
-==============================*/
 
 interface IGameProperties {
   matchDuration: number;
@@ -25,15 +21,11 @@ interface IGameProperties {
   endgame: Duration;
 }
 
-export const gameProperties: IGameProperties = {
-  matchDuration: 150,
-  autoDuration: 15,
-  teleopDuration: 135,
-  endgameDuration: 30,
-  auto: { start: 0, end: 15 },
-  teleop: { start: 15, end: 150 },
-  endgame: { start: 120, end: 150 }
-};
+interface ICycleDeterminer {
+  cycleStart: string;
+  cycleEnd: string;
+  startWithEnd: boolean;
+}
 
 /*==============================
 ||           Events           ||
@@ -181,3 +173,23 @@ export const StateList = [
   ...Object.values(ERobotStates),
   ...Object.values(ECustomStates)
 ];
+
+/*==============================
+||      Game Properties       ||
+==============================*/
+
+export const gameProperties: IGameProperties = {
+  matchDuration: 150,
+  autoDuration: 15,
+  teleopDuration: 135,
+  endgameDuration: 30,
+  auto: { start: 0, end: 15 },
+  teleop: { start: 15, end: 150 },
+  endgame: { start: 120, end: 150 }
+};
+
+export const cycleDeterminer: ICycleDeterminer = {
+  cycleStart: ERobotStates.GATHERING,
+  cycleEnd: ERobotStates.SHOOTING,
+  startWithEnd: true
+};

@@ -1,13 +1,22 @@
 import { Schema, model, Document } from 'mongoose';
-import { RobotEventList, State, RobotEvent } from '../global/gameTypes';
+import { RobotEventList, IRobotState, IRobotEvent } from '../global/gameTypes';
+import accuracyResolver from '../global/accuracyResolver';
+import { cycleDeterminer, Duration, gameProperties } from '../global/gameTypes';
 // const ObjectId = Schema.Types.ObjectId;
 
 export interface IMatch extends Document {
     matchNumber: number;
     teamNumber: number;
-    robotEvents: Array<RobotEvent>;
-    robotStates: Array<State>;
+    robotEvents: Array<IRobotEvent>;
+    robotStates: Array<IRobotState>;
 }
+
+// type Cycle = {
+//     start: number;
+//     end: number;
+//     gathering: number;
+//     shooting: number;
+// };
 
 const matchSchema = new Schema({
     matchNumber: {
@@ -46,6 +55,9 @@ const matchSchema = new Schema({
     ]
 });
 
+// schema.set('toJSON', { getters: true, virtuals: false });
+matchSchema.set('toJSON', { virtuals: true });
+
 // matchSchema.pre<IMatch>(/^find/, function(next) {
 //     this.populate({
 //         path: 'team',
@@ -54,6 +66,124 @@ const matchSchema = new Schema({
 //     next();
 // });
 
-matchSchema.virtual('').get(() => {});
+matchSchema.virtual('points').get(function(this: IMatch) {
+    let sum = 0;
+    this.robotEvents.forEach(event => {
+        if (event.points) {
+            sum += event.points;
+        }
+    });
+    return sum;
+});
+
+matchSchema.virtual('accuracy').get(function(this: IMatch) {
+    // const typeToOccurence = {};
+    // const typeToSuccess = {}
+    const statMap: { [key: string]: { hit: number; total: number } } = {};
+    this.robotEvents.forEach(event => {
+        if (accuracyResolver(event.type)) {
+            if (!statMap[event.type.toString()]) {
+                statMap[event.type.toString()] = { hit: 0, total: 0 };
+            }
+            statMap[event.type.toString()].total += 1;
+            if (event.success) {
+                statMap[event.type.toString()].hit += event.success;
+            }
+        }
+    });
+    const accuracyMap: { [key: string]: number } = {};
+    for (let key in statMap) {
+        accuracyMap[key] = statMap[key].hit / statMap[key].total;
+    }
+    return accuracyMap;
+});
+
+/**
+ * Match starts with cells loaded
+ * 1) The robot makes their shots in auto
+ * 2) They go back to gather
+ * 3) They shoot
+ */
+matchSchema.virtual('cycle').get(function(this: IMatch) {
+    let cycleStates: Array<IRobotState> = [];
+
+    // Add the states that determine a cycles start or end to a list
+    this.robotStates.forEach(state => {
+        if (
+            state.type === cycleDeterminer.cycleStart ||
+            state.type === cycleDeterminer.cycleEnd
+        ) {
+            cycleStates.push(state);
+        }
+    });
+
+    // Sort the events in that list by time
+    cycleStates = cycleStates.sort((a, b) => {
+        if (a.start && b.start) {
+            return a.start < b.start ? 1 : -1;
+        }
+        return 0;
+    });
+    console.log('SORTED BY TIME');
+    console.log(cycleStates);
+
+    // Get the time intervals of each cycle
+    const cycleIntervals: Array<Duration> = [];
+    let cycleIntervalIndx = 0;
+    let onStart = true;
+    cycleStates.forEach((state, i) => {
+        // The very first event could be either cycleStart or cycleEnd, depending on if the robot starts pre-loaded and chooses to shoot
+        if (state.type === cycleDeterminer.cycleEnd && i === 0) {
+            cycleIntervals[0] = {
+                start: gameProperties.matchDuration,
+                end: state.end
+            };
+            cycleIntervalIndx++;
+            cycleIntervals.push({});
+        }
+
+        // If we are looking for the  begining of a cycle
+        if (
+            onStart &&
+            !cycleIntervals[cycleIntervalIndx].start &&
+            state.type === cycleDeterminer.cycleStart
+        ) {
+            cycleIntervals[cycleIntervalIndx].start = state.start;
+            onStart = false;
+        }
+
+        // If we are looking for the end of a cycle
+        if (
+            !onStart &&
+            !cycleIntervals[cycleIntervalIndx].end &&
+            state.type === cycleDeterminer.cycleEnd
+        ) {
+            cycleIntervals[cycleIntervalIndx].end = state.end;
+            onStart = true;
+            cycleIntervalIndx++;
+            cycleIntervals.push({});
+        }
+    });
+
+    console.log('INTERVALS');
+    console.log(cycleIntervals);
+
+    // const cycleRanges: Array<{ start: number; end: number | undefined }> = [
+    //     { start: 0, end: 0 }
+    // ];
+    // let cycleIndex = 0;
+    // let search: 'start' | 'end' = 'start';
+    // this.robotStates.forEach(state => {
+    //     if (state.type === 'SHOOTING' && cycleIndex == 0) {
+    //         cycleRanges[cycleIndex].end = state.end;
+    //         cycleIndex++;
+    //         cycleRanges[cycleIndex] = { start: -1, end: -1 };
+    //     }
+    //     if (search === 'start' && cycleIndex > 0) {
+    //         if (state.type === 'GATHERING') {
+    //         }
+    //     }
+    // });
+});
 
 export default model<IMatch>('Match', matchSchema);
