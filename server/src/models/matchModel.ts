@@ -11,6 +11,12 @@ export interface IMatch extends Document {
     robotStates: Array<IRobotState>;
 }
 
+interface ICycle {
+    interval: Duration;
+    cycleEvents: Array<IRobotEvent>;
+    cycleStates: Array<IRobotState>;
+}
+
 // type Cycle = {
 //     start: number;
 //     end: number;
@@ -165,8 +171,62 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
         }
     });
 
+    // Remove a trailing cycle if its empty
+    if (
+        cycleIntervals.length > 0 &&
+        !cycleIntervals[cycleIntervals.length - 1].start &&
+        !cycleIntervals[cycleIntervals.length - 1].end
+    ) {
+        cycleIntervals.pop();
+    }
+
     console.log('INTERVALS');
     console.log(cycleIntervals);
+
+    // Build the array of cycles
+    const cycles: Array<ICycle> = [];
+    // Loop through each previously computed interval
+    cycleIntervals.forEach(interval => {
+        const cycleEvents: Array<IRobotEvent> = [];
+        const cycleStates: Array<IRobotState> = [];
+        // Find the events that took place on that interval
+        this.robotEvents.forEach(event => {
+            console.log(`Checking event ${event.type}`);
+            if (interval.start && interval.end) {
+                console.log(
+                    `The event happened at ${event.start} and the interval is on [${interval.start},${interval.end}]`
+                );
+                if (
+                    interval.start >= event.start &&
+                    event.start >= interval.end
+                ) {
+                    cycleEvents.push(event);
+                }
+            }
+        });
+        // Find the states that took place on that interval
+        this.robotStates.forEach(state => {
+            if (interval.start && state.start && state.end && interval.end) {
+                if (
+                    interval.start >= state.start &&
+                    state.end >= interval.end
+                ) {
+                    cycleStates.push(state);
+                }
+            }
+        });
+
+        cycles.push({
+            interval,
+            cycleEvents,
+            cycleStates
+        });
+    });
+
+    console.log('CYCLES');
+    console.log(cycles);
+
+    return cycles;
 
     // const cycleRanges: Array<{ start: number; end: number | undefined }> = [
     //     { start: 0, end: 0 }
