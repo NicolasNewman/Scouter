@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { catchAsync } from '../utils/catchAsync';
 import { CustomError } from '../utils/error';
+import dataCompiler from '../utils/dataCompiler';
 
 import Game from '../models/gameModel';
 import Match from '../models/matchModel';
@@ -58,59 +59,6 @@ export const postMatch = catchAsync(
     }
 );
 
-// /:matchNumber/:alliance/:seed/:teamNumber/event
-// export const postRobotEvent = catchAsync(
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         const matchNumber = req.params.matchNumber;
-//         const alliance = req.params.alliance;
-//         const seed = req.params.seed;
-//         const teamNumber = req.params.teamNumber;
-
-//         logger.info(
-//             `Adding team state to match ${matchNumber} on the ${alliance} alliance`
-//         );
-
-//         let teamEvent = req.body;
-
-//         // Add the match to the game
-//         const game = await Game.findOne({ matchNumber });
-
-//         if (game) {
-//             if (alliance === 'red' || alliance === 'blue') {
-//                 game[alliance].teamEvents.push(teamEvent);
-//                 await game.save();
-//             } else {
-//                 new CustomError(
-//                     404,
-//                     `Error pushing data to teamEvents for alliance ${alliance}`
-//                 );
-//             }
-//         } else {
-//             next(
-//                 new CustomError(
-//                     404,
-//                     `Error accessing game with match number ${matchNumber}`
-//                 )
-//             );
-//         }
-
-//         // const game = await Game.findOneAndUpdate(
-//         //     { matchNumber },
-//         //     { $set: { [loc]: match._id } },
-//         //     { new: true }
-//         // );
-//         res.status(200).json({
-//             status: 'success',
-//             data: {
-//                 game
-//             }
-//         });
-//     }
-// );
-
-// OLD
-// /:matchNumber/:alliance/:seed/:teamNumber/match
-
 // /:matchNumber/:alliance/event
 // Pushes a team event to the alliance for a game
 export const postTeamEvent = catchAsync(
@@ -156,5 +104,26 @@ export const postTeamEvent = catchAsync(
                 game
             }
         });
+    }
+);
+
+export const download = catchAsync(
+    async (_req: Request, res: Response, _next: NextFunction) => {
+        // let data = 'Hello\nHow are you?';
+        console.log('compiling');
+        dataCompiler().then(data => {
+            console.log(data);
+            res.attachment('scouting-data.json');
+            res.type('json');
+            res.send(data);
+        });
+
+        // res.status(200).json({
+        //     status: 'success',
+        //     results: matches.length,
+        //     data: {
+        //         matches
+        //     }
+        // });
     }
 );

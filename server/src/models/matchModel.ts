@@ -11,6 +11,20 @@ export interface IMatch extends Document {
     robotStates: Array<IRobotState>;
 }
 
+export type IVritualizedMatches = Array<IVirtualizedMatch>;
+
+interface IVirtualizedMatch {
+    matchNumber: number;
+    teamNumber: number;
+    robotEvents: Array<IRobotEvent>;
+    robotState: Array<IRobotState>;
+    points: number;
+    accuracy: {
+        [key: string]: number;
+    };
+    cycle: Array<ICycle>;
+}
+
 interface ICycle {
     interval: Duration;
     cycleEvents: Array<IRobotEvent>;

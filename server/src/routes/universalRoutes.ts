@@ -11,4 +11,6 @@ router
     .route('/:matchNumber/:alliance/event')
     .post(universalController.postTeamEvent);
 
+router.route('/download').get(universalController.download);
+
 export default router;
