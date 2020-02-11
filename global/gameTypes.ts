@@ -124,7 +124,7 @@ export interface IRobotEvent {
   type: RobotEvent;
   start: number;
   points?: number;
-  success?: 1 | 0;
+  success?: number;
 }
 
 export interface ITeamEvent {
