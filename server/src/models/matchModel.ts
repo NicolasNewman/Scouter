@@ -2,6 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 import { RobotEventList, IRobotState, IRobotEvent } from '../global/gameTypes';
 import accuracyResolver from '../global/accuracyResolver';
 import { cycleDeterminer, Duration, gameProperties } from '../global/gameTypes';
+import { ICycle } from '../global/modelTypes';
 // const ObjectId = Schema.Types.ObjectId;
 
 export interface IMatch extends Document {
@@ -11,32 +12,25 @@ export interface IMatch extends Document {
     robotStates: Array<IRobotState>;
 }
 
-export type IVritualizedMatches = Array<IVirtualizedMatch>;
+// export type VritualizedMatches = Array<IVirtualizedMatch>;
 
-interface IVirtualizedMatch {
-    matchNumber: number;
-    teamNumber: number;
-    robotEvents: Array<IRobotEvent>;
-    robotState: Array<IRobotState>;
-    points: number;
-    accuracy: {
-        [key: string]: number;
-    };
-    cycle: Array<ICycle>;
-}
+// interface IVirtualizedMatch {
+//     matchNumber: number;
+//     teamNumber: number;
+//     robotEvents: Array<IRobotEvent>;
+//     robotState: Array<IRobotState>;
+//     points: number;
+//     accuracy: {
+//         [key: string]: number;
+//     };
+//     cycle: Array<ICycle>;
+// }
 
-interface ICycle {
-    interval: Duration;
-    cycleEvents: Array<IRobotEvent>;
-    cycleStates: Array<IRobotState>;
-}
-
-// type Cycle = {
-//     start: number;
-//     end: number;
-//     gathering: number;
-//     shooting: number;
-// };
+// interface ICycle {
+//     interval: Duration;
+//     cycleEvents: Array<IRobotEvent>;
+//     cycleStates: Array<IRobotState>;
+// }
 
 const matchSchema = new Schema({
     matchNumber: {

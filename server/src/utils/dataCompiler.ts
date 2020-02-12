@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { IVritualizedMatches } from '../models/matchModel';
+import { VritualizedMatches } from '../global/modelTypes';
 import {
     EScorableRobotEvents,
     IRobotEvent,
@@ -11,11 +11,13 @@ import {
 const dataCompiler = async (): Promise<string> => {
     const res = await fetch('http://localhost:3000/data/matches');
     const json = await res.json();
-    const matches: IVritualizedMatches = json.data.matches;
+    const matches: VritualizedMatches = json.data.matches;
     let allData = '';
     matches.forEach(match => {
         let data = '';
-        data = addDataToRow(data, match.matchNumber);
+        if (match.matchNumber) {
+            data = addDataToRow(data, match.matchNumber);
+        }
         data = addDataToRow(data, 'color');
         data = addDataToRow(data, match.teamNumber);
         // Initiation?
