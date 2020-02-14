@@ -5,6 +5,7 @@ import Timeline from "./PlotComponents/Timeline";
 // import Scatterplot from "./PlotComponents/Scatterplot";
 import { History } from "history";
 import { IGame, ITeam } from "../../../global/modelTypes";
+import Grid from "../../Grid/Grid";
 
 import { Tabs, Select, Radio } from "antd";
 const { Option } = Select;
@@ -67,21 +68,72 @@ export default class Home extends Component<IProps, IState> {
         )}
         <Tabs>
           <TabPane tab="Game" key="game" disabled={this.state.noData}>
-            <Select
-              onChange={this.gameMatchNumberChanged}
-              disabled={this.state.noData}
-              defaultActiveFirstOption={false}
-            >
-              {gameMatchNumberOptions}
-            </Select>
+            <div>
+              <span>Match number: </span>
+              <Select
+                onChange={this.gameMatchNumberChanged}
+                disabled={this.state.noData}
+                defaultActiveFirstOption={false}
+              >
+                {gameMatchNumberOptions}
+              </Select>
+            </div>
             {this.props.gameData[this.state.gameMatchNumber - 1] ? (
-              <Timeline
-                match={
-                  this.props.gameData[this.state.gameMatchNumber - 1].blue.s3
-                }
+              <Grid
+                cols="50% 50%"
+                rows="10% 30% 30% 30%"
+                className="timeline-grid"
+                templateArea="
+            'red blue'
+            'rs1 bs1'
+            'rs2 bs2'
+            'rs3 bs3'"
+                gridElements={[
+                  <h1 className="timeline-grid__heading r">Red</h1>,
+                  <h1 className="timeline-grid__heading b">Blue</h1>,
+                  <Timeline
+                    gridAreaName="rs1"
+                    match={
+                      this.props.gameData[this.state.gameMatchNumber - 1].red.s1
+                    }
+                  />,
+                  <Timeline
+                    gridAreaName="rs2"
+                    match={
+                      this.props.gameData[this.state.gameMatchNumber - 1].red.s2
+                    }
+                  />,
+                  <Timeline
+                    gridAreaName="rs3"
+                    match={
+                      this.props.gameData[this.state.gameMatchNumber - 1].red.s3
+                    }
+                  />,
+                  <Timeline
+                    gridAreaName="bs1"
+                    match={
+                      this.props.gameData[this.state.gameMatchNumber - 1].blue
+                        .s1
+                    }
+                  />,
+                  <Timeline
+                    gridAreaName="bs2"
+                    match={
+                      this.props.gameData[this.state.gameMatchNumber - 1].blue
+                        .s2
+                    }
+                  />,
+                  <Timeline
+                    gridAreaName="bs3"
+                    match={
+                      this.props.gameData[this.state.gameMatchNumber - 1].blue
+                        .s3
+                    }
+                  />
+                ]}
               />
             ) : (
-              undefined
+              <p>A game could not be found</p>
             )}
           </TabPane>
         </Tabs>

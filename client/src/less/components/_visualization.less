@@ -11,3 +11,18 @@
     margin-bottom: 1rem;
   }
 }
+
+.timeline-grid {
+  &__heading {
+    margin: 0;
+    text-align: center;
+    &.r {
+      color: @first-red;
+      grid-area: red;
+    }
+    &.b {
+      color: @first-blue;
+      grid-area: blue;
+    }
+  }
+}

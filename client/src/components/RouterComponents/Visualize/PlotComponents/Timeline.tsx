@@ -3,12 +3,13 @@ import { Component } from "react";
 import Plot from "react-plotly.js";
 import { IVirtualizedMatch } from "../../../../global/modelTypes";
 import { gameProperties } from "../../../../global/gameTypes";
+import { IGridElementProps } from "../../../Grid/Grid";
 
 import { Select } from "antd";
 import { PlotData } from "plotly.js";
 const Option = Select;
 
-interface IProps {
+interface IProps extends IGridElementProps {
   match: IVirtualizedMatch;
 }
 
@@ -115,28 +116,27 @@ export default class Timeline extends Component<IProps, IState> {
     }
 
     return (
-      <div>
-        <div></div>
-        <Plot
-          data={[...traces]}
-          layout={{
-            height: 250,
-            xaxis: {
-              range: [gameProperties.matchDuration, 0],
-              rangemode: "tozero",
-              tickmode: "linear",
-              fixedrange: true,
-              dtick: 10
-            },
-            yaxis: {
-              range: [0, i + 1],
-              fixedrange: true,
-              dtick: 1
-            },
-            title: `Team ${this.props.match.teamNumber}`
-          }}
-        />
-      </div>
+      <Plot
+        data={[...traces]}
+        layout={{
+          height: 300,
+          xaxis: {
+            range: [gameProperties.matchDuration, 0],
+            rangemode: "tozero",
+            tickmode: "linear",
+            fixedrange: true,
+            dtick: 10
+          },
+          yaxis: {
+            range: [0, i + 1],
+            fixedrange: true,
+            dtick: 1
+          },
+          title: `Team ${this.props.match.teamNumber}`,
+          plot_bgcolor: "#eef5f9",
+          paper_bgcolor: "#eef5f9"
+        }}
+      />
     );
   }
 }
