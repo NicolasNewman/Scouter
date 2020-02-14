@@ -60,7 +60,7 @@
         "@types/mongodb": "^3.3.12",
         "@types/mongoose": "^5.5.32",
         "@types/node": "12.12.11",
-        "@types/node-fetch": "2.5.3",
+        "@types/node-fetch": "^2.5.4",
         "@types/socket.io": "^2.1.4",
         "@types/supertest": "^2.0.8",
         "copyfiles": "^2.1.1",
