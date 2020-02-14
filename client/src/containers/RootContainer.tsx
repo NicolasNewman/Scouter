@@ -21,10 +21,8 @@ function mapStateToProps(state: any, _ownProps: any) {
     scoutingTargets: state.scouting.targets,
     matchNumber: state.scouting.matchNumber,
     isActive: state.scouting.isActive,
-    competitionData: state.data.competitionData,
-    teamMins: state.data.teamMins,
-    teamMaxes: state.data.teamMaxes,
-    teamAverages: state.data.teamAverages
+    teamData: state.data.teamData,
+    gameData: state.data.gameData
   };
 }
 

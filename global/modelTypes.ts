@@ -9,7 +9,7 @@ export interface IVirtualizedMatch {
   matchNumber?: number;
   teamNumber: number;
   robotEvents: Array<IRobotEvent>;
-  robotState: Array<IRobotState>;
+  robotStates: Array<IRobotState>;
   points: number;
   accuracy: {
     [key: string]: number;
