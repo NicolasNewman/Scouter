@@ -29,7 +29,6 @@ export default class Timeline extends Component<IProps, IState> {
     "#bcbd22",
     "#17becf"
   ];
-  // teams: Array<string>;
 
   constructor(props: IProps) {
     super(props);
