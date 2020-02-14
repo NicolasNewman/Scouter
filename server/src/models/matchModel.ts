@@ -142,7 +142,7 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
     console.log(cycleStates);
 
     // Get the time intervals of each cycle
-    const cycleIntervals: Array<Duration> = [];
+    const cycleIntervals: Array<Duration> = [{}];
     let cycleIntervalIndx = 0;
     let onStart = true;
     cycleStates.forEach((state, i) => {
@@ -156,7 +156,7 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
             cycleIntervals.push({});
         }
 
-        // If we are looking for the  begining of a cycle
+        // If we are looking for the begining of a cycle
         if (
             onStart &&
             !cycleIntervals[cycleIntervalIndx].start &&
