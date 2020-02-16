@@ -27,7 +27,7 @@ export default class AccuracyEventButton extends Component<IProps> {
     super(props);
   }
 
-  clicked = (e: React.SyntheticEvent, success: 1 | 0) => {
+  clicked = (_e: React.SyntheticEvent, success: 1 | 0) => {
     const points = resolveScore(this.props.type, this.props.phase);
     const event: IRobotEvent = {
       type: this.props.type,

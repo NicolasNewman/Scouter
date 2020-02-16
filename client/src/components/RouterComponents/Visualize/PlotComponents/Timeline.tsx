@@ -5,9 +5,7 @@ import { IVirtualizedMatch } from "../../../../global/modelTypes";
 import { gameProperties } from "../../../../global/gameTypes";
 import { IGridElementProps } from "../../../Grid/Grid";
 
-import { Select } from "antd";
 import { PlotData } from "plotly.js";
-const Option = Select;
 
 interface IProps extends IGridElementProps {
   match: IVirtualizedMatch;
@@ -71,7 +69,6 @@ export default class Timeline extends Component<IProps, IState> {
     }
     i += 1;
     let j = 0;
-    const occuredTypes: Array<string> = [];
     traceColorMap = {};
 
     if (this.props.match.robotEvents) {

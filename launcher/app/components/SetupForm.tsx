@@ -8,11 +8,11 @@ import {
     Button,
     Tooltip,
     Icon,
-    Select,
+    // Select,
     // Upload,
     Input
 } from 'antd';
-const { Option } = Select;
+// const { Option } = Select;
 
 import DataStore from 'app/classes/DataStore';
 
@@ -60,7 +60,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                 // console.log('dbName');
                 this.props.dataStore.set('dbName', vals.dbName);
                 this.props.dataStore.set('adminPassword', vals.adminPassword);
-                this.props.dataStore.set('mode', vals.mode);
+                // this.props.dataStore.set('mode', 'vals.mode');
             }
 
             if (!err) {
@@ -223,7 +223,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                     })(<Input.Password className="form__item--number-input" />)}
                 </Form.Item>
                 {/* Mode */}
-                <Form.Item
+                {/* <Form.Item
                     className="form__item"
                     label={
                         <span className="form__item--label">
@@ -253,7 +253,7 @@ class SetupForm extends Component<IProps & FormComponentProps> {
                             <Option value="timeseries">Timeseries</Option>
                         </Select>
                     )}
-                </Form.Item>
+                </Form.Item> */}
                 {/* File uploader */}
                 {/* <Form.Item>
                     {getFieldDecorator('moduleDragger', {

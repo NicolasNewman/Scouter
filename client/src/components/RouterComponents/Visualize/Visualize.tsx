@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Component } from "react";
-import { keys, isEmpty } from "../../../helper/helper";
 import Timeline from "./PlotComponents/Timeline";
 // import Scatterplot from "./PlotComponents/Scatterplot";
 import { History } from "history";
 import { IGame, ITeam } from "../../../global/modelTypes";
 import Grid from "../../Grid/Grid";
 
-import { Tabs, Select, Radio } from "antd";
+import { Tabs, Select } from "antd";
 const { Option } = Select;
 const { TabPane } = Tabs;
 
