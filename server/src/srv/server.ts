@@ -94,6 +94,9 @@ class Server {
                 );
             } else {
                 // Serve the static asset from disk
+                console.log('/ route: ');
+                console.log(this.getAssetPath());
+                console.log(SPAs.getRedirectName());
                 res.sendFile(
                     path.resolve(
                         this.getAssetPath(),
@@ -117,6 +120,9 @@ class Server {
                     this.sendDevServerAsset(`/${entryPoint}`, res, next);
                 } else {
                     // Serve the static asset from disk
+                    console.log('/:entryPoint route: ');
+                    console.log(this.getAssetPath());
+                    console.log(entryPoint);
                     res.sendFile(
                         path.resolve(this.getAssetPath(), entryPoint!),
                         {
@@ -187,10 +193,13 @@ class Server {
     }
 
     private getAssetPath(): string {
+        console.log('GetAssetPath: ');
+        console.log(StaticAssetPath.TRANSPILED);
+        console.log(__dirname);
         return path.join(
             __dirname,
             this.m_assetPath === StaticAssetPath.TRANSPILED
-                ? '../client/static/'
+                ? '../../../client/static/'
                 : '../../build/client/static/'
         );
     }
