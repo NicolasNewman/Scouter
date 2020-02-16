@@ -19,7 +19,7 @@ export default class Home extends Component<IProps> {
         <h1>Scouter</h1>
         {this.props.isAdmin ? (
           <p>
-            Welcome to Scouter! When you are ready to have your scouts beign
+            Welcome to Scouter! When you are ready to have your scouts begin
             entering data for a match, head to the Admin tab
             <span style={{ margin: "0 0.25rem" }}>
               (<Icon type="tool" />)
@@ -35,6 +35,10 @@ export default class Home extends Component<IProps> {
             will be enabled and you can begin scouting.
           </p>
         )}
+        <p>
+          If you'd like to download the match data, click{" "}
+          <a href="/data/download">here</a>
+        </p>
       </div>
     );
   }
