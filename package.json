@@ -54,7 +54,8 @@
     "copy": "yarn copy-global-client && yarn copy-global-server",
     "dev-server": "cd server && yarn dev",
     "dev-client": "cd client && yarn dev",
-    "dev": "npm-run-all copy --parallel dev-server dev-client"
+    "dev": "npm-run-all copy --parallel dev-server dev-client",
+    "build-win": "yarn copy && cd launcher && yarn package-win"
   },
   "devDependencies": {
     "copyfiles": "^2.2.0",
