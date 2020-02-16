@@ -162,7 +162,9 @@ const getWebpackConfig = (env, argv) => {
             terserOptions: {
               keep_classnames: false,
               mangle: true,
-              compress: false,
+              compress: {
+                drop_console: true
+              },
               keep_fnames: false,
               output: {
                 comments: false
