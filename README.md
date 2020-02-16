@@ -1,23 +1,10 @@
-﻿<!-- <div align="center">
-  <a href="https://github.com/winwiz1/crisp-react">
-    <img alt="crisp-react logo" src="docs/crisp-react.png">
-  </a>
-  <br />
-  <br />
-</div>
-<br />
-<div align="center">
-  <img alt="Travis CI badge" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
-  <img alt="Language badge. Sometimes timeouts - please reload." src="https://img.shields.io/github/languages/top/winwiz1/crisp-react">
-  <img alt="Snyk Vulnerabilities badge" src="https://img.shields.io/snyk/vulnerabilities/github/winwiz1/crisp-react">
-  <img alt="License badge" src="https://img.shields.io/github/license/winwiz1/crisp-react">
-</div> -->
-
-# Scouter
+﻿# Scouter
 
 ## Note
 
-Scouter is currently in an early Alpha state and as such is subject to change. The software will not be ready for testing until reaching Beta.
+~~Scouter is currently in an early Alpha state and as such is subject to change. The software will not be ready for testing until reaching Beta.~~
+
+Scouter is now in Beta! While it is ready for competition use, there are still some bugs that need to be ironed out.
 
 ## About
 
