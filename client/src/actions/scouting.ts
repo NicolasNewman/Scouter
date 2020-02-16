@@ -46,6 +46,8 @@ export function setScoutingTargets(
 }
 
 /**
+ * @deprecated Left over from when the data input was form based
+ *
  * Removes a team from the list of targets. This is generally done to clear the form once it is submited
  * @param target - the team to remove from the list of targets
  */
