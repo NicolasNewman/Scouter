@@ -6,5 +6,5 @@ node_modules/
 README.md
 .gitignore
 .travis.yml
-crisp-react.code-workspace
+scouter.code-workspace
 start-container-windows.cmd

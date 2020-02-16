@@ -1,10 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-// import * as flatten from 'flat';
 import { catchAsync } from '../utils/catchAsync';
 import { CustomError } from '../utils/error';
-// import { Types } from 'mongoose';
-
-// const ObjectId = Types.ObjectId;
+import dataCompiler from '../utils/dataCompiler';
 
 import Game from '../models/gameModel';
 import Match from '../models/matchModel';
@@ -12,6 +9,7 @@ import Team from '../models/teamModel';
 import { logger } from '../utils/logger';
 
 // /:matchNumber/:alliance/:seed/:teamNumber/match
+// Used to add a team's match to a game
 // Match is in body
 export const postMatch = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +25,10 @@ export const postMatch = catchAsync(
         const team = await Team.findOne({ teamNumber });
         if (team) {
             // Add the team to the match
-            match.team = team._id;
+            // match.team = team._id;
+            // match.matchNumber = matchNumber;
+            // match = await Match.create(match);
+            match.teamNumber = team.teamNumber;
             match.matchNumber = matchNumber;
             match = await Match.create(match);
 
@@ -43,8 +44,6 @@ export const postMatch = catchAsync(
             const loc = `${alliance}.${seed}`;
             const game = await Game.findOneAndUpdate(
                 { matchNumber },
-                // flatten({ [alliance]: { [seed]: ObjectId(match._id) } }),
-                // { $set: { [alliance]: { [seed]: match._id } } },
                 { $set: { [loc]: match._id } },
                 { new: true }
             );
@@ -57,5 +56,74 @@ export const postMatch = catchAsync(
         } else {
             next(new CustomError(404, `Error accessing team ${teamNumber}`));
         }
+    }
+);
+
+// /:matchNumber/:alliance/event
+// Pushes a team event to the alliance for a game
+export const postTeamEvent = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const matchNumber = req.params.matchNumber;
+        const alliance = req.params.alliance;
+        logger.info(
+            `Adding team state to match ${matchNumber} on the ${alliance} alliance`
+        );
+
+        let teamEvent = req.body;
+
+        // Add the match to the game
+        const game = await Game.findOne({ matchNumber });
+
+        if (game) {
+            if (alliance === 'red' || alliance === 'blue') {
+                game[alliance].teamEvents.push(teamEvent);
+                await game.save();
+            } else {
+                new CustomError(
+                    404,
+                    `Error pushing data to teamEvents for alliance ${alliance}`
+                );
+            }
+        } else {
+            next(
+                new CustomError(
+                    404,
+                    `Error accessing game with match number ${matchNumber}`
+                )
+            );
+        }
+
+        // const game = await Game.findOneAndUpdate(
+        //     { matchNumber },
+        //     { $set: { [loc]: match._id } },
+        //     { new: true }
+        // );
+        res.status(200).json({
+            status: 'success',
+            data: {
+                game
+            }
+        });
+    }
+);
+
+export const download = catchAsync(
+    async (_req: Request, res: Response, _next: NextFunction) => {
+        // let data = 'Hello\nHow are you?';
+        console.log('compiling');
+        dataCompiler().then(data => {
+            console.log(data);
+            res.attachment('scouting-data.json');
+            res.type('json');
+            res.send(data);
+        });
+
+        // res.status(200).json({
+        //     status: 'success',
+        //     results: matches.length,
+        //     data: {
+        //         matches
+        //     }
+        // });
     }
 );

@@ -8,6 +8,7 @@ interface UpdateFormAction {
     dbPort: number;
     dbName: string;
     adminPassword: string;
+    mode: 'form' | 'timeseries';
 }
 
 export type FormTypes = UpdateFormAction;
@@ -21,14 +22,16 @@ export function updateFormState(
     serverPort: number,
     dbPort: number,
     dbName: string,
-    adminPassword: string
+    adminPassword: string,
+    mode: 'form' | 'timeseries'
 ): UpdateFormAction {
     return {
         type: FormTypeKeys.UPDATE_FORM_STATE,
         serverPort,
         dbPort,
         dbName,
-        adminPassword
+        adminPassword,
+        mode
     };
 }
 

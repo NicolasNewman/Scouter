@@ -23,7 +23,7 @@ import {
   IAdminScoutStatus,
   MainTabKeys
 } from "../reducers/admin";
-import { IStatisticData, ICompetitionData } from "../reducers/data";
+import { IGame, ITeam } from "../global/modelTypes";
 
 interface IProps {
   socket: SocketController;
@@ -51,10 +51,8 @@ interface IProps {
   matchNumber: number;
   isActive: boolean;
   // data
-  competitionData: ICompetitionData;
-  teamMins: IStatisticData;
-  teamMaxes: IStatisticData;
-  teamAverages: IStatisticData;
+  teamData: Array<ITeam>;
+  gameData: Array<IGame>;
   setMatchData: () => void;
 }
 
@@ -139,9 +137,8 @@ export default class Root extends Component<IProps, IState> {
               endSession={this.props.endSession}
               setSelectedMainTab={this.props.setSelectedMainTab}
               matchNumber={this.props.matchNumber}
-              teamMins={this.props.teamMins}
-              teamMaxes={this.props.teamMaxes}
-              teamAverages={this.props.teamAverages}
+              teamData={this.props.teamData}
+              gameData={this.props.gameData}
               setMatchData={this.props.setMatchData}
             />
           </div>

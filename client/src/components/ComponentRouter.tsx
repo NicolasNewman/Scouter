@@ -5,6 +5,7 @@ import Home from "./RouterComponents/Home";
 import DataInput from "./RouterComponents/DataInput/DataInput";
 import Visualize from "./RouterComponents/Visualize/Visualize";
 import Admin from "./RouterComponents/Admin/Admin";
+import Debug from "./RouterComponents/Debug/Debug";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RequestHandler from "../classes/RequestHandler";
 import { SocketController, ScoutingTargets } from "../classes/socketController";
@@ -13,12 +14,12 @@ import {
   IAdminScoutStatus,
   MainTabKeys
 } from "../reducers/admin";
-import { IStatisticData } from "../reducers/data";
+import { IGame, ITeam } from "../global/modelTypes";
 import { History } from "history";
 
 interface IProps {
-  isAdmin: boolean;
   requestHandler: RequestHandler;
+  isAdmin: boolean;
   socket: SocketController;
   history: History;
   formState: IAdminFormState;
@@ -33,9 +34,8 @@ interface IProps {
   setSelectedMainTab: (key: MainTabKeys) => void;
   scoutingTargets: ScoutingTargets;
   matchNumber: number;
-  teamMins: IStatisticData;
-  teamMaxes: IStatisticData;
-  teamAverages: IStatisticData;
+  teamData: Array<ITeam>;
+  gameData: Array<IGame>;
   setMatchData: () => void;
 }
 
@@ -49,6 +49,7 @@ export default class ComponentRouter extends Component<IProps> {
 
   constructor(props: IProps) {
     super(props);
+    console.log(this.props);
   }
 
   render() {
@@ -78,9 +79,8 @@ export default class ComponentRouter extends Component<IProps> {
             component={() => (
               <Visualize
                 history={this.props.history}
-                teamMins={this.props.teamMins}
-                teamMaxes={this.props.teamMaxes}
-                teamAverages={this.props.teamAverages}
+                teamData={this.props.teamData}
+                gameData={this.props.gameData}
               />
             )}
           />
@@ -103,6 +103,15 @@ export default class ComponentRouter extends Component<IProps> {
             )}
             path="/admin"
           />
+          <Route
+            path="/debug"
+            component={() => (
+              <Debug
+                socket={this.props.socket}
+                requestHandler={this.props.requestHandler}
+              />
+            )}
+          ></Route>
           <Route component={Home} />
         </Switch>
       </div>

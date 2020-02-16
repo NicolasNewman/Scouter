@@ -1,6 +1,10 @@
 # DHCP Server
 dhcp/
 
+# Client / Server globals
+client/src/global/*
+server/src/global/*
+
 # Logs
 logs
 *.log

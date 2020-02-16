@@ -30,7 +30,9 @@ export default class Navigation extends Component<IProps> {
           </span>
           <Link to="/home" />
         </Menu.Item>
-        <Menu.Item disabled={!this.props.isActive} key="entry">
+        <Menu.Item key="entry">
+          {" "}
+          {/* disabled={!this.props.isActive} key="entry"> */}
           <span>
             <Icon type="form" />
             <span>Entry</span>
@@ -50,6 +52,13 @@ export default class Navigation extends Component<IProps> {
             <span>Admin</span>
           </span>
           <Link to="/admin" />
+        </Menu.Item>
+        <Menu.Item key="debug">
+          <span>
+            <Icon type="bug" />
+            <span>Debug</span>
+          </span>
+          <Link to="/debug" />
         </Menu.Item>
       </Menu>
     );
