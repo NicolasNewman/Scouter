@@ -43,47 +43,91 @@ interface IState {
   autoButtonsDisabled: boolean;
   teleopButtonsDisabled: boolean;
   endgameButtonsDisabled: boolean;
+  globalDisabled: boolean;
 }
 
 export default class Home extends Component<IProps, IState> {
   props: IProps;
   // Stores constants that are needed by the event and state buttons
   constantProps: IConstantProps;
+  interval: NodeJS.Timeout;
 
   constructor(props: IProps) {
     super(props);
 
-    this.state = {
-      matchTime: 0,
-      phase: "NONE",
-      autoButtonsDisabled: true,
-      teleopButtonsDisabled: true,
-      endgameButtonsDisabled: true
-    };
+    if (this.props.scoutingTargets.length <= 0) {
+      this.state = {
+        matchTime: 0,
+        phase: "NONE",
+        autoButtonsDisabled: true,
+        teleopButtonsDisabled: true,
+        endgameButtonsDisabled: true,
+        globalDisabled: true
+      };
+      this.constantProps = {
+        handler: this.props.requestHandler,
+        getTime: this.getTime,
+        matchNumber: this.props.matchNumber,
+        teamNumber: -1
+      };
+    } else {
+      this.state = {
+        matchTime: 0,
+        phase: "NONE",
+        autoButtonsDisabled: true,
+        teleopButtonsDisabled: true,
+        endgameButtonsDisabled: true,
+        globalDisabled: false
+      };
+      this.constantProps = {
+        handler: this.props.requestHandler,
+        getTime: this.getTime,
+        matchNumber: this.props.matchNumber,
+        teamNumber: parseInt(this.props.scoutingTargets[0].team)
+      };
+    }
 
-    this.constantProps = {
-      handler: this.props.requestHandler,
-      getTime: this.getTime,
-      matchNumber: this.props.matchNumber,
-      teamNumber: parseInt(this.props.scoutingTargets[0].team)
+    this.componentDidUpdate = () => {
+      if (
+        this.constantProps.teamNumber === -1 &&
+        this.props.scoutingTargets.length > 0
+      ) {
+        this.constantProps.teamNumber = parseInt(
+          this.props.scoutingTargets[0].team
+        );
+      }
     };
 
     // Initialize an interval to query the match time from the server
-    setInterval(() => {
-      this.props.socket.emit(
-        emitableEvents.getRemainingTime,
-        undefined,
-        (remainingTime: number, phase: "AUTO" | "TELEOP" | "ENDGAME") => {
-          this.setState({
-            matchTime: remainingTime,
-            phase,
-            autoButtonsDisabled: phase === "AUTO" ? false : true,
-            teleopButtonsDisabled: phase === "TELEOP" ? false : true,
-            endgameButtonsDisabled: phase === "ENDGAME" ? false : true
-          });
-        }
-      );
-    }, 500);
+    if (this.props.scoutingTargets.length > 0) {
+      this.interval = setInterval(() => {
+        this.props.socket.emit(
+          emitableEvents.getRemainingTime,
+          undefined,
+          (remainingTime: number, phase: "AUTO" | "TELEOP" | "ENDGAME") => {
+            if (remainingTime < 0) {
+              clearInterval(this.interval);
+              this.setState({
+                matchTime: 0,
+                phase: "NONE",
+                autoButtonsDisabled: true,
+                teleopButtonsDisabled: true,
+                endgameButtonsDisabled: true,
+                globalDisabled: true
+              });
+            } else {
+              this.setState({
+                matchTime: remainingTime,
+                phase,
+                autoButtonsDisabled: phase === "AUTO" ? false : true,
+                teleopButtonsDisabled: phase === "TELEOP" ? false : true,
+                endgameButtonsDisabled: phase === "ENDGAME" ? false : true
+              });
+            }
+          }
+        );
+      }, 500);
+    }
   }
 
   getTime = (): number => {
@@ -142,6 +186,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Inner"
                   type={EScorableRobotEvents.POWERCELLS_INNER}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -151,6 +196,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Outer"
                   type={EScorableRobotEvents.POWERCELLS_OUTER}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -160,6 +206,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Bottom "
                   type={EScorableRobotEvents.POWERCELLS_BOTTOM}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -184,6 +231,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Foul"
                   type={EFoulEvents.FOUL}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -193,6 +241,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Tech Foul"
                   type={EFoulEvents.TECH_FOUL}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -202,6 +251,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Yellow Card"
                   type={EFoulEvents.YELLOW_CARD}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -211,6 +261,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Red Card"
                   type={EFoulEvents.RED_CARD}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -238,8 +289,9 @@ export default class Home extends Component<IProps, IState> {
                   label="Wheel"
                   type={ERobotStates.WHEEL}
                   disabled={
-                    this.state.teleopButtonsDisabled &&
-                    this.state.endgameButtonsDisabled
+                    this.state.globalDisabled ||
+                    (this.state.teleopButtonsDisabled &&
+                      this.state.endgameButtonsDisabled)
                   }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
@@ -250,6 +302,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Shooting"
                   type={ERobotStates.SHOOTING}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -259,6 +312,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Gathering"
                   type={ERobotStates.GATHERING}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -268,7 +322,10 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Climbing"
                   type={ERobotStates.CLIMBING}
-                  disabled={this.state.endgameButtonsDisabled}
+                  disabled={
+                    this.state.globalDisabled ||
+                    this.state.endgameButtonsDisabled
+                  }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -278,6 +335,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Defending"
                   type={ERobotStates.DEFENDING}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -311,7 +369,9 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Initiation"
                   type={EScorableRobotEvents.INITIATION}
-                  disabled={this.state.autoButtonsDisabled}
+                  disabled={
+                    this.state.globalDisabled || this.state.autoButtonsDisabled
+                  }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -321,7 +381,10 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Hang"
                   type={EScorableRobotEvents.HANG}
-                  disabled={this.state.endgameButtonsDisabled}
+                  disabled={
+                    this.state.globalDisabled ||
+                    this.state.endgameButtonsDisabled
+                  }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -331,7 +394,10 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Park"
                   type={EScorableRobotEvents.PARK}
-                  disabled={this.state.endgameButtonsDisabled}
+                  disabled={
+                    this.state.globalDisabled ||
+                    this.state.endgameButtonsDisabled
+                  }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
@@ -356,8 +422,9 @@ export default class Home extends Component<IProps, IState> {
                   label="Position"
                   type={EScorableRobotEvents.POSITION_CONTROL}
                   disabled={
-                    this.state.teleopButtonsDisabled &&
-                    this.state.endgameButtonsDisabled
+                    this.state.globalDisabled ||
+                    (this.state.teleopButtonsDisabled &&
+                      this.state.endgameButtonsDisabled)
                   }
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
@@ -368,6 +435,7 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Rotation"
                   type={EScorableRobotEvents.ROTATION_CONTROL}
+                  disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
