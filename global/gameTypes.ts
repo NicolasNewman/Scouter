@@ -83,7 +83,8 @@ export enum ERobotStates {
   SHOOTING = "SHOOTING",
   GATHERING = "GATHERING",
   CLIMBING = "CLIMBING",
-  DEFENDING = "DEFENDING"
+  DEFENDING = "DEFENDING",
+  DEFENDED = "DEFENDED"
 }
 
 /*==============================

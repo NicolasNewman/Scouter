@@ -277,12 +277,11 @@ export default class Home extends Component<IProps, IState> {
               'title      title   '
               'gather     shooting'
               'wheel      climbing'
-              'defending      .   '"
+              'defending  defended'"
               gridElements={[
                 <div className="input-grid__title">
                   <p>States</p>
                 </div>,
-
                 <StateButton
                   gridAreaName="wheel"
                   constants={this.constantProps}
@@ -335,6 +334,16 @@ export default class Home extends Component<IProps, IState> {
                   constants={this.constantProps}
                   label="Defending"
                   type={ERobotStates.DEFENDING}
+                  disabled={this.state.globalDisabled}
+                  phase={
+                    this.state.phase === "NONE" ? "AUTO" : this.state.phase
+                  }
+                />,
+                <StateButton
+                  gridAreaName="defended"
+                  constants={this.constantProps}
+                  label="Defended"
+                  type={ERobotStates.DEFENDED}
                   disabled={this.state.globalDisabled}
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
