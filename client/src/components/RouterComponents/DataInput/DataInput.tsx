@@ -115,6 +115,15 @@ export default class Home extends Component<IProps, IState> {
                 endgameButtonsDisabled: true,
                 globalDisabled: true
               });
+
+              const identifier = `${
+                this.props.scoutingTargets[0].alliance === "red" ? "r" : "b"
+              }-${this.props.scoutingTargets[0].seed}-scout`;
+
+              this.props.socket.emit(
+                emitableEvents.scoutingFormSubmited,
+                identifier
+              );
             } else {
               this.setState({
                 matchTime: remainingTime,
