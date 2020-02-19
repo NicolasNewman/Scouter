@@ -119,6 +119,7 @@ matchSchema.virtual('accuracy').get(function(this: IMatch) {
  * 3) They shoot
  */
 matchSchema.virtual('cycle').get(function(this: IMatch) {
+    // 1) Filter the states that are part of the cycleStart or end into cycleStates
     let cycleStates: Array<IRobotState> = [];
 
     // Add the states that determine a cycles start or end to a list
@@ -131,19 +132,18 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
         }
     });
 
-    // Sort the events in that list by time
+    // 2) Sort the events in that list by time
     cycleStates = cycleStates.sort((a, b) => {
         if (a.start && b.start) {
             return a.start < b.start ? 1 : -1;
         }
         return 0;
     });
-    console.log('SORTED BY TIME');
-    console.log(cycleStates);
 
-    // Get the time intervals of each cycle
+    // 3) Figure out the time intervals that each cycle happens over
     const cycleIntervals: Array<Duration> = [{}];
     let cycleIntervalIndx = 0;
+    // Flag to keep track of if we are at the start of a cycle
     let onStart = true;
     cycleStates.forEach((state, i) => {
         // The very first event could be either cycleStart or cycleEnd, depending on if the robot starts pre-loaded and chooses to shoot
@@ -188,10 +188,7 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
         cycleIntervals.pop();
     }
 
-    console.log('INTERVALS');
-    console.log(cycleIntervals);
-
-    // Build the array of cycles
+    // 4) Build the array of cycles
     const cycles: Array<ICycle> = [];
     // Loop through each previously computed interval
     cycleIntervals.forEach(interval => {
@@ -199,11 +196,8 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
         const cycleStates: Array<IRobotState> = [];
         // Find the events that took place on that interval
         this.robotEvents.forEach(event => {
-            console.log(`Checking event ${event.type}`);
             if (interval.start && interval.end) {
-                console.log(
-                    `The event happened at ${event.start} and the interval is on [${interval.start},${interval.end}]`
-                );
+                // Check if the event happened over the interval for that cycle
                 if (
                     interval.start >= event.start &&
                     event.start >= interval.end
@@ -215,6 +209,7 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
         // Find the states that took place on that interval
         this.robotStates.forEach(state => {
             if (interval.start && state.start && state.end && interval.end) {
+                // Check if the event happened over the interval for that cycle
                 if (
                     interval.start >= state.start &&
                     state.end >= interval.end
