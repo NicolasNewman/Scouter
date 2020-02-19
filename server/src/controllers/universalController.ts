@@ -113,8 +113,8 @@ export const download = catchAsync(
         console.log('compiling');
         dataCompiler().then(data => {
             console.log(data);
-            res.attachment('scouting-data.json');
-            res.type('json');
+            res.attachment('scouting-data.csv');
+            res.type('csv');
             res.send(data);
         });
 
