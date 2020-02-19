@@ -95,7 +95,7 @@ const dataCompiler = async (): Promise<string> => {
         }
 
         // match.cycle.forEach((cycle, i) => {
-        let matchCycles = autoCycles;
+        let matchCycles = 0;
         let foul = 0;
         let techFoul = 0;
         let rotation = 'No';
@@ -103,8 +103,8 @@ const dataCompiler = async (): Promise<string> => {
         let parkOrClimb = 'No';
         let climbDuration = 0;
         for (let i = autoCycles; i < match.cycle.length; i++) {
-            matchCycles = i;
-            if (i >= 24) {
+            matchCycles++;
+            if (matchCycles >= 24) {
                 break;
             }
             const cycle = match.cycle[i];
@@ -139,10 +139,10 @@ const dataCompiler = async (): Promise<string> => {
                 }
             });
 
-            let defnededAgainst = 'No';
+            let defendedAgainst = 'No';
             cycle.cycleStates.forEach(state => {
                 if (state.type === ERobotStates.DEFENDED) {
-                    defnededAgainst = 'Yes';
+                    defendedAgainst = 'Yes';
                 } else if (state.type === ERobotStates.CLIMBING) {
                     parkOrClimb = 'Yes';
                     if (state.start && state.end) {
@@ -152,7 +152,7 @@ const dataCompiler = async (): Promise<string> => {
             });
             data = addDataToRow(data, attempt);
             data = addDataToRow(data, scored);
-            data = addDataToRow(data, defnededAgainst);
+            data = addDataToRow(data, defendedAgainst);
             data = addDataToRow(data, 'and then?'); // and then is blank
         }
         if (matchCycles < 24) {
