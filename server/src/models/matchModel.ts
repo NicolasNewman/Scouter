@@ -8,6 +8,7 @@ import { ICycle } from '../global/modelTypes';
 export interface IMatch extends Document {
     matchNumber: number;
     teamNumber: number;
+    alliance: string;
     robotEvents: Array<IRobotEvent>;
     robotStates: Array<IRobotState>;
 }
@@ -40,6 +41,11 @@ const matchSchema = new Schema({
     teamNumber: {
         type: Number,
         required: [true, 'A match must have a team number!']
+    },
+    alliance: {
+        type: String,
+        enum: ['red', 'blue'],
+        required: [true, 'A match must have an alliance color']
     },
     robotEvents: [
         {

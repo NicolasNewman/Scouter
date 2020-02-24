@@ -36,7 +36,7 @@ const dataCompiler = async (): Promise<string> => {
         }
 
         // TODO alliance color
-        data = addDataToRow(data, 'color');
+        data = addDataToRow(data, match.alliance);
         // team number
         data = addDataToRow(data, match.teamNumber);
         // Initiation?
@@ -45,7 +45,7 @@ const dataCompiler = async (): Promise<string> => {
             eventHappened(match.robotEvents, EScorableRobotEvents.INITIATION)
         );
         // TODO try to score: regex to replace phrase once you know in loop?
-        data = addDataToRow(data, 'played in auto?');
+        data = addDataToRow(data, '$PLAYED_IN_AUTO');
 
         // Get auto scores
         let autoCycles = 0;
@@ -94,7 +94,14 @@ const dataCompiler = async (): Promise<string> => {
             }
         }
 
-        // match.cycle.forEach((cycle, i) => {
+        // Now that we know if the robot played in auto, update the previous field
+        if (autoCycles > 0) {
+            data = data.replace('$PLAYED_IN_AUTO', 'Yes');
+        } else {
+            data = data.replace('$PLAYED_IN_AUTO', 'Yes');
+        }
+
+        // Now compute the cycles for teleop
         let matchCycles = 0;
         let foul = 0;
         let techFoul = 0;
@@ -146,7 +153,7 @@ const dataCompiler = async (): Promise<string> => {
                 } else if (state.type === ERobotStates.CLIMBING) {
                     parkOrClimb = 'Yes';
                     if (state.start && state.end) {
-                        climbDuration = state.start - state.end;
+                        climbDuration += state.start - state.end;
                     }
                 }
             });

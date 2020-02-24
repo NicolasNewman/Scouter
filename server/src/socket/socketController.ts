@@ -221,34 +221,6 @@ export default class SocketController {
                                                 logger.info(
                                                     `Found team #${teamDoc?.teamNumber}`
                                                 );
-                                                const matchObj = {
-                                                    matchNumber: parseInt(
-                                                        formValues.matchNumber
-                                                    ),
-                                                    teamNumber: parseInt(
-                                                        teamNumber
-                                                    ),
-                                                    robotEvents: [],
-                                                    robotState: []
-                                                };
-                                                const matchDoc = await Match.create(
-                                                    matchObj
-                                                );
-                                                logger.info('Created match');
-                                                logger.info(matchDoc);
-
-                                                // Push the newly created match's ObjectID to the team's match list
-                                                teamDoc.matches.push(
-                                                    matchDoc._id
-                                                );
-                                                logger.info(
-                                                    'Saving teamDoc...'
-                                                );
-
-                                                await teamDoc.save();
-                                                logger.info(
-                                                    `Saved match #${matchObj.matchNumber} to team ${teamDoc.teamNumber}`
-                                                );
 
                                                 // Keys are stored as alliance-seed-type and can be split to get specific information
                                                 const splitFields = key.split(
@@ -269,6 +241,36 @@ export default class SocketController {
 
                                                 logger.info(
                                                     `${scout} is scouting the team ${teamNumber} which is seed ${seed} on the ${alliance} alliance`
+                                                );
+
+                                                const matchObj = {
+                                                    matchNumber: parseInt(
+                                                        formValues.matchNumber
+                                                    ),
+                                                    teamNumber: parseInt(
+                                                        teamNumber
+                                                    ),
+                                                    alliance,
+                                                    robotEvents: [],
+                                                    robotState: []
+                                                };
+                                                const matchDoc = await Match.create(
+                                                    matchObj
+                                                );
+                                                logger.info('Created match');
+                                                logger.info(matchDoc);
+
+                                                // Push the newly created match's ObjectID to the team's match list
+                                                teamDoc.matches.push(
+                                                    matchDoc._id
+                                                );
+                                                logger.info(
+                                                    'Saving teamDoc...'
+                                                );
+
+                                                await teamDoc.save();
+                                                logger.info(
+                                                    `Saved match #${matchObj.matchNumber} to team ${teamDoc.teamNumber}`
                                                 );
 
                                                 // Update the game document's match for the corrosponding seed and alliance
