@@ -190,20 +190,21 @@ export default class Home extends Component<IProps, IState> {
                 <div className="input-grid__title">
                   <p>Powercells</p>
                 </div>,
-                <AccuracyEventButton
-                  gridAreaName="inner"
-                  constants={this.constantProps}
-                  label="Inner"
-                  type={EScorableRobotEvents.POWERCELLS_INNER}
-                  disabled={this.state.globalDisabled}
-                  phase={
-                    this.state.phase === "NONE" ? "AUTO" : this.state.phase
-                  }
-                />,
+                // <AccuracyEventButton
+                //   gridAreaName="inner"
+                //   constants={this.constantProps}
+                //   label="Inner"
+                //   type={EScorableRobotEvents.POWERCELLS_INNER}
+                //   disabled={this.state.globalDisabled}
+                //   phase={
+                //     this.state.phase === "NONE" ? "AUTO" : this.state.phase
+                //   }
+                // />,
                 <AccuracyEventButton
                   gridAreaName="outer"
                   constants={this.constantProps}
-                  label="Outer"
+                  // label="Outer"
+                  label="Top"
                   type={EScorableRobotEvents.POWERCELLS_OUTER}
                   disabled={this.state.globalDisabled}
                   phase={
