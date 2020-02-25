@@ -65,5 +65,5 @@ const exclude = [".git", "node_modules", "release", "dist"];
 findFiles(root, "package.json", exclude, path => {
   let content = JSON.parse(fs.readFileSync(path, "utf-8"));
   content.version = argv._[0];
-  fs.writeFileSync(path, JSON.stringify(content));
+  fs.writeFileSync(path, JSON.stringify(content, null, 1));
 });
