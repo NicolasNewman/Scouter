@@ -10,12 +10,14 @@ const argv = require("yargs")
     "$0 increment -v 1.1.2",
     "Update the version in all package.jsons to 1.1.2"
   )
-  .alias("v", "version")
+  .alias("v", "update")
   .nargs("v", 1)
   .describe("v", "Version you are updating to")
   .demandOption(["v"])
   .help("h")
   .alias("h", "help").argv;
+
+console.log(argv);
 
 const findFiles = (root, filename, exclude, fn) => {
   if (!fs.existsSync(root)) {
@@ -45,6 +47,6 @@ const root = argv.dir ? argv.dir : "./";
 const exclude = [".git", "node_modules", "release", "dist"];
 findFiles(root, "package.json", exclude, path => {
   let content = JSON.parse(fs.readFileSync(path, "utf-8"));
-  content.version = argv._[0];
+  content.version = argv.v;
   fs.writeFileSync(path, JSON.stringify(content, null, 1));
 });
