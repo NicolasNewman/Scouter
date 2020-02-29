@@ -21,12 +21,6 @@ interface IGameProperties {
   endgame: Duration;
 }
 
-interface ICycleDeterminer {
-  cycleStart: string;
-  cycleEnd: string;
-  startWithEnd: boolean;
-}
-
 /*==============================
 ||           Events           ||
 ==============================*/
@@ -189,8 +183,4 @@ export const gameProperties: IGameProperties = {
   endgame: { start: 120, end: 150 }
 };
 
-export const cycleDeterminer: ICycleDeterminer = {
-  cycleStart: ERobotStates.GATHERING,
-  cycleEnd: ERobotStates.SHOOTING,
-  startWithEnd: true
-};
+export const cycleDeterminer = ERobotStates.GATHERING;

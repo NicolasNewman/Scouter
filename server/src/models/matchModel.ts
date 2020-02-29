@@ -130,10 +130,7 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
 
     // Add the states that determine a cycles start or end to a list
     this.robotStates.forEach(state => {
-        if (
-            state.type === cycleDeterminer.cycleStart ||
-            state.type === cycleDeterminer.cycleEnd
-        ) {
+        if (state.type === cycleDeterminer) {
             cycleStates.push(state);
         }
     });
@@ -149,39 +146,19 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
     // 3) Figure out the time intervals that each cycle happens over
     const cycleIntervals: Array<Duration> = [{}];
     let cycleIntervalIndx = 0;
-    // Flag to keep track of if we are at the start of a cycle
-    let onStart = true;
     cycleStates.forEach((state, i) => {
-        // The very first event could be either cycleStart or cycleEnd, depending on if the robot starts pre-loaded and chooses to shoot
-        if (state.type === cycleDeterminer.cycleEnd && i === 0) {
+        // The first event starts when the when the game starts
+        if (i === 0) {
             cycleIntervals[0] = {
                 start: gameProperties.matchDuration,
                 end: state.end
             };
             cycleIntervalIndx++;
-            cycleIntervals.push({});
-        }
-
-        // If we are looking for the begining of a cycle
-        if (
-            onStart &&
-            !cycleIntervals[cycleIntervalIndx].start &&
-            state.type === cycleDeterminer.cycleStart
-        ) {
-            cycleIntervals[cycleIntervalIndx].start = state.start;
-            onStart = false;
-        }
-
-        // If we are looking for the end of a cycle
-        if (
-            !onStart &&
-            !cycleIntervals[cycleIntervalIndx].end &&
-            state.type === cycleDeterminer.cycleEnd
-        ) {
+            cycleIntervals.push({ start: state.end });
+        } else {
             cycleIntervals[cycleIntervalIndx].end = state.end;
-            onStart = true;
             cycleIntervalIndx++;
-            cycleIntervals.push({});
+            cycleIntervals.push({ start: state.end });
         }
     });
 
