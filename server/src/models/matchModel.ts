@@ -162,6 +162,9 @@ matchSchema.virtual('cycle').get(function(this: IMatch) {
         }
     });
 
+    // Bridge the last event so it has an end
+    cycleIntervals[cycleIntervalIndx].end = 0;
+
     // Remove a trailing cycle if its empty
     if (
         cycleIntervals.length > 0 &&
