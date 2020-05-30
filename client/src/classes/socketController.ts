@@ -1,6 +1,5 @@
 import * as socketIOClient from "socket.io-client";
 import store from "../entrypoints/home";
-// import { Store } from "redux";
 import { setAdminStatus } from "../actions/user";
 import { setScoutingTargets } from "../actions/scouting";
 import { setScoutStatus } from "../actions/admin";
@@ -10,7 +9,7 @@ import { message } from "antd";
 export const socketEvents = {
   isAdmin: "isAdmin",
   assignScout: "assignScout",
-  scoutFinished: "scoutFinished"
+  scoutFinished: "scoutFinished",
 };
 
 export const emitableEvents = {
@@ -18,7 +17,7 @@ export const emitableEvents = {
   getUsers: "getUsers",
   adminFormSubmited: "adminFormSubmited",
   scoutingFormSubmited: "scoutingFormSubmited",
-  getRemainingTime: "getRemainingTime"
+  getRemainingTime: "getRemainingTime",
 };
 
 export interface IScoutingTarget {
@@ -42,10 +41,18 @@ interface IAssignScoutPacket {
   matchNumber: number;
 }
 
+/**
+ * SocketIO client implementnation class
+ *
+ * Listeners for server socket events are placed in here
+ *
+ * Any emits to the server should utilize the emit helper
+ */
 export class SocketController {
   socket: SocketIOClient.Socket;
   constructor(address: string) {
     this.socket = socketIOClient(address);
+
     /**
      * Received once the server has verified wheather or not this user is an admin
      */
@@ -55,6 +62,7 @@ export class SocketController {
         store.dispatch(setAdminStatus(true));
       }
     });
+
     /**
      * Received once the server has pre-configured the database for a game and has sent each scout their targets
      */

@@ -1,10 +1,14 @@
 import axios, { AxiosInstance } from "axios";
 
+/**
+ * Contains logic to make GET and POST requests from the client to the server
+ */
 export default class RequestHandler {
   instance: AxiosInstance;
+
   constructor(baseURL: string) {
     this.instance = axios.create({
-      baseURL
+      baseURL,
     });
   }
 
