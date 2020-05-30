@@ -4,7 +4,7 @@ import { Component } from "react";
 import {
   ScoutingTargets,
   SocketController,
-  emitableEvents
+  emitableEvents,
 } from "../../../classes/socketController";
 
 import Grid from "../../Grid/Grid";
@@ -17,7 +17,7 @@ import AccuracyEventButton from "./DataInputFormComponents/AccuracyEventButton";
 import {
   EScorableRobotEvents,
   EFoulEvents,
-  ERobotStates
+  ERobotStates,
 } from "../../../global/gameTypes";
 
 interface IProps {
@@ -29,7 +29,9 @@ interface IProps {
   setMatchData: () => void;
 }
 
-// Stores constants that are needed by the event and state buttons
+/**
+ * Stores constants that are needed by the event and state buttons
+ */
 export interface IConstantProps {
   handler: RequestHandler;
   getTime: () => number;
@@ -62,13 +64,13 @@ export default class Home extends Component<IProps, IState> {
         autoButtonsDisabled: true,
         teleopButtonsDisabled: true,
         endgameButtonsDisabled: true,
-        globalDisabled: true
+        globalDisabled: true,
       };
       this.constantProps = {
         handler: this.props.requestHandler,
         getTime: this.getTime,
         matchNumber: this.props.matchNumber,
-        teamNumber: -1
+        teamNumber: -1,
       };
     } else {
       this.state = {
@@ -77,13 +79,13 @@ export default class Home extends Component<IProps, IState> {
         autoButtonsDisabled: true,
         teleopButtonsDisabled: true,
         endgameButtonsDisabled: true,
-        globalDisabled: false
+        globalDisabled: false,
       };
       this.constantProps = {
         handler: this.props.requestHandler,
         getTime: this.getTime,
         matchNumber: this.props.matchNumber,
-        teamNumber: parseInt(this.props.scoutingTargets[0].team)
+        teamNumber: parseInt(this.props.scoutingTargets[0].team),
       };
     }
 
@@ -113,7 +115,7 @@ export default class Home extends Component<IProps, IState> {
                 autoButtonsDisabled: true,
                 teleopButtonsDisabled: true,
                 endgameButtonsDisabled: true,
-                globalDisabled: true
+                globalDisabled: true,
               });
 
               const identifier = `${
@@ -130,7 +132,7 @@ export default class Home extends Component<IProps, IState> {
                 phase,
                 autoButtonsDisabled: phase === "AUTO" ? false : true,
                 teleopButtonsDisabled: phase === "TELEOP" ? false : true,
-                endgameButtonsDisabled: phase === "ENDGAME" ? false : true
+                endgameButtonsDisabled: phase === "ENDGAME" ? false : true,
               });
             }
           }
@@ -145,7 +147,7 @@ export default class Home extends Component<IProps, IState> {
 
   render() {
     const scoutingTargets = this.props.scoutingTargets
-      .map(obj => {
+      .map((obj) => {
         return obj.team;
       })
       .join(", ");
@@ -164,7 +166,7 @@ export default class Home extends Component<IProps, IState> {
             <h2 style={{ gridArea: "match" }}>
               Match: {this.props.matchNumber}
             </h2>,
-            <h2 style={{ gridArea: "team" }}>Team: {scoutingTargets}</h2>
+            <h2 style={{ gridArea: "team" }}>Team: {scoutingTargets}</h2>,
           ]}
         />
         <Grid
@@ -220,7 +222,7 @@ export default class Home extends Component<IProps, IState> {
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
-                />
+                />,
               ]}
             />,
             <Grid
@@ -275,7 +277,7 @@ export default class Home extends Component<IProps, IState> {
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
-                />
+                />,
               ]}
             />,
             <Grid
@@ -358,7 +360,7 @@ export default class Home extends Component<IProps, IState> {
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
-                />
+                />,
               ]}
             />,
             // TODO re-add the team events
@@ -420,13 +422,13 @@ export default class Home extends Component<IProps, IState> {
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
-                />
+                />,
               ]}
             />,
             <Grid
               gridAreaName="wheel-event"
               className="input-grid__child"
-              cols="1f 1fr"
+              cols="1fr 1fr"
               rows="20% 80%"
               templateArea="
               'title       title'
@@ -458,9 +460,9 @@ export default class Home extends Component<IProps, IState> {
                   phase={
                     this.state.phase === "NONE" ? "AUTO" : this.state.phase
                   }
-                />
+                />,
               ]}
-            />
+            />,
           ]}
         />
       </div>
