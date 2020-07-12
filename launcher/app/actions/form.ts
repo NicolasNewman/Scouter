@@ -4,11 +4,9 @@ export enum FormTypeKeys {
 
 interface UpdateFormAction {
     type: FormTypeKeys.UPDATE_FORM_STATE;
-    serverPort: number;
-    dbPort: number;
     dbName: string;
     adminPassword: string;
-    mode: 'form' | 'timeseries';
+    filePath: string;
 }
 
 export type FormTypes = UpdateFormAction;
@@ -19,19 +17,15 @@ export type FormTypes = UpdateFormAction;
  * @param dbPort the port used to connect to the database
  */
 export function updateFormState(
-    serverPort: number,
-    dbPort: number,
     dbName: string,
     adminPassword: string,
-    mode: 'form' | 'timeseries'
+    filePath: string
 ): UpdateFormAction {
     return {
         type: FormTypeKeys.UPDATE_FORM_STATE,
-        serverPort,
-        dbPort,
         dbName,
         adminPassword,
-        mode
+        filePath
     };
 }
 

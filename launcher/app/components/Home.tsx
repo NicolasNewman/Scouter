@@ -15,14 +15,12 @@ interface IProps extends RouteComponentProps<any> {
     dbPort: number;
     dbName: string;
     adminPassword: string;
-    mode: 'form' | 'timeseries';
+    filePath: string;
     logText: string;
     updateFormState: (
-        serverPort: number,
-        dbPort: number,
         dbName: string,
         adminPassword: string,
-        mode: 'form' | 'timeseries'
+        filePath: string
     ) => void;
     logEvent: (event: string) => void;
 }
@@ -74,7 +72,9 @@ export default class Home extends Component<IProps, IState> {
                         dataStore={this.props.dataStore}
                         serverPort={this.props.serverPort}
                         dbPort={this.props.dbPort}
-                        mode={this.props.mode}
+                        filePath={this.props.filePath}
+                        dbName={this.props.dbName}
+                        adminPassword={this.props.adminPassword}
                         updateFormState={this.props.updateFormState}
                         handleFormSubmit={this.handleFormSubmit}
                     />
@@ -91,7 +91,7 @@ export default class Home extends Component<IProps, IState> {
                         dbPort={this.props.dbPort}
                         dbName={this.props.dbName}
                         adminPassword={this.props.adminPassword}
-                        mode={this.props.mode}
+                        filePath={this.props.filePath}
                     />
                 </TabPane>
             </Tabs>

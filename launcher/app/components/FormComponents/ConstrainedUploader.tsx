@@ -47,7 +47,11 @@ export default class ConstrainedUploader extends Component<IProps, IState> {
 
     render() {
         return (
-            <Upload onChange={this.handleChange} fileList={this.state.fileList}>
+            <Upload
+                accept=".sdc"
+                onChange={this.handleChange}
+                fileList={this.state.fileList}
+            >
                 <Button>
                     <UploadOutlined /> {this.props.btnText}
                 </Button>

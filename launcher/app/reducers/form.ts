@@ -8,7 +8,7 @@ interface IFormState {
     dbPort: number;
     dbName: string;
     adminPassword: string;
-    mode: 'form' | 'timeseries';
+    filePath: string;
 }
 
 const initialState: IFormState = {
@@ -16,7 +16,7 @@ const initialState: IFormState = {
     dbPort: dataStore.get('dbPort') || 27017,
     dbName: dataStore.get('dbName') || 'regional_data',
     adminPassword: dataStore.get('adminPassword') || '',
-    mode: dataStore.get('mode') || ''
+    filePath: dataStore.get('filePath') || ''
 };
 
 export default function form(
@@ -26,11 +26,9 @@ export default function form(
     switch (action.type) {
         case FormTypeKeys.UPDATE_FORM_STATE:
             return {
-                serverPort: action.serverPort,
-                dbPort: action.dbPort,
                 dbName: action.dbName,
                 adminPassword: action.adminPassword,
-                mode: action.mode
+                filePath: action.filePath
             };
         default:
             return state;

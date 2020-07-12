@@ -26,11 +26,11 @@ const writeEnv = (
     dbPort: number,
     dbName: string,
     password: string,
-    mode: 'form' | 'timeseries'
+    filePath: string
 ): Promise<{ error: boolean; errorMsg: string }> => {
     return new Promise((res, rej) => {
         const envPath = path.join(process.resourcesPath, 'server/.env');
-        const data = `DB_HOSTNAME=localhost\nDB_PORT=27017\nDB_NAME=${dbName}\nPASSWORD=${password}\nMODE=${mode}
+        const data = `DB_HOSTNAME=localhost\nDB_PORT=27017\nDB_NAME=${dbName}\nPASSWORD=${password}\nFILE_PATH=${filePath}
         `;
         fs.writeFile(envPath, data, err => {
             if (err) {

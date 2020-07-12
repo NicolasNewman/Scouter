@@ -11,7 +11,7 @@ function mapStateToProps(state, ownProps) {
         dbPort: state.form.dbPort,
         dbName: state.form.dbName,
         adminPassword: state.form.adminPassword,
-        mode: state.form.mode,
+        filePath: state.form.filePath,
         logText: state.log.text
     };
 }
@@ -26,7 +26,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     );
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

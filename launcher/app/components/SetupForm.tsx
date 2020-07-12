@@ -13,14 +13,14 @@ import RememberSubmit from './FormComponents/RememberSubmit';
 interface IProps {
     dataStore: DataStore;
     serverPort: number;
+    dbName: string;
     dbPort: number;
-    mode: 'form' | 'timeseries';
+    adminPassword: string;
+    filePath: string;
     updateFormState: (
-        serverPort: number,
-        dbPort: number,
         dbName: string,
         adminPassword: string,
-        mode: 'form' | 'timeseries'
+        filePath: string
     ) => void;
     handleFormSubmit: () => void;
 }
@@ -46,46 +46,31 @@ class SetupForm extends Component<IProps> {
     }
 
     handleSubmit = (values): void => {
-        console.log('HANDLE SUBMIT');
-        console.log(values);
-        // e.preventDefault();
-        // this.props.form.validateFields((err, vals) => {
-        //     console.log(vals);
-        //     console.log(err);
-        //     if (!err && vals.save) {
-        //         // console.log('serverPort');
-        //         // this.props.dataStore.set('serverPort', vals.serverPort);
-        //         // console.log('dbPort');
-        //         // this.props.dataStore.set('dbPort', vals.dbPort);
-        //         // console.log('dbName');
-        //         this.props.dataStore.set('dbName', vals.dbName);
-        //         this.props.dataStore.set('adminPassword', vals.adminPassword);
-        //         // this.props.dataStore.set('mode', 'vals.mode');
-        //     }
-        //     if (!err) {
-        //         this.props.updateFormState(
-        //             vals.serverPort,
-        //             vals.dbPort,
-        //             vals.dbName,
-        //             vals.adminPassword,
-        //             vals.mode
-        //         );
-        //         this.props.handleFormSubmit();
-        //     }
-        // });
+        const dbName = values.dbName;
+        const adminPassword = values.adminPassword;
+        const save = values.save.checked;
+        let filePath = null;
+        if (values.customModule.head) {
+            filePath = values.customModule.head.originFileObj.path;
+        }
+        console.log(filePath);
+
+        if (save) {
+            this.props.dataStore.set('dbName', dbName);
+            this.props.dataStore.set('adminPassword', adminPassword);
+        }
+        this.props.updateFormState(
+            dbName,
+            adminPassword,
+            filePath ? filePath : ''
+        );
+        this.props.handleFormSubmit();
     };
 
     validateModules = (rule, value) => {
-        console.log(rule);
-        console.log(value);
-        // console.log(callback);
         if (value && value.head) {
-            console.log(value);
-            console.log(value.head);
             const fName: string = value.head.name;
-            console.log(fName);
             if (!fName.endsWith('.sdc')) {
-                console.log('cb');
                 return Promise.reject('The uploaded file is not an .sdc file');
             }
         }
@@ -109,7 +94,6 @@ class SetupForm extends Component<IProps> {
                                 className="form__item--tooltip"
                                 title="The name of the database document in MongoDB"
                             >
-                                {/* <Icon type="question-circle" /> */}
                                 <QuestionCircleOutlined />
                             </Tooltip>
                         </span>
@@ -122,7 +106,10 @@ class SetupForm extends Component<IProps> {
                         }
                     ]}
                 >
-                    <Input className="form__item--number-input" />
+                    <Input
+                        defaultValue={this.props.dbName}
+                        className="form__item--number-input"
+                    />
                 </Form.Item>
                 {/* Admin password field */}
                 <Form.Item
@@ -134,7 +121,6 @@ class SetupForm extends Component<IProps> {
                                 className="form__item--tooltip"
                                 title="The username needed to login as admin"
                             >
-                                {/* <Icon type="question-circle" /> */}
                                 <QuestionCircleOutlined />
                             </Tooltip>
                         </span>
@@ -147,7 +133,10 @@ class SetupForm extends Component<IProps> {
                         }
                     ]}
                 >
-                    <Input.Password className="form__item--number-input" />
+                    <Input.Password
+                        defaultValue={this.props.adminPassword}
+                        className="form__item--number-input"
+                    />
                 </Form.Item>
                 {/* File uploader */}
                 <Form.Item
@@ -159,7 +148,6 @@ class SetupForm extends Component<IProps> {
                                 className="form__item--tooltip"
                                 title="If a custom form has been created, upload the .sdc file here"
                             >
-                                {/* <Icon type="question-circle" /> */}
                                 <QuestionCircleOutlined />
                             </Tooltip>
                         </span>
