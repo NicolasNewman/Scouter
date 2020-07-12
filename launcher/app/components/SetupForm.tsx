@@ -46,11 +46,12 @@ class SetupForm extends Component<IProps> {
     }
 
     handleSubmit = (values): void => {
+        console.log(values);
         const dbName = values.dbName;
         const adminPassword = values.adminPassword;
         const save = values.save.checked;
         let filePath = null;
-        if (values.customModule.head) {
+        if (values.customModule && values.customModule.head) {
             filePath = values.customModule.head.originFileObj.path;
         }
         console.log(filePath);
@@ -83,6 +84,10 @@ class SetupForm extends Component<IProps> {
                 className="form"
                 ref={this.formRef}
                 onFinish={this.handleSubmit}
+                initialValues={{
+                    dbName: this.props.dbName,
+                    adminPassword: this.props.adminPassword
+                }}
             >
                 {/* Database name field */}
                 <Form.Item
@@ -106,10 +111,7 @@ class SetupForm extends Component<IProps> {
                         }
                     ]}
                 >
-                    <Input
-                        defaultValue={this.props.dbName}
-                        className="form__item--number-input"
-                    />
+                    <Input className="form__item--number-input" />
                 </Form.Item>
                 {/* Admin password field */}
                 <Form.Item
@@ -133,10 +135,7 @@ class SetupForm extends Component<IProps> {
                         }
                     ]}
                 >
-                    <Input.Password
-                        defaultValue={this.props.adminPassword}
-                        className="form__item--number-input"
-                    />
+                    <Input.Password className="form__item--number-input" />
                 </Form.Item>
                 {/* File uploader */}
                 <Form.Item

@@ -15,7 +15,9 @@ interface ILocations {
     CLIENT: {
         ROOT: string;
         NODE_MODULES: string;
+        CUSTOM: string;
     };
+    GLOBAL: string;
 }
 
 interface IScripts {
@@ -48,8 +50,10 @@ export default class ResourceManager {
             },
             CLIENT: {
                 ROOT: path.join(this.root, 'client'),
-                NODE_MODULES: path.join(this.root, 'client/node_modules')
-            }
+                NODE_MODULES: path.join(this.root, 'client/node_modules'),
+                CUSTOM: path.join(this.root, 'client/src/components/Custom')
+            },
+            GLOBAL: path.join(this.root, '../global')
         };
         this.SCRIPTS = {
             build: path.join(
@@ -88,5 +92,9 @@ export default class ResourceManager {
 
     mkdir = (directory: string) => {
         fs.mkdirSync(directory);
+    };
+
+    write = (path: string, data: string) => {
+        fs.writeFileSync(path, data);
     };
 }

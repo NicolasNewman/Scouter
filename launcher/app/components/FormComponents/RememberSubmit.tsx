@@ -27,6 +27,7 @@ export default class RememberSubmit extends Component<IProps, IState> {
         this.state = {
             checked: false
         };
+        this.props.onChange({ checked: false });
     }
 
     handleChange = (e: CheckboxChangeEvent) => {

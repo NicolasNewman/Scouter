@@ -5,6 +5,8 @@ import { Input, Button } from 'antd';
 import ResourceManager from '../classes/ResourceManager';
 import ScriptExecutor from '../classes/ScriptExecutor';
 import { writeEnv } from '../helper/helper';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const { TextArea } = Input;
 interface IProps {
@@ -50,6 +52,11 @@ export default class Log extends Component<IProps, IState> {
         })();
         const manager = new ResourceManager(platform);
         const SCRIPTS = manager.getScripts();
+        const clientPath = manager.getLocations().CLIENT.CUSTOM;
+        const globalPath = manager.getLocations().GLOBAL;
+        console.log(clientPath);
+        console.log(globalPath);
+
         this.props.logEvent('Starting the server...');
         // TODO remove env file from server on package
         if (process.env.NODE_ENV === 'production') {
@@ -60,16 +67,85 @@ export default class Log extends Component<IProps, IState> {
             const res = await writeEnv(
                 this.props.dbPort,
                 this.props.dbName,
-                this.props.adminPassword,
-                this.props.filePath
+                this.props.adminPassword
             );
 
             if (res.error) {
                 this.props.logEvent(`Error: ${res.errorMsg}`);
             } else {
                 this.props.logEvent('Done');
+                // 2) Inject the custom modules if they exist
+                if (this.props.filePath !== '') {
+                    this.props.logEvent(
+                        `Compiling the Form code from ${this.props.filePath}`
+                    );
+                    const code = fs.readFileSync(this.props.filePath, 'utf8');
+                    const modules = code.split('$#$');
+                    if (modules.length !== 4) {
+                        this.props.logEvent(
+                            'Something is wrong with the loaded file. Please try re-generating it through Scouter Design'
+                        );
+                    } else {
+                        const form = `const module = \`${Buffer.from(
+                            modules[0],
+                            'base64'
+                        ).toString('utf-8')}\`;\nexport default module;`;
+                        const type = `const module = \`${Buffer.from(
+                            modules[1],
+                            'base64'
+                        ).toString('utf-8')}\`;\nexport default module;`;
+                        const accuracy = `const module = \`${Buffer.from(
+                            modules[2],
+                            'base64'
+                        ).toString('utf-8')}\`;\nexport default module;`;
+                        const score = `const module = \`${Buffer.from(
+                            modules[3],
+                            'base64'
+                        ).toString('utf-8')}\`;\nexport default module;`;
+
+                        this.props.logEvent('Writing form code to file...');
+
+                        manager.write(
+                            path.join(clientPath, 'C_DataInput.tsx'),
+                            form
+                        );
+                        manager.write(
+                            path.join(globalPath, 'C_gameTypes.ts'),
+                            type
+                        );
+                        manager.write(
+                            path.join(globalPath, 'C_accuracyResolver.ts'),
+                            accuracy
+                        );
+                        manager.write(
+                            path.join(globalPath, 'C_soureResolver.ts'),
+                            score
+                        );
+
+                        this.props.logEvent('Done');
+                    }
+                } else {
+                    const emptyExport = `const module = \`\`;\nexport default module;`;
+
+                    manager.write(
+                        path.join(clientPath, 'C_DataInput.tsx'),
+                        emptyExport
+                    );
+                    manager.write(
+                        path.join(globalPath, 'C_gameTypes.ts'),
+                        emptyExport
+                    );
+                    manager.write(
+                        path.join(globalPath, 'C_accuracyResolver.ts'),
+                        emptyExport
+                    );
+                    manager.write(
+                        path.join(globalPath, 'C_soureResolver.ts'),
+                        emptyExport
+                    );
+                }
                 this.props.logEvent('Building the server...');
-                // 2) Build the server
+                // 3) Build the server
                 const buildExecutor = new ScriptExecutor(
                     SCRIPTS.build,
                     { shell: true, detached: true },
@@ -78,7 +154,7 @@ export default class Log extends Component<IProps, IState> {
                 await buildExecutor.executeAndWait();
                 this.props.logEvent('Done');
 
-                // 3) Run the server
+                // 4) Run the server
                 this.props.logEvent('Starting the server...');
                 const runExecutor = new ScriptExecutor(
                     SCRIPTS.run,
@@ -88,6 +164,8 @@ export default class Log extends Component<IProps, IState> {
                 await runExecutor.executeAndWait();
                 this.props.logEvent('The server has shutdown');
             }
+        } else {
+            this.props.logEvent('In development, testing code...');
         }
     };
 
