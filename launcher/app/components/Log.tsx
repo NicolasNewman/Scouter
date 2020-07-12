@@ -115,7 +115,8 @@ export default class Log extends Component<IProps, IState> {
                         className="log__button"
                         disabled={this.state.stopDisabled}
                         onClick={this.stopClicked}
-                        type="danger"
+                        type="primary"
+                        danger
                     >
                         Stop
                     </Button>
