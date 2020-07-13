@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+echo "INSTALL HOOK"
+echo "TEST" > "$SNAP_DATA/test.txt"
+echo $(ls) > "$SNAP_DATA/output.txt" 
+if ! ls -d $SNAP_DATA/resources >/dev/null 2>&1; then
+  # cp -a $SNAP/resources $SNAP_DATA/
+  cp -a $SNAP/resources $SNAP_DATA/
+  chmod -R 777 $SNAP_DATA/resources
+fi

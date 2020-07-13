@@ -79,12 +79,22 @@
         },
         "linux": {
             "target": [
-                "deb",
-                "rpm",
-                "snap",
-                "AppImage"
+                {
+                    "target": "snap",
+                    "arch": [
+                        "x64"
+                    ]
+                }
             ],
-            "category": "Development"
+            "vendor": "Nicolas Newman",
+            "maintainer": "Nicolas Newman",
+            "category": "Utility",
+            "icon": "resources/icons/"
+        },
+        "snap": {
+            "confinement": "devmode",
+            "grade": "devel",
+            "hooks": "snap-hooks/"
         },
         "directories": {
             "buildResources": "resources",
