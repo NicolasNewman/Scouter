@@ -36,7 +36,10 @@
   "note": "The 'scripts' section is limited. Please refer to ./README.md, ./client/package.json, ./server/package.json"
  },
  "scripts": {
-  "install": "cd client && yarn",
+  "install:all": "yarn && npm-run-all install:client install:server install:launcher",
+  "install:client": "cd client && yarn",
+  "install:server": "cd server && yarn",
+  "install:launcher": "cd launcher && yarn",
   "postinstall": "cd server && yarn",
   "test": "cd client && yarn test",
   "posttest": "cd server && yarn copy && yarn test",
