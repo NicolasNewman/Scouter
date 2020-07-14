@@ -55,10 +55,12 @@
   "copy-global-client": "copyfiles -f global/* client/src/global",
   "copy-global-server": "copyfiles -f global/* server/src/global",
   "copy": "yarn copy-global-client && yarn copy-global-server",
-  "dev-server": "cd server && yarn dev",
-  "dev-client": "cd client && yarn dev",
-  "dev": "npm-run-all copy --parallel dev-server dev-client",
-  "build-win": "yarn copy && cd launcher && yarn package-win"
+  "dev:server": "cd server && yarn dev",
+  "dev:client": "cd client && yarn dev",
+  "dev:launcher": "cd launcher && yarn dev",
+  "dev": "npm-run-all copy --parallel dev:server dev:client",
+  "package:win": "yarn copy && cd launcher && yarn package-win",
+  "package:linux": "yarn copy && cd launcher && yarn package-linux"
  },
  "devDependencies": {
   "copyfiles": "^2.2.0",
