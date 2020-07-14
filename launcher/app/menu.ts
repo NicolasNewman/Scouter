@@ -202,6 +202,10 @@ export default class MenuBuilder {
                             'https://github.com/atom/electron/issues'
                         );
                     }
+                },
+                {
+                    label: 'Enable Developer Tools',
+                    click: () => {}
                 }
             ]
         };
@@ -221,14 +225,13 @@ export default class MenuBuilder {
     }
 
     buildDefaultTemplate(): MenuItemConstructorOptions[] {
-        const templateDefault = [
+        const templateDefault: MenuItemConstructorOptions[] = [
             {
                 label: '&File',
                 submenu: [
-                    { label: '&Open', accelerator: 'Ctrl+O' },
                     {
-                        label: '&Close',
-                        accelerator: 'Ctrl+W',
+                        label: '&Quit',
+                        accelerator: 'Ctrl+Q',
                         click: () => {
                             this.mainWindow.close();
                         }
@@ -236,82 +239,53 @@ export default class MenuBuilder {
                 ]
             },
             {
-                label: '&View',
-                submenu:
-                    process.env.NODE_ENV === 'development'
-                        ? [
-                              {
-                                  label: '&Reload',
-                                  accelerator: 'Ctrl+R',
-                                  click: () => {
-                                      this.mainWindow.webContents.reload();
-                                  }
-                              },
-                              {
-                                  label: 'Toggle &Full Screen',
-                                  accelerator: 'F11',
-                                  click: () => {
-                                      this.mainWindow.setFullScreen(
-                                          !this.mainWindow.isFullScreen()
-                                      );
-                                  }
-                              },
-                              {
-                                  label: 'Toggle &Developer Tools',
-                                  accelerator: 'Alt+Ctrl+I',
-                                  click: () => {
-                                      this.mainWindow.webContents.toggleDevTools();
-                                  }
-                              }
-                          ]
-                        : [
-                              {
-                                  label: 'Toggle &Full Screen',
-                                  accelerator: 'F11',
-                                  click: () => {
-                                      this.mainWindow.setFullScreen(
-                                          !this.mainWindow.isFullScreen()
-                                      );
-                                  }
-                              }
-                          ]
-            },
-            {
-                label: 'Help',
+                label: '&Help',
                 submenu: [
                     {
-                        label: 'Learn More',
-                        click() {
-                            shell.openExternal('http://electron.atom.io');
-                        }
-                    },
-                    {
-                        label: 'Documentation',
+                        label: 'Guide',
                         click() {
                             shell.openExternal(
-                                'https://github.com/atom/electron/tree/master/docs#readme'
+                                'https://github.com/NicolasNewman/Scouter/wiki'
                             );
                         }
                     },
+                    // {
+                    //     label: 'Community Discussions',
+                    //     click() {
+                    //         shell.openExternal(
+                    //             'https://discuss.atom.io/c/electron'
+                    //         );
+                    //     }
+                    // },
                     {
-                        label: 'Community Discussions',
+                        label: 'Report Bug',
                         click() {
                             shell.openExternal(
-                                'https://discuss.atom.io/c/electron'
+                                'https://github.com/NicolasNewman/Scouter/issues'
                             );
+                        }
+                    }
+                ]
+            },
+            {
+                label: '&Dev',
+                submenu: [
+                    {
+                        label: 'Toggle Debuging Tools',
+                        click: () => {
+                            this.mainWindow.webContents.toggleDevTools();
                         }
                     },
                     {
-                        label: 'Search Issues',
-                        click() {
-                            shell.openExternal(
-                                'https://github.com/atom/electron/issues'
-                            );
+                        label: 'Open Resource Folder',
+                        click: () => {
+                            shell.openItem(process.resourcesPath);
                         }
                     }
                 ]
             }
         ];
+        console.log(templateDefault);
 
         return templateDefault;
     }
