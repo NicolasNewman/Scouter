@@ -55,7 +55,7 @@
             {
                 "from": "../global/",
                 "to": "./global"
-            }
+            },
             {
                 "from": "../package.json",
                 "to": "."
