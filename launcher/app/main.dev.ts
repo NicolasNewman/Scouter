@@ -122,6 +122,24 @@ app.on('ready', async () => {
             // Check each node_modules location and see if packages need to be installed
             const scriptsToRun: Array<{ script: string; cwd: string }> = [];
             log.info('Checking if the modules are installed...');
+            const globalPath = LOCATIONS.GLOBAL.NODE_MODULES;
+
+            // 1) Check the root
+            log.info(`Checking ${globalPath}`);
+            if (!manager.exists(globalPath)) {
+                manager.mkdir(globalPath);
+            }
+            if (manager.empty(globalPath)) {
+                scriptsToRun.push({
+                    script: SCRIPTS.installGlobalModules,
+                    cwd: LOCATIONS.GLOBAL.ROOT
+                });
+                log.warn(
+                    'The node_modules for the client is empty, flagging for install'
+                );
+            }
+
+            // 2) Check the client
             const clientPath = LOCATIONS.CLIENT.NODE_MODULES;
             log.info(`Checking ${clientPath}`);
             if (!manager.exists(clientPath)) {
@@ -137,6 +155,7 @@ app.on('ready', async () => {
                 );
             }
 
+            // 3) Check the server
             const serverPath = LOCATIONS.SERVER.NODE_MODULES;
             log.info(`Checking ${serverPath}`);
             if (!manager.exists(serverPath)) {

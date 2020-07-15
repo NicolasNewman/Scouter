@@ -17,12 +17,17 @@ interface ILocations {
         NODE_MODULES: string;
         CUSTOM: string;
     };
-    GLOBAL: string;
+    GLOBAL: {
+        ROOT: string;
+        GLOBAL: string;
+        NODE_MODULES: string;
+    };
 }
 
 interface IScripts {
     build: string;
     run: string;
+    installGlobalModules: string;
     installClientModules: string;
     installServerModules: string;
 }
@@ -38,6 +43,7 @@ export default class ResourceManager {
         // this.os = os;
         this.extension = os === 'WIN' ? 'bat' : 'sh';
         this.root = path.join(process.resourcesPath);
+        console.log(`The root path is: ${this.root}`);
         this.LOCATIONS = {
             SCRIPTS: {
                 UNIX: path.join(this.root, 'scripts/unix'),
@@ -51,9 +57,16 @@ export default class ResourceManager {
             CLIENT: {
                 ROOT: path.join(this.root, 'client'),
                 NODE_MODULES: path.join(this.root, 'client/node_modules'),
-                CUSTOM: path.join(this.root, 'client/src/components/Custom')
+                CUSTOM: path.join(
+                    this.root,
+                    'client/src/components/RouterComponents/DataInput'
+                )
             },
-            GLOBAL: path.join(this.root, '../global')
+            GLOBAL: {
+                ROOT: path.join(this.root),
+                GLOBAL: path.join(this.root, 'global'),
+                NODE_MODULES: path.join(this.root, 'node_modules')
+            }
         };
         this.SCRIPTS = {
             build: path.join(
@@ -61,6 +74,10 @@ export default class ResourceManager {
                 `build.${this.extension}`
             ),
             run: path.join(this.LOCATIONS.SCRIPTS[os], `run.${this.extension}`),
+            installGlobalModules: path.join(
+                this.LOCATIONS.SCRIPTS[os],
+                `install_global_modules.${this.extension}`
+            ),
             installClientModules: path.join(
                 this.LOCATIONS.SCRIPTS[os],
                 `install_client_modules.${this.extension}`

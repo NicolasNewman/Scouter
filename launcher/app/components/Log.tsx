@@ -53,7 +53,7 @@ export default class Log extends Component<IProps, IState> {
         const manager = new ResourceManager(platform);
         const SCRIPTS = manager.getScripts();
         const clientPath = manager.getLocations().CLIENT.CUSTOM;
-        const globalPath = manager.getLocations().GLOBAL;
+        const globalPath = manager.getLocations().GLOBAL.GLOBAL;
         console.log(clientPath);
         console.log(globalPath);
 
@@ -77,7 +77,7 @@ export default class Log extends Component<IProps, IState> {
                 // 2) Inject the custom modules if they exist
                 if (this.props.filePath !== '') {
                     this.props.logEvent(
-                        `Compiling the Form code from ${this.props.filePath}`
+                        `Compiling the form code from ${this.props.filePath}`
                     );
                     const code = fs.readFileSync(this.props.filePath, 'utf8');
                     const modules = code.split('$#$');
@@ -86,62 +86,73 @@ export default class Log extends Component<IProps, IState> {
                             'Something is wrong with the loaded file. Please try re-generating it through Scouter Design'
                         );
                     } else {
-                        const form = `const module = \`${Buffer.from(
+                        const form = `${Buffer.from(
                             modules[0],
                             'base64'
-                        ).toString('utf-8')}\`;\nexport default module;`;
-                        const type = `const module = \`${Buffer.from(
+                        ).toString('utf-8')}`;
+                        const type = `${Buffer.from(
                             modules[1],
                             'base64'
-                        ).toString('utf-8')}\`;\nexport default module;`;
-                        const accuracy = `const module = \`${Buffer.from(
+                        ).toString('utf-8')}`;
+                        const accuracy = `${Buffer.from(
                             modules[2],
                             'base64'
-                        ).toString('utf-8')}\`;\nexport default module;`;
-                        const score = `const module = \`${Buffer.from(
+                        ).toString('utf-8')}`;
+                        const score = `${Buffer.from(
                             modules[3],
                             'base64'
-                        ).toString('utf-8')}\`;\nexport default module;`;
+                        ).toString('utf-8')}`;
 
                         this.props.logEvent('Writing form code to file...');
 
                         manager.write(
-                            path.join(clientPath, 'C_DataInput.tsx'),
+                            path.join(clientPath, 'DataInput.tsx'),
                             form
                         );
                         manager.write(
-                            path.join(globalPath, 'C_gameTypes.ts'),
+                            path.join(globalPath, 'gameTypes.ts'),
                             type
                         );
                         manager.write(
-                            path.join(globalPath, 'C_accuracyResolver.ts'),
+                            path.join(globalPath, 'accuracyResolver.ts'),
                             accuracy
                         );
                         manager.write(
-                            path.join(globalPath, 'C_soureResolver.ts'),
+                            path.join(globalPath, 'soureResolver.ts'),
                             score
                         );
 
                         this.props.logEvent('Done');
                     }
                 } else {
-                    const emptyExport = `const module = \`\`;\nexport default module;`;
+                    this.props.logEvent(`Reloading default form code`);
 
+                    const form = fs
+                        .readFileSync(path.join(clientPath, 'D_DataInput.tsx'))
+                        .toString();
+                    const type = fs
+                        .readFileSync(path.join(globalPath, 'D_gameType.ts'))
+                        .toString();
+                    const accuracy = fs
+                        .readFileSync(
+                            path.join(globalPath, 'D_accuracyResolver.ts')
+                        )
+                        .toString();
+                    const score = fs
+                        .readFileSync(
+                            path.join(globalPath, 'D_scoreResolver.ts')
+                        )
+                        .toString();
+
+                    manager.write(path.join(clientPath, 'DataInput.tsx'), form);
+                    manager.write(path.join(globalPath, 'gameTypes.ts'), type);
                     manager.write(
-                        path.join(clientPath, 'C_DataInput.tsx'),
-                        emptyExport
+                        path.join(globalPath, 'accuracyResolver.ts'),
+                        accuracy
                     );
                     manager.write(
-                        path.join(globalPath, 'C_gameTypes.ts'),
-                        emptyExport
-                    );
-                    manager.write(
-                        path.join(globalPath, 'C_accuracyResolver.ts'),
-                        emptyExport
-                    );
-                    manager.write(
-                        path.join(globalPath, 'C_soureResolver.ts'),
-                        emptyExport
+                        path.join(globalPath, 'soureResolver.ts'),
+                        score
                     );
                 }
                 this.props.logEvent('Building the server...');
@@ -149,7 +160,9 @@ export default class Log extends Component<IProps, IState> {
                 const buildExecutor = new ScriptExecutor(
                     SCRIPTS.build,
                     { shell: true, detached: true },
-                    data => {}
+                    data => {
+                        console.log(data.toString());
+                    }
                 );
                 await buildExecutor.executeAndWait();
                 this.props.logEvent('Done');
@@ -159,7 +172,9 @@ export default class Log extends Component<IProps, IState> {
                 const runExecutor = new ScriptExecutor(
                     SCRIPTS.run,
                     { shell: true, detached: true },
-                    data => {}
+                    data => {
+                        console.log(data.toString());
+                    }
                 );
                 await runExecutor.executeAndWait();
                 this.props.logEvent('The server has shutdown');
