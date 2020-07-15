@@ -59,6 +59,10 @@
             {
                 "from": "../package.json",
                 "to": "."
+            },
+            {
+                "from": "../yarn.lock",
+                "to": "."
             }
         ],
         "dmg": {
