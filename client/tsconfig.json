@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*.ts", "src/**/*.tsx", "../global/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "src/components/RouterComponents/DataInput/D_DataInput.tsx"],
   "compilerOptions": {
     "outDir": "./dist/js/",
     "allowSyntheticDefaultImports": false,
@@ -21,7 +21,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": false,
