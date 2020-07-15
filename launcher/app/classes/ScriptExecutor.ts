@@ -37,11 +37,13 @@ export default class ScriptExecutor {
             log.info('========== STARTING COMMAND EXECUTION ==========');
             const process = spawn(this.cmd, this.options);
             process.stdout.on('data', this.stdoutCB);
+
             process.stdout.on('close', code => {
+                scriptLogger.info('STDOUT closed');
                 res({ error: false, errorMsg: '' });
             });
             process.stderr.on('data', data => {
-                scriptLogger.error(data);
+                scriptLogger.error(`ERROR RECEIVED: ${data}`);
                 rej({ error: true, errorMsg: data });
             });
         });

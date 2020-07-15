@@ -105,7 +105,7 @@ app.on('ready', async () => {
                     return undefined;
             }
         })();
-        log.info(`Modified platform is ${platform}`);
+        log.info(`Platform is ${platform}`);
 
         // Unknown platform
         if (!platform) {
@@ -121,7 +121,7 @@ app.on('ready', async () => {
 
             // Check each node_modules location and see if packages need to be installed
             const scriptsToRun: Array<{ script: string; cwd: string }> = [];
-            log.info('Checking if the modules are installed...');
+            log.info('Checking if the modules are installed...\n');
             const globalPath = LOCATIONS.GLOBAL.NODE_MODULES;
 
             // 1) Check the root
@@ -172,7 +172,7 @@ app.on('ready', async () => {
                 );
             }
             log.info(
-                `There are ${scriptsToRun.length} module folders that are empty`
+                `There are ${scriptsToRun.length} module folders that are empty\n`
             );
 
             //TODO detect is node, npm, or yarn isn't installed!
@@ -200,7 +200,13 @@ app.on('ready', async () => {
                                 );
                             } else {
                                 // Loop through scripts and install them
+                                log.info(
+                                    'Iterating over runnable scripts...\n'
+                                );
                                 for (const script of scriptsToRun) {
+                                    log.info(
+                                        `Building executor for script [${script.script}]`
+                                    );
                                     const executor = new ScriptExecutor(
                                         script.script,
                                         { shell: true, detached: true },
@@ -208,6 +214,7 @@ app.on('ready', async () => {
                                             scriptLogger.info(`${data}`);
                                         }
                                     );
+                                    log.info(`Running script...`);
                                     const res = await executor.executeAndWait();
                                     log.info(
                                         `Script [${
