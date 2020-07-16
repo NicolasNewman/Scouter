@@ -42,7 +42,8 @@ const gameSchema = new Schema({
                     enum: TeamEventList,
                     required: [true, 'A events type is required!']
                 },
-                start: { type: Date, default: Date.now }
+                start: { type: Date, default: Date.now },
+                points: Number
             }
         ]
     },
@@ -66,7 +67,8 @@ const gameSchema = new Schema({
                     enum: TeamEventList,
                     required: [true, 'A events type is required!']
                 },
-                start: { type: Date, default: Date.now }
+                start: { type: Date, default: Date.now },
+                points: Number
             }
         ]
     }

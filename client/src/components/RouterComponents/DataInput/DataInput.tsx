@@ -37,6 +37,7 @@ export interface IConstantProps {
   getTime: () => number;
   matchNumber: number;
   teamNumber: number;
+  alliance: 'red' | 'blue' | null;
 }
 
 interface IState {
@@ -71,6 +72,7 @@ export default class Home extends Component<IProps, IState> {
         getTime: this.getTime,
         matchNumber: this.props.matchNumber,
         teamNumber: -1,
+        alliance: null
       };
     } else {
       this.state = {
@@ -86,6 +88,7 @@ export default class Home extends Component<IProps, IState> {
         getTime: this.getTime,
         matchNumber: this.props.matchNumber,
         teamNumber: parseInt(this.props.scoutingTargets[0].team),
+        alliance: this.props.scoutingTargets[0].alliance
       };
     }
 

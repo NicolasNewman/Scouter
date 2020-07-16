@@ -97,6 +97,34 @@ export const updateGame = catchAsync(
     }
 );
 
+export const updateGameEvent = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const game = await Game.findOne({
+            matchNumber: req.params.matchNumber
+        });
+
+        if (!game) {
+            return next(
+                new CustomError(
+                    404,
+                    `Could not find game with number ${req.params.matchNumber}`
+                )
+            );
+        }
+
+        const alliance = req.params.alliance as 'red' | 'blue';
+        game[alliance].teamEvents.push(req.body);
+        await game.save();
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                game
+            }
+        });
+    }
+);
+
 export const deleteGame = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const game = await Game.findOneAndDelete({

@@ -14,4 +14,8 @@ router
     .patch(gameController.updateGame)
     .delete(gameController.deleteGame);
 
+router
+    .route('/:matchNumber/:alliance/event')
+    .post(gameController.updateGameEvent);
+
 export default router;
