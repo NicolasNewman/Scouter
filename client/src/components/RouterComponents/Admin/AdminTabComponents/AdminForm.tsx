@@ -45,6 +45,10 @@ class AdminForm extends Component<IProps & FormComponentProps, IState> {
    * Sends a signal to the socket to receive the teams from the db and users registered the scouting system
    */
   async componentDidMount() {
+    await this.refreshFields();
+  }
+
+  async refreshFields() {
     // Calls for the team data from the API request handler
     const data = await this.props.requestHandler.get("teams");
 
@@ -109,6 +113,11 @@ class AdminForm extends Component<IProps & FormComponentProps, IState> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form className="admin__form" onSubmit={this.handleSubmit}>
+        <Button type="primary" onClick={async () => {
+          await this.refreshFields()
+        }}>
+          Refresh
+        </Button>
         <div className="admin">
           <div className="admin__col">
             {/* Column for the red alliance */}
