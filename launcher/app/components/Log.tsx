@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { Input, Button } from 'antd';
+import { networkInterfaces } from 'os';
 
 import ResourceManager from '../classes/ResourceManager';
 import ScriptExecutor from '../classes/ScriptExecutor';
+import DHCP from '../classes/DHCP';
 import { writeEnv } from '../helper/helper';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -27,6 +29,7 @@ interface IState {
 export default class Log extends Component<IProps, IState> {
     props: IProps;
     state: IState;
+    dhcpServer: DHCP;
 
     constructor(props) {
         super(props);
@@ -35,6 +38,7 @@ export default class Log extends Component<IProps, IState> {
             startDisabled: false,
             stopDisabled: true
         };
+        this.dhcpServer = new DHCP();
     }
 
     startClicked = async e => {
@@ -60,7 +64,35 @@ export default class Log extends Component<IProps, IState> {
         this.props.logEvent('Starting the server...');
         // TODO remove env file from server on package
         if (process.env.NODE_ENV === 'production') {
-            // 1) Update the env file with the form fields
+            // 1) Check for a valid DHCP configuration
+            this.props.logEvent('Checking for a valid DHCP configuration...');
+            const interfaces = networkInterfaces();
+            let found = false;
+            for (let key in interfaces) {
+                this.props.logEvent(`Checking interface "${key}"...`);
+                interfaces[key].forEach(group => {
+                    if (
+                        group.family === 'IPv4' &&
+                        group.address === '192.168.0.1'
+                    ) {
+                        this.props.logEvent(
+                            'Found adapter with IP 192.168.0.1'
+                        );
+                        found = true;
+                    }
+                });
+            }
+
+            if (!found) {
+                this.props.logEvent(
+                    'Could not find adapter with static IP 192.168.0.1. Scouter will not be able to be accessed from other devices'
+                );
+            } else {
+                this.props.logEvent('Starting DHCP server...');
+                this.dhcpServer.start();
+            }
+
+            // 2) Update the env file with the form fields
             this.props.logEvent(
                 'Writing the form fields to the server env file...'
             );
@@ -74,7 +106,7 @@ export default class Log extends Component<IProps, IState> {
                 this.props.logEvent(`Error: ${res.errorMsg}`);
             } else {
                 this.props.logEvent('Done');
-                // 2) Inject the custom modules if they exist
+                // 3) Inject the custom modules if they exist
                 if (this.props.filePath !== '') {
                     this.props.logEvent(
                         `Compiling the form code from ${this.props.filePath}`
@@ -156,7 +188,7 @@ export default class Log extends Component<IProps, IState> {
                     );
                 }
                 this.props.logEvent('Building the server...');
-                // 3) Build the server
+                // 4) Build the server
                 const buildExecutor = new ScriptExecutor(
                     SCRIPTS.build,
                     { shell: true, detached: true },
@@ -167,7 +199,7 @@ export default class Log extends Component<IProps, IState> {
                 await buildExecutor.executeAndWait();
                 this.props.logEvent('Done');
 
-                // 4) Run the server
+                // 5) Run the server
                 this.props.logEvent('Starting the server...');
                 const runExecutor = new ScriptExecutor(
                     SCRIPTS.run,
@@ -181,11 +213,38 @@ export default class Log extends Component<IProps, IState> {
             }
         } else {
             this.props.logEvent('In development, testing code...');
+            this.props.logEvent('Checking for a valid DHCP configuration...');
+            const interfaces = networkInterfaces();
+            let found = false;
+            for (let key in interfaces) {
+                this.props.logEvent(`Checking interface "${key}"...`);
+                interfaces[key].forEach(group => {
+                    if (
+                        group.family === 'IPv4' &&
+                        group.address === '192.168.0.1'
+                    ) {
+                        this.props.logEvent(
+                            'Found adapter with IP 192.168.0.1'
+                        );
+                        found = true;
+                    }
+                });
+            }
+
+            if (!found) {
+                this.props.logEvent(
+                    'Could not find adapter with static IP 192.168.0.1. Scouter will not be able to be accessed from other devices'
+                );
+            } else {
+                this.props.logEvent('Starting DHCP server...');
+                this.dhcpServer.start();
+            }
         }
     };
 
     stopClicked = (e): void => {
         this.props.logEvent('Stoping the server...');
+        this.dhcpServer.stop();
     };
 
     render() {
