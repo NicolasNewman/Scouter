@@ -122,6 +122,7 @@
         "core-js": "2",
         "custom-electron-titlebar": "^3.1.0",
         "devtron": "^1.4.0",
+        "dhcp-ms-fix": "^0.2.19",
         "electron-debug": "^2.1.0",
         "electron-log": "^4.0.2",
         "electron-store": "^5.0.0",

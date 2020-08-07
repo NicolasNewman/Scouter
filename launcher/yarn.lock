@@ -3402,6 +3402,13 @@ devtron@^1.4.0:
     highlight.js "^9.3.0"
     humanize-plus "^1.8.1"
 
+dhcp-ms-fix@^0.2.19:
+  version "0.2.19"
+  resolved "https://registry.yarnpkg.com/dhcp-ms-fix/-/dhcp-ms-fix-0.2.19.tgz#170e77d44fb171fa0611517fdac2820261b6cb48"
+  integrity sha512-Wh8eJ/q+sfQ4SF825btDIgVNn5j7UFxGE+T9rMctQfH555//Ynb8jdB9nH4RlYxdGjXsy/wBSjQpibpeAN+kFg==
+  dependencies:
+    minimist "*"
+
 diffie-hellman@^5.0.0:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/diffie-hellman/-/diffie-hellman-5.0.3.tgz#40e8ee98f55a2149607146921c63e1ae5f3d2875"
@@ -6598,7 +6605,7 @@ minimist-options@^3.0.1:
     arrify "^1.0.1"
     is-plain-obj "^1.1.0"
 
-minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5:
+minimist@*, minimist@^1.1.0, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
