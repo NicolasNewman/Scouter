@@ -3402,10 +3402,10 @@ devtron@^1.4.0:
     highlight.js "^9.3.0"
     humanize-plus "^1.8.1"
 
-dhcp-ms-fix@^0.2.19:
+dhcp@^0.2.19:
   version "0.2.19"
-  resolved "https://registry.yarnpkg.com/dhcp-ms-fix/-/dhcp-ms-fix-0.2.19.tgz#170e77d44fb171fa0611517fdac2820261b6cb48"
-  integrity sha512-Wh8eJ/q+sfQ4SF825btDIgVNn5j7UFxGE+T9rMctQfH555//Ynb8jdB9nH4RlYxdGjXsy/wBSjQpibpeAN+kFg==
+  resolved "https://registry.yarnpkg.com/dhcp/-/dhcp-0.2.19.tgz#70e0524731d1f002ba80d2a17437402cf086905b"
+  integrity sha512-RQhzFYjO955zR6YUqP2NbaE6owt9sq33ACWydyKS0v7Tec71Gf2+ewNLyE91UqCtw3wmQhTAYDsWdrqzsxVNig==
   dependencies:
     minimist "*"
 
