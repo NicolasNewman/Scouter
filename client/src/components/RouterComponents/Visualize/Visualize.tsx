@@ -1,147 +1,83 @@
-import * as React from "react";
-import { Component } from "react";
-import Timeline from "./PlotComponents/Timeline";
-// import Scatterplot from "./PlotComponents/Scatterplot";
-import { History } from "history";
-import { IGame, ITeam } from "../../../global/modelTypes";
-import Grid from "../../Grid/Grid";
+import * as React from 'react';
+import { Component } from 'react';
+import { History } from 'history';
+import { IGame, ITeam } from '../../../global/modelTypes';
 
-import { Tabs, Select } from "antd";
-const { Option } = Select;
+import Visualizer_Game from './Visualizers/Visualizer_Game';
+
+import { Tabs } from 'antd';
 const { TabPane } = Tabs;
 
 interface IProps {
-  history: History;
-  teamData: Array<ITeam>;
-  gameData: Array<IGame>;
+    history: History;
+    teamData: Array<ITeam>;
+    gameData: Array<IGame>;
 }
 
 interface IState {
-  noData: boolean;
-  gameMatchNumber: number;
+    noData: boolean;
+    gameMatchNumber: number;
 }
 
 /**
  * Component for the plotly graphical display pane
  */
 export default class Home extends Component<IProps, IState> {
-  props: IProps;
+    props: IProps;
 
-  constructor(props: IProps) {
-    super(props);
-    console.log(this.props);
-    if (this.props.gameData.length === 0) {
-      this.state = {
-        noData: true,
-        gameMatchNumber: 0
-      };
-    } else {
-      this.state = {
-        noData: false,
-        gameMatchNumber: this.props.gameData[0].matchNumber
-      };
+    constructor(props: IProps) {
+        super(props);
+        console.log(this.props);
+        if (this.props.gameData.length === 0) {
+            this.state = {
+                noData: true,
+                gameMatchNumber: 0,
+            };
+        } else {
+            this.state = {
+                noData: false,
+                gameMatchNumber: this.props.gameData[0].matchNumber,
+            };
+        }
     }
-  }
 
-  componentDidUpdate() {}
+    componentDidUpdate() {
+        // Update the data display flag if new data has been received
+        if (this.state.noData && this.props.gameData.length > 0) {
+            this.setState({ noData: false });
+        }
+    }
 
-  gameMatchNumberChanged = (matchNumber: number) => {
-    this.setState({
-      gameMatchNumber: matchNumber
-    });
-  };
+    gameMatchNumberChanged = (matchNumber: number) => {
+        this.setState({
+            gameMatchNumber: matchNumber,
+        });
+    };
 
-  render() {
-    const gameMatchNumberOptions = this.props.gameData.map(game => {
-      return <Option key={game.matchNumber}>{game.matchNumber}</Option>;
-    });
-    return (
-      <div className="graphs">
-        {this.state.noData ? (
-          <p>
-            WARNING: You need to have match data entered before you can use the
-            visualizers
-          </p>
-        ) : (
-          undefined
-        )}
-        <Tabs>
-          <TabPane tab="Game" key="game" disabled={this.state.noData}>
-            <div>
-              <span>Match number: </span>
-              <Select
-                onChange={this.gameMatchNumberChanged}
-                disabled={this.state.noData}
-                defaultActiveFirstOption={false}
-              >
-                {gameMatchNumberOptions}
-              </Select>
+    render() {
+        return (
+            <div className="graphs">
+                {this.state.noData ? (
+                    <p>
+                        WARNING: You need to have match data entered before you
+                        can use the visualizers
+                    </p>
+                ) : undefined}
+                <Tabs>
+                    <TabPane tab="Game" key="game" disabled={this.state.noData}>
+                        <Visualizer_Game
+                            gameData={this.props.gameData}
+                            teamData={this.props.teamData}
+                            noData={this.state.noData}
+                        />
+                    </TabPane>
+                </Tabs>
             </div>
-            {this.props.gameData[this.state.gameMatchNumber - 1] ? (
-              <Grid
-                cols="50% 50%"
-                rows="10% 30% 30% 30%"
-                className="timeline-grid"
-                templateArea="
-            'red blue'
-            'rs1 bs1'
-            'rs2 bs2'
-            'rs3 bs3'"
-                gridElements={[
-                  <h1 className="timeline-grid__heading r">Red</h1>,
-                  <h1 className="timeline-grid__heading b">Blue</h1>,
-                  <Timeline
-                    gridAreaName="rs1"
-                    match={
-                      this.props.gameData[this.state.gameMatchNumber - 1].red.s1
-                    }
-                  />,
-                  <Timeline
-                    gridAreaName="rs2"
-                    match={
-                      this.props.gameData[this.state.gameMatchNumber - 1].red.s2
-                    }
-                  />,
-                  <Timeline
-                    gridAreaName="rs3"
-                    match={
-                      this.props.gameData[this.state.gameMatchNumber - 1].red.s3
-                    }
-                  />,
-                  <Timeline
-                    gridAreaName="bs1"
-                    match={
-                      this.props.gameData[this.state.gameMatchNumber - 1].blue
-                        .s1
-                    }
-                  />,
-                  <Timeline
-                    gridAreaName="bs2"
-                    match={
-                      this.props.gameData[this.state.gameMatchNumber - 1].blue
-                        .s2
-                    }
-                  />,
-                  <Timeline
-                    gridAreaName="bs3"
-                    match={
-                      this.props.gameData[this.state.gameMatchNumber - 1].blue
-                        .s3
-                    }
-                  />
-                ]}
-              />
-            ) : (
-              <p>A game could not be found</p>
-            )}
-          </TabPane>
-        </Tabs>
-      </div>
-    );
-    // } else {
-    //   return <p>Something went wrong, please go back to home</p>;
-    // }
-  }
+        );
+        // } else {
+        //   return <p>Something went wrong, please go back to home</p>;
+        // }
+    }
 }
 
 // import * as React from "react";
