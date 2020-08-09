@@ -1,5 +1,6 @@
 import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 import * as ElectronLog from 'electron-log';
+import { dirname } from 'path';
 
 export default class MenuBuilder {
     mainWindow: BrowserWindow;
@@ -253,7 +254,7 @@ export default class MenuBuilder {
                     {
                         label: 'Open Log Folder',
                         click: () => {
-                            shell.openItem(this.log.transports.file.findLogPath());
+                            shell.openItem(dirname(this.log.transports.file.findLogPath()));
                         }
                     }
                 ]
