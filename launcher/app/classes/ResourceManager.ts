@@ -42,7 +42,11 @@ export default class ResourceManager {
     constructor(os: 'WIN' | 'UNIX') {
         // this.os = os;
         this.extension = os === 'WIN' ? 'bat' : 'sh';
-        this.root = path.join(process.resourcesPath);
+        if (process.env.NODE_ENV === 'production') {
+            this.root = path.join(process.resourcesPath);
+        } else {
+            this.root = path.join(process.cwd());
+        }
         console.log(`The root path is: ${this.root}`);
         this.LOCATIONS = {
             SCRIPTS: {

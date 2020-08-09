@@ -1,30 +1,21 @@
-import {
-    app,
-    Menu,
-    shell,
-    BrowserWindow,
-    MenuItemConstructorOptions
-} from 'electron';
+import { app, Menu, shell, BrowserWindow, MenuItemConstructorOptions } from 'electron';
+import * as ElectronLog from 'electron-log';
 
 export default class MenuBuilder {
     mainWindow: BrowserWindow;
+    log: ElectronLog.ElectronLog;
 
-    constructor(mainWindow: BrowserWindow) {
+    constructor(mainWindow: BrowserWindow, log: ElectronLog.ElectronLog) {
         this.mainWindow = mainWindow;
+        this.log = log;
     }
 
     buildMenu() {
-        if (
-            process.env.NODE_ENV === 'development' ||
-            process.env.DEBUG_PROD === 'true'
-        ) {
+        if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
             this.setupDevelopmentEnvironment();
         }
 
-        const template =
-            process.platform === 'darwin'
-                ? this.buildDarwinTemplate()
-                : this.buildDefaultTemplate();
+        const template = process.platform === 'darwin' ? this.buildDarwinTemplate() : this.buildDefaultTemplate();
 
         const menu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(menu);
@@ -118,9 +109,7 @@ export default class MenuBuilder {
                     label: 'Toggle Full Screen',
                     accelerator: 'Ctrl+Command+F',
                     click: () => {
-                        this.mainWindow.setFullScreen(
-                            !this.mainWindow.isFullScreen()
-                        );
+                        this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                     }
                 },
                 {
@@ -139,9 +128,7 @@ export default class MenuBuilder {
                     label: 'Toggle Full Screen',
                     accelerator: 'Ctrl+Command+F',
                     click: () => {
-                        this.mainWindow.setFullScreen(
-                            !this.mainWindow.isFullScreen()
-                        );
+                        this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
                     }
                 },
                 {
@@ -182,25 +169,19 @@ export default class MenuBuilder {
                 {
                     label: 'Documentation',
                     click() {
-                        shell.openExternal(
-                            'https://github.com/atom/electron/tree/master/docs#readme'
-                        );
+                        shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
                     }
                 },
                 {
                     label: 'Community Discussions',
                     click() {
-                        shell.openExternal(
-                            'https://discuss.atom.io/c/electron'
-                        );
+                        shell.openExternal('https://discuss.atom.io/c/electron');
                     }
                 },
                 {
                     label: 'Search Issues',
                     click() {
-                        shell.openExternal(
-                            'https://github.com/atom/electron/issues'
-                        );
+                        shell.openExternal('https://github.com/atom/electron/issues');
                     }
                 },
                 {
@@ -210,18 +191,9 @@ export default class MenuBuilder {
             ]
         };
 
-        const subMenuView =
-            process.env.NODE_ENV === 'development'
-                ? subMenuViewDev
-                : subMenuViewProd;
+        const subMenuView = process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
 
-        return [
-            subMenuAbout,
-            subMenuEdit,
-            subMenuView,
-            subMenuWindow,
-            subMenuHelp
-        ] as MenuItemConstructorOptions[];
+        return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp] as MenuItemConstructorOptions[];
     }
 
     buildDefaultTemplate(): MenuItemConstructorOptions[] {
@@ -244,9 +216,7 @@ export default class MenuBuilder {
                     {
                         label: 'Guide',
                         click() {
-                            shell.openExternal(
-                                'https://github.com/NicolasNewman/Scouter/wiki'
-                            );
+                            shell.openExternal('https://github.com/NicolasNewman/Scouter/wiki');
                         }
                     },
                     // {
@@ -260,9 +230,7 @@ export default class MenuBuilder {
                     {
                         label: 'Report Bug',
                         click() {
-                            shell.openExternal(
-                                'https://github.com/NicolasNewman/Scouter/issues'
-                            );
+                            shell.openExternal('https://github.com/NicolasNewman/Scouter/issues');
                         }
                     }
                 ]
@@ -280,6 +248,12 @@ export default class MenuBuilder {
                         label: 'Open Resource Folder',
                         click: () => {
                             shell.openItem(process.resourcesPath);
+                        }
+                    },
+                    {
+                        label: 'Open Log Folder',
+                        click: () => {
+                            shell.openItem(this.log.transports.file.findLogPath());
                         }
                     }
                 ]

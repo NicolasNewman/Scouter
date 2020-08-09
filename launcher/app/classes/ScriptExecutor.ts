@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import log from 'electron-log';
 
-type ExecutorError = {
+export type ExecutorError = {
     error: boolean;
     errorMsg: string;
 };
@@ -19,32 +19,32 @@ scriptLogger.transports.file.format = '[{level}]> {text}';
 export default class ScriptExecutor {
     private cmd: string;
     private options: SpawnOptions;
-    private stdoutCB: (data: string) => void;
 
-    constructor(
-        cmd: string,
-        options: SpawnOptions,
-        stdoutCB: (data: string) => void
-    ) {
+    constructor(cmd: string, options: SpawnOptions) {
         log.info(`Loaded command [${cmd}] into memory`);
         this.cmd = cmd;
         this.options = options;
-        this.stdoutCB = stdoutCB;
     }
 
-    executeAndWait(): Promise<ExecutorError> {
+    executeAndWait(): Promise<null> {
         return new Promise((res, rej) => {
+            let errorChain: Error[] = [];
             log.info('========== STARTING COMMAND EXECUTION ==========');
             const process = spawn(this.cmd, this.options);
-            process.stdout.on('data', this.stdoutCB);
-
-            process.stdout.on('close', code => {
-                scriptLogger.info('STDOUT closed');
-                res({ error: false, errorMsg: '' });
+            process.stdout.on('data', data => {
+                scriptLogger.info(data.toString());
             });
             process.stderr.on('data', data => {
-                scriptLogger.error(`ERROR RECEIVED: ${data}`);
-                rej({ error: true, errorMsg: data });
+                scriptLogger.error(data.toString());
+                errorChain = [new Error(data.ToString()), ...errorChain];
+            });
+
+            process.stdout.on('close', code => {
+                log.info('========== ENDING COMMAND EXECUTION ==========');
+                if (errorChain.length > 0) {
+                    rej(errorChain[0]);
+                }
+                res();
             });
         });
     }

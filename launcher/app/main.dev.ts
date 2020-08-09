@@ -32,19 +32,14 @@ scriptLogger.transports.file.format = '[{level}]> {text}';
 log.silly('=========================================');
 log.silly('||               Scouter               ||');
 log.silly('=========================================');
-log.info(
-    `The runtime environment is in ${process.env.NODE_ENV} on ${process.platform}`
-);
+log.info(`The runtime environment is in ${process.env.NODE_ENV} on ${process.platform}`);
 
 if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');
     sourceMapSupport.install();
 }
 
-if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-) {
+if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     require('electron-debug')();
 }
 
@@ -53,11 +48,7 @@ const installExtensions = async () => {
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
     const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
-    return Promise.all(
-        extensions.map(name =>
-            installer.default(installer[name], forceDownload)
-        )
-    ).catch(console.log);
+    return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log);
 };
 
 /**
@@ -73,10 +64,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-    if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.DEBUG_PROD === 'true'
-    ) {
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
         await installExtensions();
     }
 
@@ -134,9 +122,7 @@ app.on('ready', async () => {
                     script: SCRIPTS.installGlobalModules,
                     cwd: LOCATIONS.GLOBAL.ROOT
                 });
-                log.warn(
-                    'The node_modules for the client is empty, flagging for install'
-                );
+                log.warn('The node_modules for the client is empty, flagging for install');
             }
 
             // 2) Check the client
@@ -150,9 +136,7 @@ app.on('ready', async () => {
                     script: SCRIPTS.installClientModules,
                     cwd: LOCATIONS.CLIENT.ROOT
                 });
-                log.warn(
-                    'The node_modules for the client is empty, flagging for install'
-                );
+                log.warn('The node_modules for the client is empty, flagging for install');
             }
 
             // 3) Check the server
@@ -167,13 +151,9 @@ app.on('ready', async () => {
                     cwd: LOCATIONS.SERVER.ROOT
                 });
 
-                log.warn(
-                    'The node_modules for the server is empty, flagging for install'
-                );
+                log.warn('The node_modules for the server is empty, flagging for install');
             }
-            log.info(
-                `There are ${scriptsToRun.length} module folders that are empty\n`
-            );
+            log.info(`There are ${scriptsToRun.length} module folders that are empty\n`);
 
             //TODO detect is node, npm, or yarn isn't installed!
 
@@ -200,33 +180,16 @@ app.on('ready', async () => {
                                 );
                             } else {
                                 // Loop through scripts and install them
-                                log.info(
-                                    'Iterating over runnable scripts...\n'
-                                );
+                                log.info('Iterating over runnable scripts...\n');
                                 for (const script of scriptsToRun) {
-                                    log.info(
-                                        `Building executor for script [${script.script}]`
-                                    );
-                                    const executor = new ScriptExecutor(
-                                        script.script,
-                                        { shell: true, detached: true },
-                                        data => {
-                                            scriptLogger.info(`${data}`);
-                                        }
-                                    );
+                                    log.info(`Building executor for script [${script.script}]`);
+                                    const executor = new ScriptExecutor(script.script, { shell: true, detached: true });
                                     log.info(`Running script...`);
-                                    const res = await executor.executeAndWait();
-                                    log.info(
-                                        `Script [${
-                                            script.script
-                                        }] finished with error status ${
-                                            res.error
-                                        } ${
-                                            res.error
-                                                ? `: ${res.errorMsg} `
-                                                : ''
-                                        }`
-                                    );
+                                    try {
+                                        await executor.executeAndWait();
+                                    } catch (err) {
+                                        log.error(`Script failed with error: ${err}`);
+                                    }
                                 }
                                 // scriptsToRun.forEach(async script => {
                                 //     const executor = await new ScriptExecutor(
@@ -252,32 +215,25 @@ app.on('ready', async () => {
                                 //     );
                                 // });
 
-                                mainWindow.loadURL(
-                                    `file://${__dirname}/app.html`
-                                );
+                                mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-                                mainWindow.webContents.on(
-                                    'did-finish-load',
-                                    () => {
-                                        if (!mainWindow) {
-                                            throw new Error(
-                                                '"mainWindow" is not defined'
-                                            );
-                                        }
-                                        if (process.env.START_MINIMIZED) {
-                                            mainWindow.minimize();
-                                        } else {
-                                            mainWindow.show();
-                                            mainWindow.focus();
-                                        }
+                                mainWindow.webContents.on('did-finish-load', () => {
+                                    if (!mainWindow) {
+                                        throw new Error('"mainWindow" is not defined');
                                     }
-                                );
+                                    if (process.env.START_MINIMIZED) {
+                                        mainWindow.minimize();
+                                    } else {
+                                        mainWindow.show();
+                                        mainWindow.focus();
+                                    }
+                                });
 
                                 mainWindow.on('closed', () => {
                                     mainWindow = null;
                                 });
 
-                                const menuBuilder = new MenuBuilder(mainWindow);
+                                const menuBuilder = new MenuBuilder(mainWindow, log);
                                 menuBuilder.buildMenu();
 
                                 // Remove this if your app does not use auto updates
@@ -316,7 +272,7 @@ app.on('ready', async () => {
                     mainWindow = null;
                 });
 
-                const menuBuilder = new MenuBuilder(mainWindow);
+                const menuBuilder = new MenuBuilder(mainWindow, log);
                 menuBuilder.buildMenu();
 
                 // Remove this if your app does not use auto updates
@@ -354,7 +310,7 @@ app.on('ready', async () => {
             mainWindow = null;
         });
 
-        const menuBuilder = new MenuBuilder(mainWindow);
+        const menuBuilder = new MenuBuilder(mainWindow, log);
         menuBuilder.buildMenu();
 
         // Remove this if your app does not use auto updates
