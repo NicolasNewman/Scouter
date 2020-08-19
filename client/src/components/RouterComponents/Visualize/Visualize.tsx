@@ -4,6 +4,7 @@ import { History } from 'history';
 import { IGame, ITeam } from '../../../global/modelTypes';
 
 import Visualizer_Game from './Visualizers/Visualizer_Game';
+import Visualizer_Team from './Visualizers/Visualizer_Game';
 
 import { Tabs } from 'antd';
 const { TabPane } = Tabs;
@@ -66,6 +67,13 @@ export default class Home extends Component<IProps, IState> {
                 <Tabs>
                     <TabPane tab="Game" key="game" disabled={this.state.noData}>
                         <Visualizer_Game
+                            gameData={this.props.gameData}
+                            teamData={this.props.teamData}
+                            noData={this.state.noData}
+                        />
+                    </TabPane>
+                    <TabPane tab="Team" key="team" disabled={this.state.noData}>
+                        <Visualizer_Team
                             gameData={this.props.gameData}
                             teamData={this.props.teamData}
                             noData={this.state.noData}
