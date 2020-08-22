@@ -4,7 +4,7 @@ import { History } from 'history';
 import { IGame, ITeam } from '../../../global/modelTypes';
 
 import Visualizer_Game from './Visualizers/Visualizer_Game';
-import Visualizer_Team from './Visualizers/Visualizer_Game';
+import Visualizer_Team from './Visualizers/Visualizer_Team';
 
 import { Tabs } from 'antd';
 const { TabPane } = Tabs;

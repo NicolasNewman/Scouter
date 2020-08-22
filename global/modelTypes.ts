@@ -8,7 +8,7 @@ export type VritualizedMatches = Array<IVirtualizedMatch>;
 export interface IVirtualizedMatch {
   matchNumber?: number;
   teamNumber: number;
-  alliance: string;
+  alliance: "red" | "blue";
   robotEvents: Array<IRobotEvent>;
   robotStates: Array<IRobotState>;
   points: number;

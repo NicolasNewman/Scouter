@@ -15,21 +15,25 @@ interface IProps {
 }
 
 interface IState {
-    compiledData: any;
+    compiledData: MatchTableData[] | undefined;
 }
+
+type MatchTableData = {
+    key: string;
+    [val: string]: any;
+};
 
 export default class Visualizer_Game extends Component<IProps, IState> {
     props: IProps;
     matchCols: ColumnProps<any>[];
-    data: {
-        [team: number]: {
-            key: string;
-            [val: string]: string;
-        }[];
-    };
+    data: { [team: string]: MatchTableData[] };
 
     constructor(props: IProps) {
         super(props);
+        this.state = {
+            compiledData: undefined,
+        };
+        this.data = {};
         this.matchCols = [
             {
                 title: 'Match',
@@ -64,10 +68,23 @@ export default class Visualizer_Game extends Component<IProps, IState> {
     }
 
     getMatchData = (teamNumber: number) => {
-        if (this.data[teamNumber] === null) {
-            const team = this.props.teamData.find(
-                (team) => team.teamNumber === teamNumber
-            );
+        console.log('Checking for team ' + teamNumber);
+        console.log(this.data[teamNumber]);
+        if (this.data[teamNumber] === undefined) {
+            console.log('Looping through: ');
+            console.log(this.props.teamData);
+            const team = this.props.teamData.find((t) => {
+                console.log(typeof t.teamNumber);
+                console.log(typeof teamNumber);
+                console.log(
+                    `${t.teamNumber}===${teamNumber}: ${
+                        `${t.teamNumber}` === `${teamNumber}`
+                    }`
+                );
+                return `${t.teamNumber}` === `${teamNumber}`;
+            });
+            console.log('Found team:');
+            console.log(team);
             if (team) {
                 this.data[teamNumber] = [];
                 team.matches.forEach((match, i) => {
@@ -78,7 +95,7 @@ export default class Visualizer_Game extends Component<IProps, IState> {
                         const alliance = game[match.alliance];
                         const opponent =
                             game[match.alliance === 'red' ? 'blue' : 'red'];
-                        const row: { key: string; [key: string]: any } = {
+                        const row: MatchTableData = {
                             key: i.toString(),
                             match: match.matchNumber,
                             alliance: [
@@ -112,6 +129,7 @@ export default class Visualizer_Game extends Component<IProps, IState> {
                 });
             }
         }
+        console.log(this.data);
         return this.data[teamNumber];
     };
 
