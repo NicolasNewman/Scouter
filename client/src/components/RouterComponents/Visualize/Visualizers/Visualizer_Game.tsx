@@ -35,7 +35,11 @@ export default class Visualizer_Game extends Component<IProps, IState> {
 
     render() {
         const gameMatchNumberOptions = this.props.gameData.map((game) => {
-            return <Option key={game.matchNumber}>{game.matchNumber}</Option>;
+            return (
+                <Option key={game.matchNumber} value={game.matchNumber}>
+                    {game.matchNumber}
+                </Option>
+            );
         });
         return (
             <React.Fragment>

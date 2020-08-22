@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { Icon } from 'antd';
+import { ToolOutlined, FormOutlined } from '@ant-design/icons';
 
 interface IProps {
     isAdmin: boolean;
@@ -23,7 +23,7 @@ export default class Home extends Component<IProps> {
                         scouts begin entering data for a match, head to the
                         Admin tab
                         <span style={{ margin: '0 0.25rem' }}>
-                            (<Icon type="tool" />)
+                            (<ToolOutlined />)
                         </span>{' '}
                         to assign your scouts to a team
                     </p>
@@ -32,7 +32,7 @@ export default class Home extends Component<IProps> {
                         Welcome to Scouter! When your lead scout is ready, the
                         Entry tab
                         <span style={{ margin: '0 0.25rem' }}>
-                            (<Icon type="form" />)
+                            (<FormOutlined />)
                         </span>
                         will be enabled and you can begin scouting.
                     </p>

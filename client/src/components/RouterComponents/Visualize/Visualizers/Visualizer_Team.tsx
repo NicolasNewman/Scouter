@@ -144,6 +144,7 @@ export default class Visualizer_Game extends Component<IProps, IState> {
             return (
                 <Option
                     key={team.teamNumber}
+                    value={team.teamNumber}
                 >{`${team.teamNumber} / ${team.teamName}`}</Option>
             );
         });
