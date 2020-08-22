@@ -23,7 +23,7 @@ interface IState {
 /**
  * Component for the plotly graphical display pane
  */
-export default class Home extends Component<IProps, IState> {
+export default class Visualize extends Component<IProps, IState> {
     props: IProps;
 
     constructor(props: IProps) {
