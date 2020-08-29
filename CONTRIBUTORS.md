@@ -16,5 +16,3 @@
   - **iconcheese** for providing the _bot_ icon
   - **Federico Panzano** for providing the _Graph_ icon
   - **Flatart** for providing the _Data_ icon
-- **[Ruttkamp](http://www.dhcpserver.de/cms/)**
-  - Designed the Windows DHCP server and allowed for it to come installed with Scouter
