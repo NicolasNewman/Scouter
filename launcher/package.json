@@ -63,6 +63,10 @@
             {
                 "from": "../yarn.lock",
                 "to": "."
+            },
+            {
+                "from": "../nodejs-win",
+                "to": "./nodejs-win"
             }
         ],
         "dmg": {

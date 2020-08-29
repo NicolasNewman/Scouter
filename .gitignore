@@ -1,5 +1,6 @@
 # DHCP Server
 dhcp/
+nodejs-win/
 
 # Client / Server globals
 client/src/global/*
