@@ -1,14 +1,4 @@
-:: Final file structure:
-:: resources/
-:: ├── server/
-:: │   └── package.json
-:: ├── client/
-:: │   └── package.json
-:: ├── scripts/
-:: │   ├── win/
-:: │   └── unix/
-:: │       └── [you are here]
-:: └── package.json
+SET PATH=%CD%/nodejs-win;%PATH%
 
 cd resources/
 yarn run:prod
