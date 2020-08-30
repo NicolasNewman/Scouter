@@ -30,6 +30,17 @@ then
     export PATH=$OP
 fi
 
+if [ ! -d "mongodb/" ]
+then
+    echo "mongodb binary does not exist. Downloading..."
+    # curl https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-4.4.0.zip > mongodb-win.zip
+    # unzip mongodb-win.zip 'mongodb-win32-x86_64-windows-4.4.0/bin/*' -d mongodb-win
+    mv mongodb-win/mongodb-win32-x86_64-windows-4.4.0/bin/* mongodb-win/
+    rm -rf mongodb-win/mongodb-win32-x86_64-windows-4.4.0
+    rm mongodb-win/Install-Compass.ps1
+    rm mongodb-win.zip
+fi
+
 yarn install
 cd server && yarn install && cd ..
 cd client && yarn install && cd ..

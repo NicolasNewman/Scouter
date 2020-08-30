@@ -1,6 +1,7 @@
-# DHCP Server
+# Binaries
 dhcp/
 nodejs-win/
+mongodb-win/
 
 # Client / Server globals
 client/src/global/*

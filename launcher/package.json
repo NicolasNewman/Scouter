@@ -86,8 +86,12 @@
             ],
             "extraResources": [
                 {
-                    "from": "../nodejs-win",
+                    "from": "../nodejs-win/",
                     "to": "./nodejs"
+                },
+                {
+                    "from": "../mongodb-win/",
+                    "to": "./mongodb"
                 }
             ]
         },
