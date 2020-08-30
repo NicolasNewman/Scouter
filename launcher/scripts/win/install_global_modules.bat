@@ -1,4 +1,4 @@
-SET PATH=%CD%/nodejs-win;%PATH%
+SET PATH=%CD%/nodejs;%PATH%
 
 cd resources/
 yarn install
