@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import log from 'electron-log';
 
 export type ExecutorError = {
@@ -28,24 +28,48 @@ export default class ScriptExecutor {
 
     executeAndWait(): Promise<null> {
         return new Promise((res, rej) => {
-            let errorChain: Error[] = [];
+            // let errorChain: Error[] = [];
             log.info('========== STARTING COMMAND EXECUTION ==========');
             const process = spawn(this.cmd, this.options);
             process.stdout.on('data', data => {
-                scriptLogger.info(data.toString());
+                console.log('STDOUT - DATA');
+                console.log(`\t${data.toString()}`);
+                // scriptLogger.info(data.toString());
             });
             process.stderr.on('data', data => {
-                scriptLogger.error(data.toString());
-                errorChain = [new Error(data.ToString()), ...errorChain];
+                console.log('STDERR - DATA');
+                console.log(`\t${data.toString()}`);
+                // scriptLogger.error(data.toString());
+                // errorChain = [new Error(data.ToString()), ...errorChain];
             });
 
             process.stdout.on('close', code => {
-                log.info('========== ENDING COMMAND EXECUTION ==========');
-                if (errorChain.length > 0) {
-                    rej(errorChain[0]);
-                }
+                console.log('STDOUT - CLOSE');
+                console.log(`\t${code.toString()}`);
+                // log.info('========== ENDING COMMAND EXECUTION ==========');
+                // if (errorChain.length > 0) {
+                //     rej(errorChain[0]);
+                // }
+                // res();
                 res();
             });
         });
+    }
+
+    execute(): ChildProcessWithoutNullStreams {
+        log.info('========== STARTING COMMAND EXECUTION ==========');
+        const process = spawn(this.cmd, this.options);
+        process.stdout.on('data', data => {
+            scriptLogger.info(data.toString());
+        });
+        process.stderr.on('data', data => {
+            scriptLogger.error(data.toString());
+        });
+
+        process.stdout.on('close', code => {
+            log.info('========== ENDING COMMAND EXECUTION ==========');
+        });
+
+        return process;
     }
 }

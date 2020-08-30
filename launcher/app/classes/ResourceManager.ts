@@ -30,6 +30,7 @@ interface IScripts {
     installGlobalModules: string;
     installClientModules: string;
     installServerModules: string;
+    mongod: string;
 }
 
 export default class ResourceManager {
@@ -61,10 +62,7 @@ export default class ResourceManager {
             CLIENT: {
                 ROOT: path.join(this.root, 'client'),
                 NODE_MODULES: path.join(this.root, 'client/node_modules'),
-                CUSTOM: path.join(
-                    this.root,
-                    'client/src/components/RouterComponents/DataInput'
-                )
+                CUSTOM: path.join(this.root, 'client/src/components/RouterComponents/DataInput')
             },
             GLOBAL: {
                 ROOT: path.join(this.root),
@@ -73,23 +71,12 @@ export default class ResourceManager {
             }
         };
         this.SCRIPTS = {
-            build: path.join(
-                this.LOCATIONS.SCRIPTS[os],
-                `build.${this.extension}`
-            ),
+            build: path.join(this.LOCATIONS.SCRIPTS[os], `build.${this.extension}`),
             run: path.join(this.LOCATIONS.SCRIPTS[os], `run.${this.extension}`),
-            installGlobalModules: path.join(
-                this.LOCATIONS.SCRIPTS[os],
-                `install_global_modules.${this.extension}`
-            ),
-            installClientModules: path.join(
-                this.LOCATIONS.SCRIPTS[os],
-                `install_client_modules.${this.extension}`
-            ),
-            installServerModules: path.join(
-                this.LOCATIONS.SCRIPTS[os],
-                `install_server_modules.${this.extension}`
-            )
+            installGlobalModules: path.join(this.LOCATIONS.SCRIPTS[os], `install_global_modules.${this.extension}`),
+            installClientModules: path.join(this.LOCATIONS.SCRIPTS[os], `install_client_modules.${this.extension}`),
+            installServerModules: path.join(this.LOCATIONS.SCRIPTS[os], `install_server_modules.${this.extension}`),
+            mongod: path.join(this.LOCATIONS.SCRIPTS[os], `mongodb.${this.extension}`)
         };
     }
 

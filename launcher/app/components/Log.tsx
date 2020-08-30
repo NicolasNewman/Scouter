@@ -123,7 +123,7 @@ export default class Log extends Component<IProps, IState> {
                     this.props.logEvent(`Reloading default form code`);
 
                     const form = fs.readFileSync(path.join(clientPath, 'D_DataInput.tsx')).toString();
-                    const type = fs.readFileSync(path.join(globalPath, 'D_gameType.ts')).toString();
+                    const type = fs.readFileSync(path.join(globalPath, 'D_gameTypes.ts')).toString();
                     const accuracy = fs.readFileSync(path.join(globalPath, 'D_accuracyResolver.ts')).toString();
                     const score = fs.readFileSync(path.join(globalPath, 'D_scoreResolver.ts')).toString();
 
@@ -143,14 +143,23 @@ export default class Log extends Component<IProps, IState> {
                     await buildExecutor.executeAndWait();
                     this.props.logEvent('Done');
 
-                    // 5) Run the server
+                    // 5) Start mongod
+                    const mongodExecutor = new ScriptExecutor(SCRIPTS.mongod, {
+                        shell: true,
+                        detached: false
+                    });
+                    const mongodProcess = mongodExecutor.execute();
+
+                    // 6) Run the server
                     this.props.logEvent('Starting the server...');
                     const runExecutor = new ScriptExecutor(SCRIPTS.run, {
                         shell: true,
                         detached: false
                     });
                     await runExecutor.executeAndWait();
+
                     this.props.logEvent('The server has shutdown');
+                    mongodProcess.kill('SIGQUIT');
                 } catch (err) {
                     this.props.logEvent('An error was received:');
                     this.props.logEvent(err);

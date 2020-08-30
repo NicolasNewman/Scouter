@@ -39,6 +39,8 @@ then
     rm -rf mongodb-win/mongodb-win32-x86_64-windows-4.4.0
     rm mongodb-win/Install-Compass.ps1
     rm mongodb-win.zip
+    mkdir mongodb-win/data
+    mkdir mongodb-win/log
 fi
 
 yarn install
