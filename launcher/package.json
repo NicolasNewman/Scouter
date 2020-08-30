@@ -63,10 +63,6 @@
             {
                 "from": "../yarn.lock",
                 "to": "."
-            },
-            {
-                "from": "../nodejs-win",
-                "to": "./nodejs-win"
             }
         ],
         "dmg": {
@@ -87,8 +83,15 @@
             "target": [
                 "nsis",
                 "msi"
+            ],
+            "extraResources": [
+                {
+                    "from": "../nodejs-win",
+                    "to": "./nodejs"
+                }
             ]
         },
+        "nsis": {},
         "linux": {
             "target": [
                 {
