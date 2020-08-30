@@ -8,13 +8,14 @@
  * When running `yarn build` or `yarn build-main`, this file is compiled to
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import ResourceManager from './classes/ResourceManager';
 import { isOnline } from './helper/helper';
 import ScriptExecutor from './classes/ScriptExecutor';
+import sizes from './constants/sizes';
 
 export default class AppUpdater {
     constructor() {
@@ -25,6 +26,11 @@ export default class AppUpdater {
 }
 
 let mainWindow = null;
+ipcMain.on('resize', (e, width: number, height: number) => {
+    console.log(`Resizing to: ${width}x${height}`);
+    mainWindow.setMinimumSize(10, 10);
+    mainWindow.setSize(width, height);
+});
 
 const scriptLogger = log.create('script');
 scriptLogger.transports.file.format = '[{level}]> {text}';
@@ -75,8 +81,8 @@ app.on('ready', async () => {
         mainWindow = new BrowserWindow({
             show: false,
             frame: false,
-            width: 400,
-            height: 550,
+            width: sizes.formWindow.width,
+            height: sizes.formWindow.height,
             resizable: false
         });
 

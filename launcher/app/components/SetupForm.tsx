@@ -9,19 +9,17 @@ import DataStore from 'app/classes/DataStore';
 import { FormInstance } from 'antd/lib/form';
 import ConstrainedUploader from './FormComponents/ConstrainedUploader';
 import RememberSubmit from './FormComponents/RememberSubmit';
+import { RouteComponentProps } from 'react-router';
+import routes from '../constants/routes';
 
-interface IProps {
+interface IProps extends RouteComponentProps<any> {
     dataStore: DataStore;
     serverPort: number;
     dbName: string;
     dbPort: number;
     adminPassword: string;
     filePath: string;
-    updateFormState: (
-        dbName: string,
-        adminPassword: string,
-        filePath: string
-    ) => void;
+    updateFormState: (dbName: string, adminPassword: string, filePath: string) => void;
     handleFormSubmit: () => void;
 }
 
@@ -60,12 +58,8 @@ class SetupForm extends Component<IProps> {
             this.props.dataStore.set('dbName', dbName);
             this.props.dataStore.set('adminPassword', adminPassword);
         }
-        this.props.updateFormState(
-            dbName,
-            adminPassword,
-            filePath ? filePath : ''
-        );
-        this.props.handleFormSubmit();
+        this.props.updateFormState(dbName, adminPassword, filePath ? filePath : '');
+        this.props.history.push(routes.LOG);
     };
 
     validateModules = (rule, value) => {
@@ -89,6 +83,7 @@ class SetupForm extends Component<IProps> {
                     adminPassword: this.props.adminPassword
                 }}
             >
+                <h1>Scouter</h1>
                 {/* Database name field */}
                 <Form.Item
                     className="form__item"
@@ -119,10 +114,7 @@ class SetupForm extends Component<IProps> {
                     label={
                         <span className="form__item--label">
                             Password
-                            <Tooltip
-                                className="form__item--tooltip"
-                                title="The username needed to login as admin"
-                            >
+                            <Tooltip className="form__item--tooltip" title="The username needed to login as admin">
                                 <QuestionCircleOutlined />
                             </Tooltip>
                         </span>
@@ -151,19 +143,13 @@ class SetupForm extends Component<IProps> {
                             </Tooltip>
                         </span>
                     }
-                    rules={[
-                        { required: false },
-                        { validator: this.validateModules }
-                    ]}
+                    rules={[{ required: false }, { validator: this.validateModules }]}
                 >
                     <ConstrainedUploader btnText="Upload File" limit={1} />
                 </Form.Item>
                 {/* Save checkbox & submit button */}
                 <Form.Item name="save">
-                    <RememberSubmit
-                        btnText="Start"
-                        checkboxText="Save fields"
-                    />
+                    <RememberSubmit btnText="Start" checkboxText="Save fields" />
                 </Form.Item>
             </Form>
         );

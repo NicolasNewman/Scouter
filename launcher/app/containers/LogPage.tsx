@@ -1,18 +1,18 @@
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import Home from '../components/Home';
+import Log from '../components/Log';
 import FormActions from '../actions/form';
 import LogActions from '../actions/log';
 
 function mapStateToProps(state, ownProps) {
     return {
-        dataStore: ownProps.dataStore,
         serverPort: state.form.serverPort,
         dbPort: state.form.dbPort,
         dbName: state.form.dbName,
         adminPassword: state.form.adminPassword,
         filePath: state.form.filePath,
-        logText: state.log.text
+        logText: state.log.text,
+        logEvent: (event: string) => {}
     };
 }
 
@@ -26,4 +26,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Log);
