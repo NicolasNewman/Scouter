@@ -1,4 +1,4 @@
-SET PATH=%CD%/nodejs;%PATH%
+SET PATH=%CD%/resources/nodejs;%PATH%
 
 cd resources/
 robocopy global/ client/src/global /E /is /it
