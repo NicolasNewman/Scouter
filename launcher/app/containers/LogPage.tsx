@@ -1,6 +1,6 @@
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import Log from '../components/Log';
+import LogPane from '../components/LogPane';
 import FormActions from '../actions/form';
 import LogActions from '../actions/log';
 
@@ -26,4 +26,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Log);
+export default connect(mapStateToProps, mapDispatchToProps)(LogPane);
