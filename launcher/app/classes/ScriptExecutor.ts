@@ -1,5 +1,6 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import log from 'electron-log';
+import { platform } from 'os';
 
 export type ExecutorError = {
     error: boolean;
@@ -19,12 +20,38 @@ scriptLogger.transports.file.format = '[{level}]> {text}';
 export default class ScriptExecutor {
     private cmd: string;
     private options: SpawnOptions;
+    private logger: (text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => void;
 
-    constructor(cmd: string, options: SpawnOptions) {
+    constructor(
+        cmd: string,
+        options: SpawnOptions,
+        logger: (text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => void = null
+    ) {
         log.info(`Loaded command [${cmd}] into memory`);
         this.cmd = cmd;
         this.options = options;
+        this.logger = logger;
     }
+
+    private cleanOutput = (output: string) => {
+        if (platform() === 'win32') {
+            const isPathDirective = output.startsWith('C:\\');
+            if (isPathDirective) {
+                const inputIndex = output.indexOf('>');
+                return output.substring(inputIndex + 1, output.length);
+            }
+        }
+        return output;
+    };
+
+    private printOutput = (output: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => {
+        const outputLines = output.split('\n').filter(line => line.length > 1);
+        console.log('=== LINES: ===');
+        outputLines.forEach(line => {
+            const cleanedLine = this.cleanOutput(line);
+            this.logger(cleanedLine, level);
+        });
+    };
 
     executeAndWait(): Promise<null> {
         return new Promise((res, rej) => {
@@ -34,11 +61,16 @@ export default class ScriptExecutor {
             process.stdout.on('data', data => {
                 console.log('STDOUT - DATA');
                 console.log(`\t${data.toString()}`);
+                this.printOutput(data.toString(), 'MESSAGE');
+                // this.logger(this.cleanOutput(data.toString()), 'MESSAGE');
                 // scriptLogger.info(data.toString());
             });
             process.stderr.on('data', data => {
                 console.log('STDERR - DATA');
                 console.log(`\t${data.toString()}`);
+                this.printOutput(data.toString(), 'ERROR');
+                // this.logger(this.cleanOutput(data.toString()), 'ERROR');
+
                 // scriptLogger.error(data.toString());
                 // errorChain = [new Error(data.ToString()), ...errorChain];
             });
@@ -46,6 +78,8 @@ export default class ScriptExecutor {
             process.stdout.on('close', code => {
                 console.log('STDOUT - CLOSE');
                 console.log(`\t${code.toString()}`);
+                this.printOutput(code.toString(), 'WARNING');
+                // this.logger(this.cleanOutput(code.toString()), 'MESSAGE');
                 // log.info('========== ENDING COMMAND EXECUTION ==========');
                 // if (errorChain.length > 0) {
                 //     rej(errorChain[0]);

@@ -16,16 +16,11 @@ const initialState: Logs = {};
 export default function form(state: Logs = initialState, action: LogTypes) {
     switch (action.type) {
         case LogTypeKeys.LOG:
-            console.log('Before:');
-            console.log(state);
             const logCpy: Logs = JSON.parse(JSON.stringify(state));
-            console.log(logCpy);
             if (!logCpy[action.name]) {
                 logCpy[action.name] = [];
             }
-            console.log(logCpy);
             logCpy[action.name].push({ message: action.text, level: action.level });
-            console.log(logCpy);
             return logCpy;
         case LogTypeKeys.CREATE_LOG:
             const createCpy: LogEvents = JSON.parse(JSON.stringify(state));

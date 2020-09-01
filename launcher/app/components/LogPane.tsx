@@ -50,6 +50,16 @@ export default class LogPane extends Component<IProps, IState> {
         this.dhcpServer = new DHCP();
     }
 
+    /**
+     * Closure that creates a function for logging events with a fixed name
+     * @param name - the name to assign to the function
+     */
+    logEventFactory = (name: string) => {
+        return (text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => {
+            this.props.logEvent(name, text, level);
+        };
+    };
+
     startClicked = async e => {
         const platform = (() => {
             switch (process.platform) {
@@ -153,26 +163,38 @@ export default class LogPane extends Component<IProps, IState> {
                 try {
                     this.props.logEvent(this.userLogName, 'Building the server...', 'MESSAGE');
                     // 4) Build the server
-                    const buildExecutor = new ScriptExecutor(SCRIPTS.build, {
-                        shell: true,
-                        detached: false
-                    });
+                    const buildExecutor = new ScriptExecutor(
+                        SCRIPTS.build,
+                        {
+                            shell: true,
+                            detached: false
+                        },
+                        this.logEventFactory('Build')
+                    );
                     await buildExecutor.executeAndWait();
                     this.props.logEvent(this.userLogName, 'Done', 'MESSAGE');
 
                     // 5) Start mongod
-                    const mongodExecutor = new ScriptExecutor(SCRIPTS.mongod, {
-                        shell: true,
-                        detached: false
-                    });
+                    const mongodExecutor = new ScriptExecutor(
+                        SCRIPTS.mongod,
+                        {
+                            shell: true,
+                            detached: false
+                        },
+                        this.logEventFactory('MongoDB')
+                    );
                     const mongodProcess = mongodExecutor.execute();
 
                     // 6) Run the server
                     this.props.logEvent(this.userLogName, 'Starting the server...', 'MESSAGE');
-                    const runExecutor = new ScriptExecutor(SCRIPTS.run, {
-                        shell: true,
-                        detached: false
-                    });
+                    const runExecutor = new ScriptExecutor(
+                        SCRIPTS.run,
+                        {
+                            shell: true,
+                            detached: false
+                        },
+                        this.logEventFactory('Server')
+                    );
                     await runExecutor.executeAndWait();
 
                     this.props.logEvent(this.userLogName, 'The server has shutdown', 'MESSAGE');
@@ -186,6 +208,15 @@ export default class LogPane extends Component<IProps, IState> {
             this.props.logEvent(this.userLogName, 'In development, testing code...', 'MESSAGE');
             this.props.logEvent(this.userLogName, 'This is a warning message', 'WARNING');
             this.props.logEvent(this.userLogName, 'This is an error message', 'ERROR');
+            const runExecutor = new ScriptExecutor(
+                SCRIPTS.run,
+                {
+                    shell: true,
+                    detached: false
+                },
+                this.logEventFactory('Server')
+            );
+            await runExecutor.executeAndWait();
             // const runExecutor = new ScriptExecutor(SCRIPTS.run, {
             //     shell: false,
             //     detached: false
