@@ -11,8 +11,10 @@ function mapStateToProps(state, ownProps) {
         dbName: state.form.dbName,
         adminPassword: state.form.adminPassword,
         filePath: state.form.filePath,
-        logText: state.log.text,
-        logEvent: (event: string) => {}
+        logs: state.log,
+        logEvent: (name: string, text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => {},
+        createLog: (name: string) => {},
+        deleteLog: (name: string) => {}
     };
 }
 

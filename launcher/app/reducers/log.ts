@@ -1,36 +1,44 @@
 import { LogTypeKeys, LogTypes } from '../actions/log';
 
-interface ILogState {
-    text: string;
+export interface LogEvent {
+    message: string;
+    level: 'MESSAGE' | 'WARNING' | 'ERROR';
 }
 
-const initialState: ILogState = {
-    text: ''
+export type LogEvents = LogEvent[];
+
+export type Logs = {
+    [name: string]: LogEvents;
 };
 
-const date = new Date();
+const initialState: Logs = {};
 
-export default function form(
-    state: ILogState = initialState,
-    action: LogTypes
-) {
+export default function form(state: Logs = initialState, action: LogTypes) {
     switch (action.type) {
-        case LogTypeKeys.SET_TEXT:
-            return {
-                text: action.text
-            };
         case LogTypeKeys.LOG:
-            const formatedEvent = `> [${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] ${
-                action.event
-            }`;
-            // Handles first event not needing \n
-            const appendedText =
-                state.text === ''
-                    ? formatedEvent
-                    : state.text + '\n' + formatedEvent;
-            return {
-                text: appendedText
-            };
+            console.log('Before:');
+            console.log(state);
+            const logCpy: Logs = JSON.parse(JSON.stringify(state));
+            console.log(logCpy);
+            if (!logCpy[action.name]) {
+                logCpy[action.name] = [];
+            }
+            console.log(logCpy);
+            logCpy[action.name].push({ message: action.text, level: action.level });
+            console.log(logCpy);
+            return logCpy;
+        case LogTypeKeys.CREATE_LOG:
+            const createCpy: LogEvents = JSON.parse(JSON.stringify(state));
+            if (!createCpy[action.name]) {
+                createCpy[action.name] = [];
+            }
+            return createCpy;
+        case LogTypeKeys.DELETE_LOG:
+            const deleteCpy: LogEvents = JSON.parse(JSON.stringify(state));
+            if (deleteCpy[action.name]) {
+                delete deleteCpy[action.name];
+            }
+            return deleteCpy;
         default:
             return state;
     }

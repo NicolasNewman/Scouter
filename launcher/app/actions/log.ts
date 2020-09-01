@@ -1,40 +1,53 @@
 export enum LogTypeKeys {
-    SET_TEXT = 'SET_TEXT',
-    LOG = 'LOG'
-}
-
-interface SetTextAction {
-    type: LogTypeKeys.SET_TEXT;
-    text: string;
+    LOG = 'LOG',
+    CREATE_LOG = 'CREATE_LOG',
+    DELETE_LOG = 'DELETE_LOG'
 }
 
 interface LogAction {
     type: LogTypeKeys.LOG;
-    event: string;
+    name: string;
+    text: string;
+    level: 'MESSAGE' | 'WARNING' | 'ERROR';
 }
 
-export type LogTypes = SetTextAction | LogAction;
-
-/**
- * Overwrites the log with the provided text
- * @param text text to override the log with
- */
-export function setLogText(text: string): SetTextAction {
-    return {
-        type: LogTypeKeys.SET_TEXT,
-        text
-    };
+interface CreateLogAction {
+    type: LogTypeKeys.CREATE_LOG;
+    name: string;
 }
+
+interface DeleteLogAction {
+    type: LogTypeKeys.DELETE_LOG;
+    name: string;
+}
+
+export type LogTypes = LogAction | CreateLogAction | DeleteLogAction;
 
 /**
  * Appends an event to the log as a new line
  * @param event the event to log
  */
-export function logEvent(event: string): LogAction {
+export function logEvent(name: string, text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR'): LogAction {
     return {
         type: LogTypeKeys.LOG,
-        event
+        name,
+        text,
+        level
     };
 }
 
-export default { setLogText, logEvent };
+export function createLog(name: string): CreateLogAction {
+    return {
+        type: LogTypeKeys.CREATE_LOG,
+        name
+    };
+}
+
+export function deleteLog(name: string): DeleteLogAction {
+    return {
+        type: LogTypeKeys.DELETE_LOG,
+        name
+    };
+}
+
+export default { logEvent, createLog, deleteLog };
