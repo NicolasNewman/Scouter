@@ -11,11 +11,13 @@ import DHCP from '../classes/DHCP';
 import { writeEnv } from '../helper/helper';
 import * as fs from 'fs';
 import * as path from 'path';
+import DataStore from '../classes/DataStore';
 
 const { TabPane } = Tabs;
 // const { TextArea } = Input;
 
 interface IProps {
+    dataStore: DataStore;
     serverPort: number;
     dbPort: number;
     dbName: string;
@@ -116,6 +118,7 @@ export default class LogPane extends Component<IProps, IState> {
                 this.props.logEvent(this.userLogName, `Error: ${res.errorMsg}`, 'ERROR');
             } else {
                 this.props.logEvent(this.userLogName, 'Done', 'MESSAGE');
+                let shouldRebuild = true;
                 // 3) Inject the custom modules if they exist
                 if (this.props.filePath !== '') {
                     this.props.logEvent(
@@ -145,8 +148,17 @@ export default class LogPane extends Component<IProps, IState> {
                         manager.write(path.join(globalPath, 'soureResolver.ts'), score);
 
                         this.props.logEvent(this.userLogName, 'Done', 'MESSAGE');
+                        this.props.dataStore.set('lastUsedCustom', true);
+                        this.props.dataStore.set('lastBuildDefault', false);
                     }
                 } else {
+                    // Determine if the server needs to be re-built
+                    if (
+                        this.props.dataStore.get('lastUsedCustom') === false &&
+                        this.props.dataStore.get('lastBuildDefault') === true
+                    ) {
+                        shouldRebuild = false;
+                    }
                     this.props.logEvent(this.userLogName, 'Reloading default form code', 'MESSAGE');
 
                     const form = fs.readFileSync(path.join(clientPath, 'D_DataInput.tsx')).toString();
@@ -158,21 +170,30 @@ export default class LogPane extends Component<IProps, IState> {
                     manager.write(path.join(globalPath, 'gameTypes.ts'), type);
                     manager.write(path.join(globalPath, 'accuracyResolver.ts'), accuracy);
                     manager.write(path.join(globalPath, 'soureResolver.ts'), score);
+                    this.props.dataStore.set('lastUsedCustom', false);
+                    this.props.dataStore.set('lastBuildDefault', true);
                 }
 
                 try {
-                    this.props.logEvent(this.userLogName, 'Building the server...', 'MESSAGE');
-                    // 4) Build the server
-                    const buildExecutor = new ScriptExecutor(
-                        SCRIPTS.build,
-                        {
-                            shell: true,
-                            detached: false
-                        },
-                        this.logEventFactory('Build')
+                    this.props.logEvent(
+                        this.userLogName,
+                        `The server ${shouldRebuild ? 'needs to be' : "doesn't need to be"} rebuilt`,
+                        'MESSAGE'
                     );
-                    await buildExecutor.executeAndWait();
-                    this.props.logEvent(this.userLogName, 'Done', 'MESSAGE');
+                    if (shouldRebuild) {
+                        this.props.logEvent(this.userLogName, 'Building the server...', 'MESSAGE');
+                        // 4) Build the server
+                        const buildExecutor = new ScriptExecutor(
+                            SCRIPTS.build,
+                            {
+                                shell: true,
+                                detached: false
+                            },
+                            this.logEventFactory('Build')
+                        );
+                        await buildExecutor.executeAndWait();
+                        this.props.logEvent(this.userLogName, 'Done', 'MESSAGE');
+                    }
 
                     // 5) Start mongod
                     const mongodExecutor = new ScriptExecutor(
@@ -209,12 +230,12 @@ export default class LogPane extends Component<IProps, IState> {
             this.props.logEvent(this.userLogName, 'This is a warning message', 'WARNING');
             this.props.logEvent(this.userLogName, 'This is an error message', 'ERROR');
             const runExecutor = new ScriptExecutor(
-                SCRIPTS.run,
+                SCRIPTS.test,
                 {
                     shell: true,
                     detached: false
                 },
-                this.logEventFactory('Server')
+                this.logEventFactory('Dev-Mongo')
             );
             await runExecutor.executeAndWait();
             // const runExecutor = new ScriptExecutor(SCRIPTS.run, {

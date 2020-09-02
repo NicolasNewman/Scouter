@@ -32,6 +32,14 @@ export default class DataStore {
             mode: {
                 type: 'string',
                 description: 'The mode used to record data'
+            },
+            lastUsedCustom: {
+                type: 'boolean',
+                description: 'Wheather a custom model was used last run'
+            },
+            lastBuildDefault: {
+                type: 'boolean',
+                description: 'Wheather the last build was using the default module'
             }
         };
         this.store = new Store({ schema: this.schema });

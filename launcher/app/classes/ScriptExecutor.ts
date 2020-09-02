@@ -25,7 +25,7 @@ export default class ScriptExecutor {
     constructor(
         cmd: string,
         options: SpawnOptions,
-        logger: (text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => void = null
+        logger: (text: string, level: 'MESSAGE' | 'WARNING' | 'ERROR') => void = (text: any, level: any) => {}
     ) {
         log.info(`Loaded command [${cmd}] into memory`);
         this.cmd = cmd;
@@ -59,28 +59,24 @@ export default class ScriptExecutor {
             log.info('========== STARTING COMMAND EXECUTION ==========');
             const process = spawn(this.cmd, this.options);
             process.stdout.on('data', data => {
-                console.log('STDOUT - DATA');
                 console.log(`\t${data.toString()}`);
                 this.printOutput(data.toString(), 'MESSAGE');
-                // this.logger(this.cleanOutput(data.toString()), 'MESSAGE');
-                // scriptLogger.info(data.toString());
+                scriptLogger.info(data.toString());
             });
             process.stderr.on('data', data => {
-                console.log('STDERR - DATA');
                 console.log(`\t${data.toString()}`);
                 this.printOutput(data.toString(), 'ERROR');
-                // this.logger(this.cleanOutput(data.toString()), 'ERROR');
+                scriptLogger.error(data.toString());
 
-                // scriptLogger.error(data.toString());
                 // errorChain = [new Error(data.ToString()), ...errorChain];
             });
 
             process.stdout.on('close', code => {
-                console.log('STDOUT - CLOSE');
                 console.log(`\t${code.toString()}`);
-                this.printOutput(code.toString(), 'WARNING');
-                // this.logger(this.cleanOutput(code.toString()), 'MESSAGE');
-                // log.info('========== ENDING COMMAND EXECUTION ==========');
+                scriptLogger.error(code.toString());
+                this.printOutput('Done', 'MESSAGE');
+                log.info('========== ENDING COMMAND EXECUTION ==========');
+                // this.printOutput(code.toString(), 'WARNING');
                 // if (errorChain.length > 0) {
                 //     rej(errorChain[0]);
                 // }
@@ -94,13 +90,20 @@ export default class ScriptExecutor {
         log.info('========== STARTING COMMAND EXECUTION ==========');
         const process = spawn(this.cmd, this.options);
         process.stdout.on('data', data => {
+            console.log(`\t${data.toString()}`);
+            this.printOutput(data.toString(), 'MESSAGE');
             scriptLogger.info(data.toString());
         });
         process.stderr.on('data', data => {
+            console.log(`\t${data.toString()}`);
+            this.printOutput(data.toString(), 'ERROR');
             scriptLogger.error(data.toString());
         });
 
         process.stdout.on('close', code => {
+            console.log(`\t${code.toString()}`);
+            scriptLogger.error(code.toString());
+            this.printOutput('Done', 'MESSAGE');
             log.info('========== ENDING COMMAND EXECUTION ==========');
         });
 

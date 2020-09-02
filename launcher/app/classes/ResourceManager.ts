@@ -31,6 +31,7 @@ interface IScripts {
     installClientModules: string;
     installServerModules: string;
     mongod: string;
+    test: string;
 }
 
 export default class ResourceManager {
@@ -76,7 +77,8 @@ export default class ResourceManager {
             installGlobalModules: path.join(this.LOCATIONS.SCRIPTS[os], `install_global_modules.${this.extension}`),
             installClientModules: path.join(this.LOCATIONS.SCRIPTS[os], `install_client_modules.${this.extension}`),
             installServerModules: path.join(this.LOCATIONS.SCRIPTS[os], `install_server_modules.${this.extension}`),
-            mongod: path.join(this.LOCATIONS.SCRIPTS[os], `mongodb.${this.extension}`)
+            mongod: path.join(this.LOCATIONS.SCRIPTS[os], `mongodb.${this.extension}`),
+            test: path.join(this.LOCATIONS.SCRIPTS[os], `test.${this.extension}`)
         };
     }
 

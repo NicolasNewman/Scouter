@@ -6,6 +6,7 @@ import LogActions from '../actions/log';
 
 function mapStateToProps(state, ownProps) {
     return {
+        dataStore: ownProps.dataStore,
         serverPort: state.form.serverPort,
         dbPort: state.form.dbPort,
         dbName: state.form.dbName,

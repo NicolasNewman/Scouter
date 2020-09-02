@@ -27,7 +27,7 @@ export default class Routes extends Component {
                         path={routes.LOG}
                         component={() => {
                             IpcInterface.resizeWindow(sizes.logWindow.width, sizes.logWindow.height);
-                            return <LogPage />;
+                            return <LogPage dataStore={this.dataStore} />;
                         }}
                     />
                     <Redirect from="/" to={routes.FORM} />
