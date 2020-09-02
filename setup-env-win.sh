@@ -24,23 +24,31 @@ then
     mv node-v12.18.3-win-x64 nodejs-win
 
     cd nodejs-win
+    # use local NPM
     export PATH="$(pwd)":$OP
+    echo "installing yarn..."
     npm install -g yarn
     cd ../
+    # revert back to global
     export PATH=$OP
 fi
 
 if [ ! -d "mongodb/" ]
 then
     echo "mongodb binary does not exist. Downloading..."
-    # curl https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-4.4.0.zip > mongodb-win.zip
-    # unzip mongodb-win.zip 'mongodb-win32-x86_64-windows-4.4.0/bin/*' -d mongodb-win
+    curl https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-4.4.0.zip > mongodb-win.zip
+    unzip mongodb-win.zip 'mongodb-win32-x86_64-windows-4.4.0/bin/*' -d mongodb-win
     mv mongodb-win/mongodb-win32-x86_64-windows-4.4.0/bin/* mongodb-win/
     rm -rf mongodb-win/mongodb-win32-x86_64-windows-4.4.0
     rm mongodb-win/Install-Compass.ps1
     rm mongodb-win.zip
     mkdir mongodb-win/data
     mkdir mongodb-win/log
+
+    echo "copying needed MS VSC C++ binaries"
+    cp C:\\Windows\\System32\\msvcp140.dll mongodb-win/
+    cp C:\\Windows\\System32\\vcruntime140.dll mongodb-win/
+    cp C:\\Windows\\System32\\vcruntime140_1.dll mongodb-win/
 fi
 
 yarn install
