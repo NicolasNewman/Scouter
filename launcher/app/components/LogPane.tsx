@@ -12,6 +12,7 @@ import { writeEnv } from '../helper/helper';
 import * as fs from 'fs';
 import * as path from 'path';
 import DataStore from '../classes/DataStore';
+import { ChildProcessWithoutNullStreams } from 'child_process';
 
 const { TabPane } = Tabs;
 // const { TextArea } = Input;
@@ -39,6 +40,7 @@ export default class LogPane extends Component<IProps, IState> {
     state: IState;
     dhcpServer: DHCP;
     userLogName: string;
+    processes: ChildProcessWithoutNullStreams[];
 
     constructor(props) {
         super(props);
@@ -86,6 +88,7 @@ export default class LogPane extends Component<IProps, IState> {
         // TODO remove env file from server on package
         if (process.env.NODE_ENV === 'production') {
             // 1) Check for a valid DHCP configuration
+            this.setState({ startDisabled: true });
             this.props.logEvent(this.userLogName, 'Checking for a valid DHCP configuration...', 'MESSAGE');
             const interfaces = networkInterfaces();
             let found = false;
@@ -196,6 +199,7 @@ export default class LogPane extends Component<IProps, IState> {
                     }
 
                     // 5) Start mongod
+                    this.props.logEvent(this.userLogName, 'Launching the database...', 'MESSAGE');
                     const mongodExecutor = new ScriptExecutor(
                         SCRIPTS.mongod,
                         {
@@ -205,6 +209,7 @@ export default class LogPane extends Component<IProps, IState> {
                         this.logEventFactory('MongoDB')
                     );
                     const mongodProcess = mongodExecutor.execute();
+                    this.processes.push(mongodProcess);
 
                     // 6) Run the server
                     this.props.logEvent(this.userLogName, 'Starting the server...', 'MESSAGE');
@@ -216,10 +221,10 @@ export default class LogPane extends Component<IProps, IState> {
                         },
                         this.logEventFactory('Server')
                     );
-                    await runExecutor.executeAndWait();
+                    const runProcess = runExecutor.execute();
+                    this.processes.push(runProcess);
 
-                    this.props.logEvent(this.userLogName, 'The server has shutdown', 'MESSAGE');
-                    mongodProcess.kill('SIGQUIT');
+                    this.setState({ stopDisabled: false });
                 } catch (err) {
                     this.props.logEvent(this.userLogName, 'An error was received:', 'ERROR');
                     this.props.logEvent(this.userLogName, err, 'ERROR');
@@ -252,8 +257,13 @@ export default class LogPane extends Component<IProps, IState> {
     };
 
     stopClicked = (e): void => {
-        // this.props.logEvent('Stoping the server...');
+        this.props.logEvent(this.userLogName, 'Stoping the servers...', 'MESSAGE');
         this.dhcpServer.stop();
+        this.processes.forEach(process => {
+            process.kill('SIGQUIT');
+        });
+        this.props.logEvent(this.userLogName, 'All servers have been shutdown', 'MESSAGE');
+        this.setState({ startDisabled: false, stopDisabled: true });
     };
 
     render() {
@@ -276,10 +286,20 @@ export default class LogPane extends Component<IProps, IState> {
                     </TabPane> */}
                 </Tabs>
                 <div className="log__button-row">
-                    <Button className="log__button" onClick={this.startClicked} type="primary">
+                    <Button
+                        className="log__button"
+                        onClick={this.startClicked}
+                        type="primary"
+                        disabled={this.state.startDisabled}
+                    >
                         Start
                     </Button>
-                    <Button className="log__button" onClick={this.startClicked} type="primary">
+                    <Button
+                        className="log__button"
+                        onClick={this.stopClicked}
+                        type="primary"
+                        disabled={this.state.stopDisabled}
+                    >
                         Stop
                     </Button>
                 </div>
