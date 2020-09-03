@@ -43,7 +43,9 @@ then
     rm mongodb-win/Install-Compass.ps1
     rm mongodb-win.zip
     mkdir mongodb-win/data
-    mkdir mongodb-win/log
+    touch mongodb-win/data/.empty
+    mkdir mongodb-win/logs
+    touch mongodb-win/logs/.empty
 
     echo "copying needed MS VSC C++ binaries"
     cp C:\\Windows\\System32\\msvcp140.dll mongodb-win/
