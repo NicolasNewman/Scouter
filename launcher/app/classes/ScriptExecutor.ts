@@ -1,6 +1,6 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import log from 'electron-log';
-import { platform } from 'os';
+import { platform, userInfo } from 'os';
 
 export type ExecutorError = {
     error: boolean;
@@ -33,12 +33,16 @@ export default class ScriptExecutor {
         this.logger = logger;
     }
 
+    static kill = (process: ChildProcessWithoutNullStreams) => {
+        spawn('taskkill', ['/pid', process.pid.toString(), '/f', '/t']);
+    };
+
     private cleanOutput = (output: string) => {
         if (platform() === 'win32') {
             const isPathDirective = output.startsWith('C:\\');
             if (isPathDirective) {
                 const inputIndex = output.indexOf('>');
-                return output.substring(inputIndex + 1, output.length);
+                return `C:\\Users\\${userInfo().username}> ${output.substring(inputIndex + 1, output.length)}`;
             }
         }
         return output;
@@ -74,7 +78,7 @@ export default class ScriptExecutor {
             process.stdout.on('close', code => {
                 console.log(`\t${code.toString()}`);
                 scriptLogger.error(code.toString());
-                this.printOutput('Done', 'MESSAGE');
+                this.printOutput('Command finished', 'MESSAGE');
                 log.info('========== ENDING COMMAND EXECUTION ==========');
                 // this.printOutput(code.toString(), 'WARNING');
                 // if (errorChain.length > 0) {
@@ -107,6 +111,12 @@ export default class ScriptExecutor {
             log.info('========== ENDING COMMAND EXECUTION ==========');
         });
 
+        // process.on('close', code => {
+        //     console.log(`\t${code}`);
+        //     scriptLogger.error(code);
+        //     this.printOutput('Done', 'MESSAGE');
+        //     log.info('========== ENDING COMMAND EXECUTION ==========');
+        // });
         return process;
     }
 }

@@ -52,6 +52,7 @@ export default class LogPane extends Component<IProps, IState> {
             stopDisabled: true
         };
         this.dhcpServer = new DHCP();
+        this.processes = [];
     }
 
     /**
@@ -243,6 +244,10 @@ export default class LogPane extends Component<IProps, IState> {
                 this.logEventFactory('Dev-Mongo')
             );
             await runExecutor.executeAndWait();
+            // setTimeout(() => {
+            //     this.props.logEvent(this.userLogName, 'Killing process', 'MESSAGE');
+            //     ScriptExecutor.kill(testProcess);
+            // }, 2000);
             // const runExecutor = new ScriptExecutor(SCRIPTS.run, {
             //     shell: false,
             //     detached: false
@@ -260,7 +265,7 @@ export default class LogPane extends Component<IProps, IState> {
         this.props.logEvent(this.userLogName, 'Stoping the servers...', 'MESSAGE');
         this.dhcpServer.stop();
         this.processes.forEach(process => {
-            process.kill('SIGQUIT');
+            ScriptExecutor.kill(process);
         });
         this.props.logEvent(this.userLogName, 'All servers have been shutdown', 'MESSAGE');
         this.setState({ startDisabled: false, stopDisabled: true });

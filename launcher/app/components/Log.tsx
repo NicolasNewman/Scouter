@@ -14,7 +14,7 @@ const Log: React.FC<IProps> = ({ events }) => {
         <div className="logfc">
             {events.map(event => (
                 <div>
-                    {'> '}
+                    {''}
                     <span
                         className={
                             event.level === 'ERROR' ? 'log--error' : event.level === 'WARNING' ? 'log--warning' : ''
