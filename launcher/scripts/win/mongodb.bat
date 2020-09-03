@@ -1,3 +1,3 @@
 SET PATH=%CD%\resources\mongodb;%PATH%
 
-mongod.exe --dbpath=%CD%\resources\mongodb\data --logpath %CD%\resources\mongodb\log\log.log --port 27017
+mongod.exe --dbpath=%CD%\resources\mongodb\data --logpath %CD%\resources\mongodb\logs\log.log --port 27017
